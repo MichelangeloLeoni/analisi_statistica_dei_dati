@@ -1,64 +1,121 @@
 \documentclass[a4paper,11pt]{article}
 
-% ------------------------ PACKAGES ------------------------
+%------------------------------------------------
+% CODIFICA E LINGUA
+%------------------------------------------------
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[italian]{babel}
-\usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage{amsmath, amssymb, amsthm, amsfonts}
-\usepackage{physics}        % Per notazione fisica (bra/ket, derivata, ecc.)
-\usepackage{siunitx}        % Per unità di misura
-\usepackage{graphicx}       % Immagini
-\usepackage{float}
-\usepackage{booktabs}       % Tabelle migliori
-\usepackage{hyperref}       % Link cliccabili
+
+%------------------------------------------------
+% MATEMATICA
+%------------------------------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
 \usepackage{mathtools}
-\usepackage{enumitem}       % Liste personalizzate
-\usepackage{geometry}       % Margini pagina
+
+%------------------------------------------------
+% UNITÀ DI MISURA
+%------------------------------------------------
+\usepackage{siunitx}
+
+%------------------------------------------------
+% GRAFICA
+%------------------------------------------------
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+%------------------------------------------------
+% STRUTTURA DOCUMENTO
+%------------------------------------------------
+\usepackage{enumitem}
+\usepackage{geometry}
 \geometry{margin=2.5cm}
 
-% ------------------------ STILE ------------------------
-\setlength{\parindent}{0pt}     % Niente indentazione paragrafi
-\setlength{\parskip}{6pt}       % Spazio tra paragrafi
+%------------------------------------------------
+% LINK PDF (SEMPRE PER ULTIMO)
+%------------------------------------------------
+\usepackage{bookmark}
+\usepackage{hyperref}
 
 \hypersetup{
-colorlinks=true,
-linkcolor=blue,
-urlcolor=purple,
-citecolor=red,
-pdftitle={Dispense Analisi Statistica dei Dati},
-pdfauthor={[Leoni Michelangelo]}
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    citecolor=blue,
+    pdftitle={Dispense di Analisi Statistica dei Dati},
+    pdfauthor={Michelangelo Leoni}
 }
 
-% ------------------------ TEOREMI ------------------------
+%------------------------------------------------
+% STILE PARAGRAFI
+%------------------------------------------------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+%------------------------------------------------
+% AMBIENTI MATEMATICI
+%------------------------------------------------
 \theoremstyle{definition}
+
 \newtheorem{definizione}{Definizione}[section]
 \newtheorem{teorema}{Teorema}[section]
 \newtheorem{lemma}{Lemma}[section]
 \newtheorem{proposizione}{Proposizione}[section]
 \newtheorem{esempio}{Esempio}[section]
 
-% ------------------------ COMANDI UTILI ------------------------
-\newcommand{\E}{\mathbb{E}}         % Valore atteso
-\newcommand{\Var}{\mathrm{Var}}     % Varianza
-\newcommand{\Cov}{\mathrm{Cov}}     % Covarianza
-\newcommand{\Prob}{\mathbb{P}}      % Probabilità
-\newcommand{\N}{\mathcal{N}}        % Gaussiana
-\newcommand{\R}{\mathbb{R}}         % Numeri reali
+%------------------------------------------------
+% COMANDI UTILI
+%------------------------------------------------
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathcal{N}}
 
-% ------------------------ DOCUMENTO ------------------------
+% Derivate
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
+\newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
+
+%------------------------------------------------
+% TITOLO
+%------------------------------------------------
+\title{Dispense di Analisi Statistica dei Dati}
+\author{Michelangelo Leoni}
+\date{\today}
+
+%------------------------------------------------
+% DOCUMENTO
+%------------------------------------------------
 \begin{document}
 
-\begin{titlepage}
-\centering
-{\Large Dispense di Analisi Statistica dei Dati}\\[0.4cm]
-{\large Michelangelo Leoni}\\[0.2cm]
-{\large \today}
-\end{titlepage}
+\maketitle
 
 \tableofcontents
 \newpage
 
-% ------------------------ CONTENUTO ------------------------
+%------------------------------------------------
+\section{Introduzione}
+
+Queste sono dispense per il corso di analisi statistica dei dati.
+
+\begin{definizione}
+Una variabile casuale è una funzione misurabile
+\[
+X : \Omega \rightarrow \R
+\]
+\end{definizione}
+
+\begin{esempio}
+Se $X \sim \N(0,1)$ allora
+\[
+\E[X] = 0
+\]
+\end{esempio}
 
 \end{document}

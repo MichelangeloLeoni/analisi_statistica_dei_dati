@@ -1,8 +1,9 @@
 # Main Makefile for the LaTeX document
+MAIN=main
 
 all: 
-	pdflatex main.tex
-	rm -f *.aux *.log *.out *.toc
+	pdflatex $(MAIN).tex
+	pdflatex $(MAIN).tex
 
 clean:
 	rm -f *.aux *.log *.out *.toc
