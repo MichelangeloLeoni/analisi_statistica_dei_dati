@@ -1,3 +1,6 @@
+# Compiled LaTeX files
+*.pdf
+
 # LaTeX auxiliary files
 *.aux
 *.lof
