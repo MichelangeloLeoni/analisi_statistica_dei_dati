@@ -1,2 +1,2 @@
-# Appunti del corso: _*"Analisi Statistica dei Dati"*_
-Appunti del corso di Analisi Statistica dei Dati, tenuto nel corso di laurea magistrale in fisica presso UniPi.
+# Notes for: _*"Analisi Statistica dei Dati"*_
+Lecture notes for the _Analisi Statistica dei Dati_ course, held in the master's degree course in physics at UniPi.
