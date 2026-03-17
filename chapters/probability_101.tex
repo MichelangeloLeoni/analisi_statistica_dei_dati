@@ -1,17 +1,21 @@
 \chapter{Probability 101}
 
-These notes are intended for a course in statistical data analysis. They provide theoretical foundations and practical tools for understanding data.
-
-\begin{definition}
-A random variable is a measurable function
+We shall start with an operative definition of probability, consistent with a physical quantity. Given an experimental procedure, that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentistic sense is defined as:
 \[
-X : \Omega \rightarrow \R
+P(E) = \lim_{N\to\infty} = \frac{n(E)}{N}
 \]
-\end{definition}
 
-\begin{example}
-If $X \sim \N(0,1)$, then
-\[
-\E[X] = 0
-\]
-\end{example}
+where $n(E)$ is the number of times that event $E$ is verified out of $N$ trials. In this operative definition, $P(E)$ is a measurable quantity, and thus it is fundamental that the experiment be repeatable infinite times in this formalism.
+
+
+Kolmogorov:
+
+We define "probability" on the set $S$ some function of the set $P$ with the following properties:
+\begin{enumerate}
+	
+	\item $\forall A \subset S P(A)\geq 0$
+	\item $P(S) = 1$
+	\item $A_i \subset S_i ; A_i\cap A_j = 0 \forall i\neq j ; \forall A_i \rightarrow P(\cup A_i) = \sum_{i}P(A_i)$
+	
+\end{enumerate}
+
