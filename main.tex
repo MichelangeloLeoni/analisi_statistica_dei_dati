@@ -1,74 +1,81 @@
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,11pt,oneside]{book}
 
 %------------------------------------------------
-% CODIFICA E LINGUA
+% ENCODING AND LANGUAGE
 %------------------------------------------------
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[italian]{babel}
+\usepackage[english]{babel}
 \usepackage{lmodern}
 
 %------------------------------------------------
-% MATEMATICA
+% MATHEMATICS
 %------------------------------------------------
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{amsthm}
-\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools}
 
 %------------------------------------------------
-% UNITÀ DI MISURA
-%------------------------------------------------
-\usepackage{siunitx}
-
-%------------------------------------------------
-% GRAFICA
+% GRAPHICS
 %------------------------------------------------
 \usepackage{graphicx}
 \usepackage{booktabs}
 
 %------------------------------------------------
-% STRUTTURA DOCUMENTO
+% PAGE LAYOUT
 %------------------------------------------------
-\usepackage{enumitem}
 \usepackage{geometry}
-\geometry{margin=2.5cm}
+\geometry{margin=3cm}
 
 %------------------------------------------------
-% LINK PDF (SEMPRE PER ULTIMO)
+% COLORS AND BOXES
 %------------------------------------------------
-\usepackage{bookmark}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbset{colback=gray!5!white, colframe=black!70!black}
+
+%------------------------------------------------
+% HEADER / FOOTER
+%------------------------------------------------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+
+%------------------------------------------------
+% HYPERREF
+%------------------------------------------------
 \usepackage{hyperref}
-
 \hypersetup{
     colorlinks=true,
     linkcolor=blue,
     urlcolor=blue,
     citecolor=blue,
-    pdftitle={Dispense di Analisi Statistica dei Dati},
+    pdftitle={Statistical Data Analysis Notes},
     pdfauthor={Michelangelo Leoni}
 }
 
 %------------------------------------------------
-% STILE PARAGRAFI
+% PARAGRAPH STYLE
 %------------------------------------------------
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt}
 
 %------------------------------------------------
-% AMBIENTI MATEMATICI
+% THEOREM ENVIRONMENTS (BOOK STYLE)
 %------------------------------------------------
 \theoremstyle{definition}
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+\newtheorem{proposition}{Proposition}[chapter]
+\newtheorem{example}{Example}[chapter]
 
-\newtheorem{definizione}{Definizione}[section]
-\newtheorem{teorema}{Teorema}[section]
-\newtheorem{lemma}{Lemma}[section]
-\newtheorem{proposizione}{Proposizione}[section]
-\newtheorem{esempio}{Esempio}[section]
+% Boxed environments
+\newtcolorbox{defbox}{title=Definition}
+\newtcolorbox{thmbox}{title=Theorem}
 
 %------------------------------------------------
-% COMANDI UTILI
+% COMMANDS
 %------------------------------------------------
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Var}{\operatorname{Var}}
@@ -77,45 +84,39 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathcal{N}}
 
-% Derivate
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
 \newcommand{\pdv}[2]{\frac{\partial #1}{\partial #2}}
 
 %------------------------------------------------
-% TITOLO
-%------------------------------------------------
-\title{Dispense di Analisi Statistica dei Dati}
-\author{Michelangelo Leoni}
-\date{\today}
-
-%------------------------------------------------
-% DOCUMENTO
+% TITLE PAGE (COVER)
 %------------------------------------------------
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+    \centering
+    \vspace*{3cm}
 
+    {\Huge\bfseries Statistical Data Analysis \par}
+    \vspace{0.5cm}
+    {\Large Lecture Notes \par}
+
+    \vspace{2cm}
+
+    {\Large Michelangelo Leoni \par}
+
+    \vfill
+
+    {\large \today \par}
+
+    \vspace*{2cm}
+\end{titlepage}
+
+\frontmatter
 \tableofcontents
-\newpage
 
-%------------------------------------------------
-\section{Introduzione}
+\mainmatter
 
-Queste sono dispense per il corso di analisi statistica dei dati.
-
-\begin{definizione}
-Una variabile casuale è una funzione misurabile
-\[
-X : \Omega \rightarrow \R
-\]
-\end{definizione}
-
-\begin{esempio}
-Se $X \sim \N(0,1)$ allora
-\[
-\E[X] = 0
-\]
-\end{esempio}
+\include{chapters/introduction}
 
 \end{document}
