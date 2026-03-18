@@ -1,5 +1,4 @@
-\documentclass[a4paper,12pt,oneside]{book}
-
+\documentclass[a4paper,12pt, twoside]{book}
 %------------------------------------------------
 % ENCODING AND LANGUAGE
 %------------------------------------------------
@@ -18,13 +17,25 @@
 %------------------------------------------------
 \usepackage{graphicx}
 \usepackage{booktabs}
-
 %------------------------------------------------
-% PAGE AND CHAPTER LAYOUT
+% PAGE, CHAPTER AND SIDENOTE LAYOUT
 %------------------------------------------------
 \usepackage{geometry}
-\geometry{margin=3cm}
+\geometry{inner=3.2cm, outer=5.5cm, bottom=3cm, top=3cm}
 \usepackage{titlesec}
+\usepackage{sidenotes}
+\makeatletter
+\RenewDocumentCommand\sidenote{o+m}{%
+	\IfNoValueTF{#1}%
+	{\sidenotemark\marginpar{\footnotesize\textsuperscript{\thesidenote}#2}}%
+	{\sidenotemark[#1]\marginpar{\footnotesize\textsuperscript{#1}#2}}%
+}
+\makeatother
+\setlength{\marginparwidth}{4.5cm}
+\setlength{\marginparsep}{0.5cm}
+
+
+
 
 \titleformat{\chapter}
 {\normalfont\Huge\bfseries}
@@ -37,6 +48,7 @@
 %------------------------------------------------
 \usepackage{xcolor}
 \usepackage{tcolorbox}
+\usepackage{todonotes}
 \tcbset{colback=gray!5!white, colframe=black!70!black}
 
 %------------------------------------------------

@@ -1,21 +1,124 @@
 \chapter{Probability 101}
 
-We shall start with an operative definition of probability, consistent with a physical quantity. Given an experimental procedure, that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentistic sense is defined as:
+\vspace*{2cm}
+
+\begin{center}
+	\itshape
+	"It is unanimously agreed that statistics
+	depends somehow on probability. But, as to
+	what probability is, and how it is connected
+	with statistics, there has seldom been such
+	complete disagreement and breakdown of
+	communication since the Tower of Babel.
+	
+	
+	Doubtless, much of the disagreement is
+	merely terminological and would disappear
+	under sufficiently sharp analysis."
+	
+	\vspace{0.5em}
+	--- Savage, 1954, The foundations of statistics\todo{Add ref}
+\end{center}
+
+\vspace{2cm}
+
+
+Throughout this course we will proceed with a physical interpretation of Probability, as we approach this complex field through the eyes of experimental physicists who want to \textit{measure something}. In nature, there exists some measurable quantities whose value depends (in some way) from unknown parameters. Observing these observables $x\in X$ we can make inferences on the nature of these unknown parameters $\mu\in A$. 
+
+In this first treatment we have introduced the notation that will follow us for the rest of the course - observable quantities will be denoted with the Latin letters \textit{x, y, z}, while unknown parameters will be denoted with the Greek letters \textit{$\mu, \nu, \sigma$}. The important subtlety that this hopes to highlight is that these quantities live in different spaces, and that observables are quantities that we can measure while the parameters are not directly measurable, and the best we can hope to do is make an inference based on a measurement. Let's never forget this, as it will be a fundamental to not mix the two quantities in the future. 
+
+
+
+\section{Operative definition of Probability}
+
+We shall start with an operative definition of Probability, consistent with a physical quantity. Given an experimental procedure that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentist sense is defined as:
 \[
 P(E) = \lim_{N\to\infty} = \frac{n(E)}{N}
 \]
 
 where $n(E)$ is the number of times that event $E$ is verified out of $N$ trials. In this operative definition, $P(E)$ is a measurable quantity, and thus it is fundamental that the experiment be repeatable infinite times in this formalism.
 
+$X$ is the space of the possible outcomes of the observable $x$, and in the simple discrete example of a mix of colored balls inside of a box $X=\{ \text{red, blue, green}\}$ and $E$ can be any single extraction of a ball, or any combination. Each event defined this way will have its own probability, and as long as the experiment is infinitely repeatable this probability well defined and given by the frequentist (Von Mises) definition provided above. 
 
-Kolmogorov:
 
-We define "probability" on the set $S$ some function of the set $P$ with the following properties:
+However, as mathematical limits are, for a limit to be well defined it must equal the same value in whichever way $N$ decides to reach infinity, no matter how the events are selected. This means that if I repeat an experiment to infinity, the probability of event $E$ must be the same if I consider all of the events, just the even ones, just the prime numbered ones, etc. 
+
+\begin{example}
+	If in the previous situation I extract (with replacement), the colored balls randomly to infinity, the sequence 
+	\[
+	\text{red, blue, green, red, blue, green, red, blue, green, red, }\dots
+	\]
+	
+	does not have $P(\text{red})$ well defined, as if I consider all of the events in the limit I get $P(\text{red})=\frac{1}{3}$, but if I consider all of the events that follow the extraction of a green ball, $P(\text{red})=1$ and all those following a blue extraction $P(\text{red})=0$. These three limits were all taken in the mathematical sense to infinity, though they are not equal to the same value and therefore the limit is not well defined, and in fact this deterministic sequence does not have a probability defined. 
+\end{example}
+
+This means that frequentist probability is defined on an ensemble.\todo{This should be looked upon further, or omitted}
+
+
+\subsection{Kolmogorov probability}
+
+	We define "probability" on the set $S$ some function of the set $P$\sidenote{Formally, $P$ is defined on a $\sigma$-algebra of subsets of $S$, so that we are sure that the union and conjugation operations remain within the same space} with the following properties:
 \begin{enumerate}
 	
 	\item $\forall A \subset S P(A)\geq 0$
 	\item $P(S) = 1$
-	\item $A_i \subset S_i ; A_i\cap A_j = 0 \forall i\neq j ; \forall A_i \rightarrow P(\cup A_i) = \sum_{i}P(A_i)$
+	\item $A_i \subset S_i ; A_i\cap A_j = 0 \forall i\neq j ; \forall A_i \rightarrow P(\cup A_i) = \sum\limits_{i}P(A_i)$
 	
 \end{enumerate}
 
+S can be taken as the space of all possible experimental observations, and each element a completely defined observation. In this case, $A$ represents a set of possible observations.
+
+
+From these three axioms we can define a series of simple theorems\todo{Do we want to demonstrate these? Also maybe the formatting could do with some work}:
+
+\[
+P(\bar{A}) = 1-P(A)
+\]
+\[
+0\leq P(A) \leq 1
+\]
+\[
+P(\emptyset)=0
+\]
+\[
+A\subset B \rightarrow P(A)\leq P(B)
+\]
+\[
+P(A\cup B) = P(A)+P(B)-P(A\cap B)
+\]
+
+\begin{definition}[Conditional probability]
+	Probability of event A given that event B has occurred
+	\[
+	P(A|B) \equiv \frac{P(A\cap B)}{P(B)}
+	\]
+This can be re-written in the more useful form:
+	\[
+	P(A\cap B)= P(A|B)\cdot P(B)
+	\]
+\end{definition}
+
+$P(A|B)$ (also denoted with $P_B(A)$) is a Kolmogorov probability and satisfies all of the necessary axioms\todo{PROOF?}.
+
+\begin{theorem}[Total probability law]
+	Let $\{A_i\}$ be a countable partition of $S$ such that $\cup_i A_i = S$\todo{Here I omitted the intermediate passages for the proof which can be added in-line or as a proof later}. It follows that:
+	\[
+	\forall B: P(B)=\sum_i P(B\cap A_i) = \sum_i P(B|A_i)P(A_i)
+	\]
+\end{theorem}
+
+This theorem is useful when the conditional probabilities are easier to calculate than the total.
+\begin{example}
+	I know that $25\%$ of lightbulbs are produced in Vietnam, while $75\%$ are produced in China. I know that of the Vietnamese lightbulbs, one in a thousand are broken during production while the Chinese ones are broken one percent of the time. I but a lightbulb from the store. What is the probability that it is broken?
+	
+	The total probability law comes to help, as we can write:
+	\begin{align*}
+	P(\text{Broken}) &= P(\text{Broken}|\text{C})\cdot P(\text{C}) + P(\text{Broken}|\text{V})\cdot P(\text{V}) \\
+	&= 0.01\cdot0.75 + 0.001\cdot0.25 \\
+	&= 0.775\%
+	\end{align*}
+\end{example}
+
+
+\subsection{Spoiler: Bayesian probability}
+The Bayesian school uses a concept of probability different than the von Mises concept. To try to minimize the natural confusion that will follow this chapter, we will baptize this concept with a different name: \textit{"degree of belief"} $\pi(x)$. The idea of this subjective reasoning is that events of which we have similar information are by definition equally probable. This concept, differently than the frequentist definition we have studied already, can be applied to whatever quantity, even if the latter is not observable. It does not depend on the ensemble, but on the subject itself, and Bayesian d.o.b (degree of belief) has been shown to satisfy the Kolmogorov axioms. We will be returning on this concept in various chapters\todo{Maybe add which ones through a ref, and perhaps elaborate further once we understand better} and it will be crucial to not confuse it with the frequentist definition of probability. 
