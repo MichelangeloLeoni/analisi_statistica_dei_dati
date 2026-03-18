@@ -33,7 +33,7 @@ In this first treatment we have introduced the notation that will follow us for 
 
 We shall start with an operative definition of Probability, consistent with a physical quantity. Given an experimental procedure that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentist sense is defined as:
 \[
-P(E) = \lim_{N\to\infty} = \frac{n(E)}{N}
+P(E) = \lim_{N\to\infty} \frac{n(E)}{N}
 \]
 
 where $n(E)$ is the number of times that event $E$ is verified out of $N$ trials. In this operative definition, $P(E)$ is a measurable quantity, and thus it is fundamental that the experiment be repeatable infinite times in this formalism.
@@ -100,6 +100,8 @@ This can be re-written in the more useful form:
 
 $P(A|B)$ (also denoted with $P_B(A)$) is a Kolmogorov probability and satisfies all of the necessary axioms\todo{PROOF?}.
 
+It is important to note that conditional probability has nothing to do with causation, correlation, or temporal relations between two events, simply put it is the probability of an event given another, and therefore is nothing more than a restriction of the probability space to a smaller ensemble. 
+
 \begin{theorem}[Total probability law]
 	Let $\{A_i\}$ be a countable partition of $S$ such that $\cup_i A_i = S$\todo{Here I omitted the intermediate passages for the proof which can be added in-line or as a proof later}. It follows that:
 	\[
@@ -109,16 +111,83 @@ $P(A|B)$ (also denoted with $P_B(A)$) is a Kolmogorov probability and satisfies 
 
 This theorem is useful when the conditional probabilities are easier to calculate than the total.
 \begin{example}
-	I know that $25\%$ of lightbulbs are produced in Vietnam, while $75\%$ are produced in China. I know that of the Vietnamese lightbulbs, one in a thousand are broken during production while the Chinese ones are broken one percent of the time. I but a lightbulb from the store. What is the probability that it is broken?
+	I know that $25\%$ of lightbulbs are produced in Vietnam, while $75\%$ are produced in China. I know that of the Vietnamese lightbulbs, one in a thousand are broken during production while the Chinese ones are broken one percent of the time. I buy a lightbulb from the store. What is the probability that it is broken?
 	
 	The total probability law comes to help, as we can write:
 	\begin{align*}
 	P(\text{Broken}) &= P(\text{Broken}|\text{C})\cdot P(\text{C}) + P(\text{Broken}|\text{V})\cdot P(\text{V}) \\
-	&= 0.01\cdot0.75 + 0.001\cdot0.25 \\
+	&= 0.01\times0.75 + 0.001\times0.25 \\
 	&= 0.775\%
 	\end{align*}
 \end{example}
 
+\begin{definition}[Independent events]
+	Two events are independent if 
+	\[
+	P(A|B)=P(A)
+	\]
+	or, reformulated, two events are independent if
+	\[
+	P(A\cap B) = P(A)\cdot P(B)
+	\]	
+	This second form takes the name of the product law of probability
+\end{definition}
+
+It is important to remember that independence is not correlation, and the former only describes whether or not the probability of an event changes after the verification of another. For example, rolling a die and flipping a coin are two independent events, while picking two cards from a deck without replacement are not two independent events as removing one card from the deck changes the odds of picking the second. 
+
+\begin{theorem}[Bayes' theorem]
+	We have already written that 
+	\[
+	P(B\cap A) = P(B|A)\cdot P(A) \overset{\scriptscriptstyle \text{symm.}}{=} P(A|B)\cdot P(B)
+	\]
+	It follows naturally that
+	\[
+	P(B|A) = \frac{P(A|B)\cdot P(B)}{P(A)}
+	\]
+\end{theorem}	
+
+The last expression takes the name of \textbf{Bayes' theorem}\sidenote{Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief.}
 
 \subsection{Spoiler: Bayesian probability}
 The Bayesian school uses a concept of probability different than the von Mises concept. To try to minimize the natural confusion that will follow this chapter, we will baptize this concept with a different name: \textit{"degree of belief"} $\pi(x)$. The idea of this subjective reasoning is that events of which we have similar information are by definition equally probable. This concept, differently than the frequentist definition we have studied already, can be applied to whatever quantity, even if the latter is not observable. It does not depend on the ensemble, but on the subject itself, and Bayesian d.o.b (degree of belief) has been shown to satisfy the Kolmogorov axioms. We will be returning on this concept in various chapters\todo{Maybe add which ones through a ref, and perhaps elaborate further once we understand better} and it will be crucial to not confuse it with the frequentist definition of probability. 
+
+\subsection{Events as physical observables}
+In physics, we usually call "event" a measurement of a certain observable $X$ yielding the value $x\in O_X$, where $O_X$ is the space of all the possible results (values of $x$). We classify $X$ as a \textbf{random observable} if the probability of measuring each of its values (or set of values\sidenote{Let's never forget that the probability of measuring an exact value from a continuous distribution is exactly zero, and therefore for continuous observables we will always talk about the probability of measuring a set of values, for example $0\leq x\leq 1$.}) exists and is well defined. Physically, this implies that for any\sidenote{Note how this condition starts with "for all". It means that just because it is met for some subsets of the observable space it is not guaranteed that this probability is well defined for \textit{all} of them.} subset $A \subset O_X$, the frequentist limit converges:
+
+\[
+\forall A \subset O_X \quad \exists P(x\in A) = \lim_{N\to\infty}\frac{n(x\in A)}{N}
+\]
+
+
+To move beyond empirical observation, math comes to the rescue, and we map this physical intuition to the formal mathematical framework of measure theory. This allows us to treat "measurements" as "functions" and inherit a powerful toolkit of existing theorems.
+
+\begin{definition}[Random variable]
+	A random variable is a function $X: S\rightarrow O_X$ such that:
+	\[
+	\forall A \subset O_X \quad X^{-1}(A)\subset \Sigma \rightarrow \exists P(X^{-1}(A))
+	\]
+\end{definition}
+
+
+The function $X$  maps the quantity we have observed to a value that we will call "random variable". Since the outcome of an experiment can be a qualitative observable, or anything really, this bridge is helpful in order to import all of the nice properties that mathematics guarantees us. However, for this function to be mathematically sound, we must confirm that it is measurable. That means that for any numerical interval we are interested in (say, the probability of a value falling between 5 and 10) there must exist a corresponding, well-defined set of real-world outcomes ($X^{-1}(A)$) that sits within our "event space" ($\Sigma$). If this condition is met, we gain the power to assign a precise probability $P$ to those outcomes.
+
+In essence, the random variable ensures that every "observable state of the world" captured by our instruments has a mathematically guaranteed seat at the table of probability theory.
+
+This may all sound scary right now, but hopefully the following example will clarify that the concept, at its core, is really quite simple. 
+
+\begin{example}
+	Consider the simplest physical experiment: flipping a coin. The Sample Space $S$ contains two physical outcomes: $\{\text{Heads, Tails}\}$. To perform calculations, we define a Random Variable $X$ as a function that maps these physical states to numbers:
+	
+	\[
+	X(s) = \begin{cases} 1 & \text{if } s = \text{Heads} \\ 0 & \text{if } s = \text{Tails} \end{cases}
+	\]
+	
+	Here, the "Observable Space" $O_X$ is $\{0, 1\}$. If we want to find the probability of the set $A = \{1\}$ (the event "Heads"), we look at the pre-image:
+	
+	
+	\[
+	X^{-1}(\{1\}) = \{\text{Heads}\}
+	\]
+	
+	Since "Heads" is a valid element of our event space $\Sigma$, the probability $P(X^{-1}(\{1\}))$ is well-defined (e.g., $0.5$). The function $X$ has successfully translated a physical piece of metal landing on a table into a number we can use in an equation.
+\end{example}
