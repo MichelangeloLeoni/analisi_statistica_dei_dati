@@ -72,7 +72,7 @@ This means that frequentist probability is defined on an ensemble.\todo{This sho
 S can be taken as the space of all possible experimental observations, and each element a completely defined observation. In this case, $A$ represents a set of possible observations.
 
 
-From these three axioms we can define a series of simple theorems\todo{Do we want to demonstrate these? Also maybe the formatting could do with some work}:
+From these three axioms we can define a series of simple theorems\todo{Do we want to prove these? Also maybe the formatting could do with some work}:
 
 
 \begin{definition}[Conditional probability]
@@ -86,7 +86,7 @@ This can be re-written in the more useful form:
 	\]
 \end{definition}
 
-$P(A|B)$ (also denoted with $P_B(A)$) is a Kolmogorov probability and satisfies all of the necessary axioms\todo{PROOF?}.
+$P(A|B)$ (also denoted with $P_B(A)$) is a Kolmogorov probability and satisfies all of the necessary axioms\todo{Proof?}.
 
 It is important to note that conditional probability has nothing to do with causation, correlation, or temporal relations between two events, simply put it is the probability of an event given another, and therefore is nothing more than a restriction of the probability space to a smaller ensemble. 
 
@@ -282,6 +282,7 @@ The law of large numbers (LLN) is one of the most fundamental and well-known the
 	\[
 	\langle x\rangle\equiv \E[x] \equiv \int_{O_X} x\cdot p_X(x)\dd x
 	\]
+\label{def:mean}
 \end{definition}
 
 \begin{theorem}[Law of large numbers (LLN)]
@@ -303,8 +304,8 @@ Within this theorem we have defined an interesting property "under the rug", whi
 
 If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". \todo{Here, the professor adds some considerations that I don't think I fully understand. Let's discuss if we want to include them.}
 
-\begin{example}[Demonstration of the LLN]
-	The most general demonstration of the LLN is beyond the scope of this course and therefore this write-up, however we will look at a more limiting but still instructive example. Let's suppose that also the following integral exists (\textit{variance of} $X$):
+\begin{example}[Proof of the LLN]
+	The most general proof of the LLN is beyond the scope of this course and therefore this write-up, however we will look at a more limiting but still instructive example. Let's suppose that also the following integral exists (\textit{variance of} $X$):
 	\[
 	\sigma^2 \equiv \Var[X] \equiv \int_{O_X}\left( x-\E[x]\right)^2p_X(x)\dd x
 	\] 
@@ -314,10 +315,10 @@ If we had to write the law of large numbers in words, it would read: "the sample
 	P\left( \left| x-\mu \right|>k\sigma \right)\leq \frac{1}{k^2}
 	\label{eq:chebyshev}
 	\end{equation}
-	exists for each $k\in\R^+$. While it's not the most useful upper bound it's useful in the demonstration of the LLN. 
+	exists for each $k\in\R^+$. While it's not the most useful upper bound it's useful in the proof of the LLN. 
 \end{lemma}
 
-\begin{example}[Demonstration of Čebyšëv's theorem]
+\begin{example}[Proof of Čebyšëv's theorem]
 		\begin{align*}
 			P\left( \left| x-\mu \right|>k\sigma \right) &= \int_{\left| x-\mu \right|>k\sigma} p_X(x)\dd x \\
 		&= \int_{O_X} \mathscr{F}\left( \left| x-\mu \right|>k\sigma \right)p_X(x)\dd x
@@ -337,7 +338,9 @@ If we had to write the law of large numbers in words, it would read: "the sample
 	\qed
 \end{example}
 
-Now we can get to demonstrating the LLN, armed with the Čebyšëv inequality. We notice that the \textit{pdf} of the vectorial observable $\{x_i\}_N$ can be written as the product of the \textit{pdf's} of the single observables, assuming that the observations are all independent: $p(x_N)=\prod_i^N p_X(x_i)$. Therefore, we have that
+Now we can get to proving the LLN, armed with the Čebyšëv inequality. We notice that the \textit{pdf} of the vectorial observable $\{x_i\}_N$ can be written as the product of the \textit{pdf's} of the single observables, assuming that the observations are all independent: $p(x_N)=\prod_i^N p_X(x_i)$. 
+
+Therefore, we have that
 \begin{align*}
 	\Var{\bar{x}_N} &= \Var\left[ \frac{\sum_i x_i}{N} \right] = \frac{\Var\left[ \sum_i x_i \right]}{N^2} \\
 	&= \frac{1}{N^2}\int\left[ \sum_i x_i - \E\left[ \sum_i x_i \right] \right]^2\prod_i p_X(x_i)\dd x^N \\ 
@@ -362,3 +365,100 @@ Regardless of $\varepsilon$, the right hand side can be made arbitrarily small w
 	\]
 	\qed
 \end{example}\todo{Phew... Look over all that to make sure nothing can be made clearer}
+
+If that didn't satisfy us the reader will be pleased to know that there is a stronger version of the Law of Large Numbers, appropriately called "Strong-LLN". 
+
+\begin{theorem}[Strong-LLN]
+	\[
+	P\left( \lim_{N\to\infty} \left| \bar{x}_N - \mu \right| > \varepsilon \right) = 0
+	\]
+\end{theorem}
+
+At first glance, this looks identical to what we have previously stated, but the subtle difference lies in the "probability of the limit" rather than the "limit of the probability". We can state that the limit of each succession coverges to $\mu$ "almost certainly" (which is stronger than convergence in probability and it actually implies the latter.) The SLLN is harder to prove and we won't even use it in the course of this text, but readers are welcome to take the opportunity to deepen their understanding on the matter.\sidenote{Or happily skip it and enjoy one less topic to study} The important topic to take away is that it exists, and that this "almost certain" convergence implies the existence of the expected value $\E[x]$. We shall not touch on the topic further.
+
+\section{Operations on statistics}
+ref{sec:stat-operations}
+
+We have, in the previous sections, talked about operators such as the distribution, expected value, and variance of random variables. It is now time to generalize these definitions to statistics, which we remind are \textit{functions} of the random variables themselves. 
+
+Let's begin with the most pressing one: how do we define the \textit{distribution} of a \textit{statistic}? Well, if I know the discrete \textit{pmf} of $x$ then the \textit{pmf} of the statistic $f(x)$ is easily written as $pmf\left(x(f)\right)$, no surprises there. 
+
+Things get more interesting in the continuous case, where the interval in the variable space is does not necessarily have the same measure as its image in the statistic space. As we well know, we must multiply by the derivative of the statistic with respect to the random variable. To be more precise:
+\begin{definition}[Distribution of a statistic]
+	Given $p_x(x) (x\in\R)$
+	\[
+	p_f(f) = p_x\left(x(f)\right)\left|\dv{x}{f}\right| = p_x\left(x(f)\right)\left|\dv{f}{x}\right|^{-1}_{x=x(f)} 
+	\]
+\label{def:pdf_var_change}
+\end{definition}
+
+This simplifies considerably if we consider a monotonically increasing $f$, in which case the cumulative function of $f$ becomes
+	\[
+	F_f(f)= F_x\left(x(f)\right)
+	\]
+taken with a "$1-$" before if $f$ is monotonically decreasing. The reader can readily verify that deriving the above expression one finds the one written in definition \ref{def:pdf_var_change}
+
+Another important operator is the expected value. We defined it for a random variable in Def \ref{def:mean}, and we now look to generalize it to statistics.
+	\[
+	\E[f(X)] = \E_X[f] = \int f(x)p_X(x)\dd x \,\,\, \text{or} \,\,\, \sum_i f(x_i)P_X(x_i) \,\, \text{if X is discrete}
+	\]
+	
+$\E_X$ is a linear operator, and for the LLN $\E_X[x]=\mu$. We also take the opportunity to introduce two helpful properties:
+	\[
+	\E_x\left[ (x-\mu)^2 \right] = \E_X[x^2] - \mu^2 = \Var[X]
+	\]
+	\[
+	\E[XY]\leq\sqrt{\E[X^2]\cdot\E[Y^2]} \quad \text{(Schwartz inequality)}
+	\]
+
+This type of formalism brings us to say something quite cool: the expected value of any statistic of the observable $X$ is independent of the base observables on which the probability itself is defined, and instead only depends on the probability in $S$, the space of all the elemental events. To put it mathematically:
+
+	\[
+	\E_X[f] = \int f(x)p_X(x)\dd x = \int fp_F(f)\dd f = \E_f[f] = \mu_f
+	\]
+
+Therefore, we don't lose any generality if we omit the index and just write $\E[f]$.
+
+
+We physicists are actually quite used to this type of trick, we are not saying anything more complicated than the fact that the expected value of a statistic does not change if you change the variable you calculate it in. However, since these concepts can be confusing the first time they are studied, the following example should hopefully clear the air. 
+
+\begin{example}
+	Let's suppose we have a gas whose particles have a velocity that follow a certain probability density function on an interval $p_v(v)$. Our goal is to find the average kinetic energy of the gas. 
+	
+	For simplicity, we'll assume that the velocity of the gas follows the following distribution (which we will later learn to be the very important \textit{uniform distribution})
+	\[
+	p(v) = \begin{cases} \frac{1}{v_{max}} & \text{if } v \in [0,v_{max}] \\ 0 &  \text{otherwise} \end{cases}
+	\]
+	Proceeding via direct calculation:
+	\[
+	\E_v[K(v)] = \int K(v)\cdot p_v(v) \dd v = \int_0^{v_{max}} \frac{1}{2}mv^2 \cdot \frac{1}{v_{max}} \dd v = \frac{v_{max}^2m}{6}
+	\]
+	
+	Otherwise, we can choose to calculate the expected value of the probability density function of the kinetic energy itself, and transforming $p_v(v)$ into $p_K(K)$ using definition \ref{def:pdf_var_change}:
+	
+	\[
+	p_K(k) = p_v(v(K))\cdot \left| \dv{v}{k} \right| = \frac{1}{v_{max}}\cdot\frac{1}{\sqrt{2Km}}\bigg\rvert_{K\in(0,\frac{1}{2}mv_{max}^2]}
+	\]
+	
+	we can now calculate the expected value of this distribution as we know how to
+	\[
+	\E_K[K] = \int K\cdot p_K(K) \dd K = \int_0^{\frac{1}{2}mv_{max}^2} K \cdot \frac{1}{v_{max}}\cdot\frac{1}{\sqrt{2Km}} \dd K = \frac{v_{max}^2m}{6}
+	\]
+	\qed
+\end{example}
+
+What happens if we try to find the expected value of the multiplication of two independent variables? Well, direct calculation tells us that given $F=f(X), G=g(X)$
+\begin{align*}
+	\E[fg] &= \int f\cdot g \cdot p_{FG}(f,g)\dd f \dd g \\
+	&= \int f\cdot g \cdot p_F(f)\cdot p_G(g)\dd f \dd g \\
+	&= \int f p_F(f) \dd f \cdot\int g p_G(g)\dd g = \E[f]\E[g]	
+\end{align*}
+Generalizing this concept we arrive quite naturally to the mystic \textbf{covariance}.
+\begin{definition}[Covariance]
+	\[
+	\operatorname{cov}[f,g] = \E\left[ (f-\E(f))(g-\E(g))\right] = \E[fg] - \E[f]\E[g]
+	\]
+	\[
+	\operatorname{cov}[f,f] \equiv \Var[f]
+	\]
+\end{definition}
