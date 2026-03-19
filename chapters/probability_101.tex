@@ -1,4 +1,5 @@
 \chapter{Probability 101}
+\label{chap:prob}
 
 \vspace*{2cm}
 
@@ -30,6 +31,7 @@ In this first treatment we have introduced the notation that will follow us for 
 
 
 \section{Operative definition of Probability}
+\label{sec:prob_def}
 
 We shall start with an operative definition of Probability, consistent with a physical quantity. Given an experimental procedure that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentist sense is defined as:
 	\[
@@ -56,6 +58,7 @@ This means that frequentist probability is defined on an ensemble.\todo{This sho
 
 
 \subsection{Kolmogorov probability}
+\label{subsec:kolmogorov}
 
 	We define "probability" on the set $S$ some function of the set $P$\sidenote{Formally, $P$ is defined on a $\sigma$-algebra of subsets of $S$, so that we are sure that the union and conjugation operations remain within the same space} with the following properties:
 \begin{enumerate}
@@ -134,9 +137,13 @@ It is important to remember that independence is not correlation, and the former
 The last expression takes the name of \textbf{Bayes' theorem}\sidenote{Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief.}
 
 \subsubsection{Spoiler: Bayesian probability}
+\label{subsubsec:Bayes}
+
 The Bayesian school uses a concept of probability different than the von Mises concept. To try to minimize the natural confusion that will follow this chapter, we will baptize this concept with a different name: \textit{"degree of belief"} $\pi(x)$. The idea of this subjective reasoning is that events of which we have similar information are by definition equally probable. This concept, differently than the frequentist definition we have studied already, can be applied to whatever quantity, even if the latter is not observable. It does not depend on the ensemble, but on the subject itself, and Bayesian d.o.b (degree of belief) has been shown to satisfy the Kolmogorov axioms. We will be returning on this concept in various chapters\todo{Maybe add which ones through a ref, and perhaps elaborate further once we understand better} and it will be crucial to not confuse it with the frequentist definition of probability. 
 
 \subsection{Events as physical observables}
+\label{subsec:observables}
+
 In physics, we usually call "event" a measurement of a certain observable $X$ yielding the value $x\in O_X$, where $O_X$ is the space of all the possible results (values of $x$). We classify $X$ as a \textbf{random observable} if the probability of measuring each of its values (or set of values\sidenote{Let's never forget that the probability of measuring an exact value from a continuous distribution is exactly zero, and therefore for continuous observables we will always talk about the probability of measuring a set of values, for example $0\leq x\leq 1$.}) exists and is well defined. Physically, this implies that for any\sidenote{Note how this condition starts with "for all". It means that just because it is met for some subsets of the observable space it is not guaranteed that this probability is well defined for \textit{all} of them.} subset $A \subset O_X$, the frequentist limit converges:
 
 	\[
@@ -185,6 +192,7 @@ Since we are looking to do \textit{something} with these random variables, it wi
 The second part of this definition is important - a statistic only depends on \textit{measurable quantities} and is therefore also a measurable quantity. A nice, simple example of an important statistic is the mean of a set of data. This concept of statistic will follow us closely throughout the whole course, and while it's a good idea to introduce them now this will certainly not be the last time we update our definition.
 
 \subsubsection{Probability distributions}
+\label{subsubsec:pdf}
 
 We have already thrown out this term \textit{probability distribution} in the previous section, and we won't get very far without giving it the proper definition it deserves. 
 
@@ -195,10 +203,12 @@ We have already thrown out this term \textit{probability distribution} in the pr
 	\]
 \end{definition}
 
-Often this gets (somewhat improperly) condensed in literature to be written as $P(X)$, which we will adopt from now on without too much hesitation. Probability mass functions are additive and satisfy our lovely Kolmogorov axioms\sidenote{They are defined positive and less than $1$, the sum of the total possibility space is $1$, and they are additive. The sum operation naturally changes definition based on the dimension of the outcome space.}, and so we can truly call them "probabilities". A simple example of a \textit{pmf} would be the case of the outcome of a fair six-sided die roll:
+Often this gets (somewhat improperly) condensed in literature to be written as $P(X)$, which we will adopt from now on without too much hesitation. Probability mass functions are additive and satisfy our lovely Kolmogorov axioms\sidenote{They are defined positive and less than $1$, the sum of the total possibility space is $1$, and they are additive. The sum operation naturally changes definition based on the dimension of the outcome space.}, and so we can truly call them "probabilities". A simple example of a \textit{pmf} would be the case of the outcome of a fair six-sided die roll
 	\[
 	pmf(x) = \begin{cases} \frac{1}{6} & \text{if } x \in \{1,2,3,4,5,6\} \\ 0 &  \text{otherwise} \end{cases}
 	\]
+
+\newpage %Paragraph started on the old page, so the sidenote calculated on the wrong side
 
 So much for discrete random variables, let's talk about the interesting stuff and generalize this formalism to continuous\sidenote{Naturally, we will never have a continuous result from an experiment as everything at some scale gets discretized or binned in some way, though we are sure the readers will have no problem with forgiving this abstraction.} observables. The probability mass function, as we have defined it, will be identically zero for each value in a continuous space such as $\Re$, so we will need a new definition, and much like we are used to in physics, the concept of \textit{mass} gets translated to \textit{density}.
 
@@ -225,3 +235,65 @@ However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the 
 	\]
 \end{definition}
 
+The fundamental theorem of calculus also tells us that $\dv{F}{x}=p(x)$. We will find the cumulative easier to calculate than the density function itself in many cases. 
+
+
+Moving on to probability distributions for more than one random variable, things generalize quite easily. We can generally call $P(x_1, \allowbreak x_2, \allowbreak \dots, \allowbreak x_N)$ the probability distribution of a countable number of random variables, each defined on its own outcome space. We can define independence as we have in section \ref{subsec:kolmogorov}, and say that probability distributions (defined on the same $S$) are independent if 
+
+
+	\[
+	\forall A,B \quad P\left( \left( x\in A\right) \cap \left( y\in B\right) \right)  = P\left( x\in A\right) \cdot P\left( y\in B\right) 
+	\]
+	
+\quad
+
+This can also be written as $P_{XY}(x,y)=P_X(x)\cdot P_Y(y)$.\todo{This condition is necessary, but not sufficient, so when you have an example, put it here}
+
+
+
+Much like the concept of independence, we generalize conditional probability and Bayes' theorem to distributions, obtaining
+	\[
+	P_X(x|y)\cdot P_Y(y) = P_{XY}(x,y) = P_Y(y|x)\cdot P_x(x)
+	\]
+	
+Finally, to end our parallels with Kolmogorov probability we consider a partition $\{Y_i\}$ of $O_Y$, particularly one where $Y$ is discrete-valued such that $Y_i = \{y_i\}$. In this case we have
+	\[
+	P_X(x) = \sum_i P_{XY}(x,y_i)=\sum_i P_X(x|y_i)\cdot P_Y(y_i)
+	\]
+	
+where astute readers will have identified the total probability law. This process is called \textit{marginalizing}, and $P_X(x)$ is the \textit{marginalized} distribution of $P_{XY}(x,y)$ with respect to $y$. This concept, although easy, has been known to be a "surprise question" at the exams that students tend to overlook.\sidenote{One of the authors speaks from experience.}
+
+\subsection{The law of large numbers}
+The law of large numbers (LLN) is one of the most fundamental and well-known theorems of this field. Let's start with a few definitions:
+\begin{definition}[Arithmetic mean]
+	Given a random variable $X$, we define \textbf{arithmetic mean} (or \textit{sample mean on N}) the statistic:
+	\[
+	\bar{x}_N = \frac{1}{N}S_N = \frac{1}{N}\sum_i^N x_i
+	\]
+\end{definition}
+
+\begin{definition}[Mean]
+	If $p_X(x)$ is the \textit{pdf} of $X$, we call the \textit{mean} of the distribution (or the expected value of $X$) the integral (Lebesgue):
+	\[
+	\langle x\rangle\equiv \E[x] \equiv \int_{O_X} x\cdot p_X(x)\dd x
+	\]
+\end{definition}
+
+\begin{theorem}[Law of large numbers (LLN)]
+	Let $X$ be a real-valued observable, and $p(x)$ its \textit{pdf}. Let's suppose that the mean of $X$ exists and is finite:
+	\begin{equation}
+	\mu = \E[x]=\int_{O_X} x\cdot p_X(x)\dd x
+	\label{eq:LLN_mean}
+	\end{equation}
+	We then have that 
+	\begin{equation}
+	\forall \varepsilon > 0: \lim_{N\to\infty} P\left( \left| \bar{x}_N - \mu\right| > \varepsilon\right) =0
+	\label{eq:LLN}
+	\end{equation}
+\end{theorem}
+
+\quad
+
+Within this theorem we have defined an interesting property "under the rug", which is convergence in probability, which is nothing more than the limit in (\ref{eq:LLN}).\todo{Maybe, instead of defining it this half-assed way we could add a definition explicitly?}
+
+If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". 

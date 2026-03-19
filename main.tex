@@ -21,7 +21,7 @@
 % PAGE, CHAPTER AND SIDENOTE LAYOUT
 %------------------------------------------------
 \usepackage{geometry}
-\geometry{inner=3.2cm, outer=5.5cm, bottom=3cm, top=3cm}
+\geometry{inner=3.2cm, outer=5.5cm, bottom=3cm, top=3cm, marginparsep=0.5cm, marginparwidth=4.5cm}
 \usepackage{titlesec}
 \usepackage{sidenotes}
 \let\oldSidenote\sidenote % Sidenotes wasn't working so this is the fix
@@ -29,11 +29,6 @@
 \renewcommand{\sidenote}[1]{%
 	\oldSidenote{\footnotesize #1}
 }
-
-\setlength{\marginparwidth}{4.5cm}
-\setlength{\marginparsep}{0.5cm}
-
-
 
 
 \titleformat{\chapter}
