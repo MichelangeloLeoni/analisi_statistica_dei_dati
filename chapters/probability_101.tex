@@ -32,9 +32,9 @@ In this first treatment we have introduced the notation that will follow us for 
 \section{Operative definition of Probability}
 
 We shall start with an operative definition of Probability, consistent with a physical quantity. Given an experimental procedure that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentist sense is defined as:
-\[
-P(E) = \lim_{N\to\infty} \frac{n(E)}{N}
-\]
+	\[
+	P(E) = \lim_{N\to\infty} \frac{n(E)}{N}
+	\]
 
 where $n(E)$ is the number of times that event $E$ is verified out of $N$ trials. In this operative definition, $P(E)$ is a measurable quantity, and thus it is fundamental that the experiment be repeatable infinite times in this formalism.
 
@@ -60,9 +60,9 @@ This means that frequentist probability is defined on an ensemble.\todo{This sho
 	We define "probability" on the set $S$ some function of the set $P$\sidenote{Formally, $P$ is defined on a $\sigma$-algebra of subsets of $S$, so that we are sure that the union and conjugation operations remain within the same space} with the following properties:
 \begin{enumerate}
 	
-	\item $\forall A \subset S P(A)\geq 0$
+	\item $\forall A \subset S \quad P(A)\geq 0$
 	\item $P(S) = 1$
-	\item $A_i \subset S_i ; A_i\cap A_j = 0 \forall i\neq j ; \forall A_i \rightarrow P(\cup A_i) = \sum\limits_{i}P(A_i)$
+	\item $A_i \subset S_i ;\quad A_i\cap A_j = 0 \quad \forall i\neq j ;\quad \forall A_i \rightarrow P(\cup A_i) = \sum\limits_{i}P(A_i)$
 	
 \end{enumerate}
 
@@ -71,21 +71,6 @@ S can be taken as the space of all possible experimental observations, and each 
 
 From these three axioms we can define a series of simple theorems\todo{Do we want to demonstrate these? Also maybe the formatting could do with some work}:
 
-\[
-P(\bar{A}) = 1-P(A)
-\]
-\[
-0\leq P(A) \leq 1
-\]
-\[
-P(\emptyset)=0
-\]
-\[
-A\subset B \rightarrow P(A)\leq P(B)
-\]
-\[
-P(A\cup B) = P(A)+P(B)-P(A\cap B)
-\]
 
 \begin{definition}[Conditional probability]
 	Probability of event A given that event B has occurred
@@ -148,15 +133,15 @@ It is important to remember that independence is not correlation, and the former
 
 The last expression takes the name of \textbf{Bayes' theorem}\sidenote{Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief.}
 
-\subsection{Spoiler: Bayesian probability}
+\subsubsection{Spoiler: Bayesian probability}
 The Bayesian school uses a concept of probability different than the von Mises concept. To try to minimize the natural confusion that will follow this chapter, we will baptize this concept with a different name: \textit{"degree of belief"} $\pi(x)$. The idea of this subjective reasoning is that events of which we have similar information are by definition equally probable. This concept, differently than the frequentist definition we have studied already, can be applied to whatever quantity, even if the latter is not observable. It does not depend on the ensemble, but on the subject itself, and Bayesian d.o.b (degree of belief) has been shown to satisfy the Kolmogorov axioms. We will be returning on this concept in various chapters\todo{Maybe add which ones through a ref, and perhaps elaborate further once we understand better} and it will be crucial to not confuse it with the frequentist definition of probability. 
 
 \subsection{Events as physical observables}
 In physics, we usually call "event" a measurement of a certain observable $X$ yielding the value $x\in O_X$, where $O_X$ is the space of all the possible results (values of $x$). We classify $X$ as a \textbf{random observable} if the probability of measuring each of its values (or set of values\sidenote{Let's never forget that the probability of measuring an exact value from a continuous distribution is exactly zero, and therefore for continuous observables we will always talk about the probability of measuring a set of values, for example $0\leq x\leq 1$.}) exists and is well defined. Physically, this implies that for any\sidenote{Note how this condition starts with "for all". It means that just because it is met for some subsets of the observable space it is not guaranteed that this probability is well defined for \textit{all} of them.} subset $A \subset O_X$, the frequentist limit converges:
 
-\[
-\forall A \subset O_X \quad \exists P(x\in A) = \lim_{N\to\infty}\frac{n(x\in A)}{N}
-\]
+	\[
+	\forall A \subset O_X \quad \exists P(x\in A) = \lim_{N\to\infty}\frac{n(x\in A)}{N}
+	\]
 
 
 To move beyond empirical observation, math comes to the rescue, and we map this physical intuition to the formal mathematical framework of measure theory. This allows us to treat "measurements" as "functions" and inherit a powerful toolkit of existing theorems.
@@ -191,3 +176,52 @@ This may all sound scary right now, but hopefully the following example will cla
 	
 	Since "Heads" is a valid element of our event space $\Sigma$, the probability $P(X^{-1}(\{1\}))$ is well-defined (e.g., $0.5$). The function $X$ has successfully translated a physical piece of metal landing on a table into a number we can use in an equation.
 \end{example}
+
+Since we are looking to do \textit{something} with these random variables, it will surely be helpful to note that any function of a random variable is a random variable itself, and more importantly if a random variable assumes a probability distribution, each function of that variable will as well. Since we will be using "functions of random variables" quite often, let's give them a name: \textbf{statistics}.
+\begin{definition}[Statistic]
+	A statistic (singular) is a function of random variables $s(x,y,\dots)$, that depends only on the values themselves, not on unknown parameters. 
+\end{definition}
+
+The second part of this definition is important - a statistic only depends on \textit{measurable quantities} and is therefore also a measurable quantity. A nice, simple example of an important statistic is the mean of a set of data. This concept of statistic will follow us closely throughout the whole course, and while it's a good idea to introduce them now this will certainly not be the last time we update our definition.
+
+\subsubsection{Probability distributions}
+
+We have already thrown out this term \textit{probability distribution} in the previous section, and we won't get very far without giving it the proper definition it deserves. 
+
+\begin{definition}[Probability mass function \textit{pmf}]
+	For a discrete random variable X
+	\[
+	pmf(x)\equiv P(E:X=x)
+	\]
+\end{definition}
+
+Often this gets (somewhat improperly) condensed in literature to be written as $P(X)$, which we will adopt from now on without too much hesitation. Probability mass functions are additive and satisfy our lovely Kolmogorov axioms\sidenote{They are defined positive and less than $1$, the sum of the total possibility space is $1$, and they are additive. The sum operation naturally changes definition based on the dimension of the outcome space.}, and so we can truly call them "probabilities". A simple example of a \textit{pmf} would be the case of the outcome of a fair six-sided die roll:
+	\[
+	pmf(x) = \begin{cases} \frac{1}{6} & \text{if } x \in \{1,2,3,4,5,6\} \\ 0 &  \text{otherwise} \end{cases}
+	\]
+
+So much for discrete random variables, let's talk about the interesting stuff and generalize this formalism to continuous\sidenote{Naturally, we will never have a continuous result from an experiment as everything at some scale gets discretized or binned in some way, though we are sure the readers will have no problem with forgiving this abstraction.} observables. The probability mass function, as we have defined it, will be identically zero for each value in a continuous space such as $\Re$, so we will need a new definition, and much like we are used to in physics, the concept of \textit{mass} gets translated to \textit{density}.
+
+\begin{definition}[Probability density function \textit{pdf}]
+	For a continuous random variable x
+	\[
+	P(x:x\in A)= \int_{A} p_X(x)\dd x
+	\]
+	where $p_X(x)$ is the \textit{probability density function} of $x$ 
+\end{definition}\todo{If we find a better definition, let's be sure to put it here. This one works, but it's not satisfying}
+
+We use the term "function", but if we intend the integral in the Lebesgue sense we can extend the definition to \textit{pdf's} that are not functions but rather distributions. In general, this allows us a series of liberties that functions formally would not allow, such as mixing discrete and continuous variables. It's not guaranteed that a \textit{pdf} satisfies the Kolmogorov axioms, and the following example shows that while $p(x)\geq 0$ not necessarily $p(x) < 1$.
+
+	\[
+	p(x) = \begin{cases} 2 & \text{if } x \in [0,\frac{1}{2}] \\ 0 &  \text{otherwise} \end{cases}
+	\]
+
+However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the \textit{pdf} is \textit{normalized}), and one can verify that the example above satisfies this.\sidenote{Interesting to note as well that while probabilities in the Kolmogorov sense are pure dimensionless numbers, \textit{pdf's} have the dimensions of $[x]^{-N}$ where $N$ is the dimension of the space. This has natural parallels to the concept of mass and density in physics.} This normalization also brings us to define the \textbf{cumulative density function} of a distribution, as assures us that it is a monotonically increasing function of $x$ from $0$ to $1$.
+
+\begin{definition}[Cumulative density function \textit{cdf}]
+	For a continuous random variable x
+	\[
+	F_X(x)\equiv P\left(X\in \left(-\infty, x\right]\right) = \int_{-\infty}^{x}p_X(x^\prime)\dd x^\prime
+	\]
+\end{definition}
+
