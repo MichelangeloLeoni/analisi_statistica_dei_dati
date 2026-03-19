@@ -11,7 +11,6 @@
 % MATHEMATICS
 %------------------------------------------------
 \usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools}
-
 %------------------------------------------------
 % GRAPHICS
 %------------------------------------------------
@@ -21,16 +20,21 @@
 % PAGE, CHAPTER AND SIDENOTE LAYOUT
 %------------------------------------------------
 \usepackage{geometry}
-\geometry{inner=3.2cm, outer=5.5cm, bottom=3cm, top=3cm, marginparsep=0.5cm, marginparwidth=4.5cm}
+\geometry{inner=2.5cm, outer=5.5cm, bottom=3cm, top=3cm, marginparsep=0.5cm, marginparwidth=4.5cm, headheight=15pt}
 \usepackage{titlesec}
-\usepackage{sidenotes}
-\let\oldSidenote\sidenote % Sidenotes wasn't working so this is the fix
+\usepackage{marginnote}
+\usepackage{ifoddpage}
 
-\renewcommand{\sidenote}[1]{%
-	\oldSidenote{\footnotesize #1}
+
+\renewcommand*{\marginfont}{\footnotesize}
+
+\newcounter{sidenote}
+
+\newcommand{\sidenote}[1]{%
+	\refstepcounter{sidenote}%
+	\textsuperscript{\thesidenote}%
+	\marginpar{\footnotesize\textbf{\thesidenote}\hspace{0.5em}#1}%
 }
-
-
 \titleformat{\chapter}
 {\normalfont\Huge\bfseries}
 {}
@@ -59,6 +63,7 @@
 %------------------------------------------------
 \usepackage{hyperref}
 \hypersetup{
+	hypertexnames=false,
     colorlinks=true,
     linkcolor=blue,
     urlcolor=blue,
@@ -76,20 +81,34 @@
 %------------------------------------------------
 % THEOREM ENVIRONMENTS (BOOK STYLE)
 %------------------------------------------------
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[chapter]
-\newtheorem{theorem}{Theorem}[chapter]
-\newtheorem{lemma}{Lemma}[chapter]
-\newtheorem{proposition}{Proposition}[chapter]
-\newtheorem{example}{Example}[chapter]
+\usepackage[framemethod=TikZ]{mdframed}
 
-% Boxed environments
-\newtcolorbox{defbox}{title=Definition}
-\newtcolorbox{thmbox}{title=Theorem}
+% Define the global style for your blocks
+\mdfdefinestyle{blockstyle}{
+	topline=false,
+	bottomline=false,
+	rightline=false,
+	linewidth=2pt,
+	linecolor=black!70, % A nice dark gray
+	leftmargin=0pt,
+	innerleftmargin=10pt,
+	innerrightmargin=0pt,
+	skipabove=10pt,
+	skipbelow=10pt
+}
+
+% Apply the style to your environments
+\newmdtheoremenv[style=blockstyle]{definition}{Definition}[chapter]
+\newmdtheoremenv[style=blockstyle]{theorem}{Theorem}[chapter]
+\newmdtheoremenv[style=blockstyle]{lemma}{Lemma}[chapter]
+\newmdtheoremenv[style=blockstyle]{proposition}{Proposition}[chapter]
+\newmdtheoremenv[style=blockstyle]{example}{Example}[chapter]
+
 
 %------------------------------------------------
 % COMMANDS
 %------------------------------------------------
+\usepackage{mathrsfs}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\Cov}{\operatorname{Cov}}

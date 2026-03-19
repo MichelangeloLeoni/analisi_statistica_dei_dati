@@ -91,11 +91,11 @@ $P(A|B)$ (also denoted with $P_B(A)$) is a Kolmogorov probability and satisfies 
 It is important to note that conditional probability has nothing to do with causation, correlation, or temporal relations between two events, simply put it is the probability of an event given another, and therefore is nothing more than a restriction of the probability space to a smaller ensemble. 
 
 \begin{theorem}[Total probability law]
-	Let $\{A_i\}$ be a countable partition of $S$ such that $\cup_i A_i = S$\todo{Here I omitted the intermediate passages for the proof which can be added in-line or as a proof later}. It follows that:
+	Let $\{A_i\}$ be a countable partition of $S$ such that $\cup_i A_i = S$. It follows that:
 	\[
 	\forall B: P(B)=\sum_i P(B\cap A_i) = \sum_i P(B|A_i)P(A_i)
 	\]
-\end{theorem}
+\end{theorem}\todo{Here I omitted the intermediate passages for the proof which can be added in-line or as a proof later}
 
 This theorem is useful when the conditional probabilities are easier to calculate than the total.
 \begin{example}
@@ -134,7 +134,7 @@ It is important to remember that independence is not correlation, and the former
 	\]
 \end{theorem}	
 
-The last expression takes the name of \textbf{Bayes' theorem}\sidenote{Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief.}
+The last expression takes the name of \textbf{Bayes' theorem}. Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief, which we will briefly introduce in this next section.
 
 \subsubsection{Spoiler: Bayesian probability}
 \label{subsubsec:Bayes}
@@ -144,7 +144,12 @@ The Bayesian school uses a concept of probability different than the von Mises c
 \subsection{Events as physical observables}
 \label{subsec:observables}
 
-In physics, we usually call "event" a measurement of a certain observable $X$ yielding the value $x\in O_X$, where $O_X$ is the space of all the possible results (values of $x$). We classify $X$ as a \textbf{random observable} if the probability of measuring each of its values (or set of values\sidenote{Let's never forget that the probability of measuring an exact value from a continuous distribution is exactly zero, and therefore for continuous observables we will always talk about the probability of measuring a set of values, for example $0\leq x\leq 1$.}) exists and is well defined. Physically, this implies that for any\sidenote{Note how this condition starts with "for all". It means that just because it is met for some subsets of the observable space it is not guaranteed that this probability is well defined for \textit{all} of them.} subset $A \subset O_X$, the frequentist limit converges:
+In physics, we usually call "event" a measurement of a certain observable $X$ yielding the value $x\in O_X$, where $O_X$ is the space of all the possible results (values of $x$). 
+
+
+We classify $X$ as a \textbf{random observable} if the probability of measuring each of its values (or set of values\sidenote{Let's never forget that the probability of measuring an exact value from a continuous distribution is exactly zero, and therefore for continuous observables we will always talk about the probability of measuring a set of values, for example $0\leq x\leq 1$.}) exists and is well defined. 
+
+Physically, this implies that for any subset $A \subset O_X$, the frequentist limit converges:
 
 	\[
 	\forall A \subset O_X \quad \exists P(x\in A) = \lim_{N\to\infty}\frac{n(x\in A)}{N}
@@ -168,7 +173,7 @@ In essence, the random variable ensures that every "observable state of the worl
 This may all sound scary right now, but hopefully the following example will clarify that the concept, at its core, is really quite simple. 
 
 \begin{example}
-	Consider the simplest physical experiment: flipping a coin. The Sample Space $S$ contains two physical outcomes: $\{\text{Heads, Tails}\}$. To perform calculations, we define a Random Variable $X$ as a function that maps these physical states to numbers:
+	Consider the simplest physical experiment: flipping a coin. The Sample Space $S$ contains two physical outcomes: $\{\text{Heads,}$ $\text{Tails}\}$. To perform calculations, we define a Random Variable $X$ as a function that maps these physical states to numbers:
 	
 	\[
 	X(s) = \begin{cases} 1 & \text{if } s = \text{Heads} \\ 0 & \text{if } s = \text{Tails} \end{cases}
@@ -208,7 +213,6 @@ Often this gets (somewhat improperly) condensed in literature to be written as $
 	pmf(x) = \begin{cases} \frac{1}{6} & \text{if } x \in \{1,2,3,4,5,6\} \\ 0 &  \text{otherwise} \end{cases}
 	\]
 
-\newpage %Paragraph started on the old page, so the sidenote calculated on the wrong side
 
 So much for discrete random variables, let's talk about the interesting stuff and generalize this formalism to continuous\sidenote{Naturally, we will never have a continuous result from an experiment as everything at some scale gets discretized or binned in some way, though we are sure the readers will have no problem with forgiving this abstraction.} observables. The probability mass function, as we have defined it, will be identically zero for each value in a continuous space such as $\Re$, so we will need a new definition, and much like we are used to in physics, the concept of \textit{mass} gets translated to \textit{density}.
 
@@ -225,6 +229,7 @@ We use the term "function", but if we intend the integral in the Lebesgue sense 
 	\[
 	p(x) = \begin{cases} 2 & \text{if } x \in [0,\frac{1}{2}] \\ 0 &  \text{otherwise} \end{cases}
 	\]
+
 
 However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the \textit{pdf} is \textit{normalized}), and one can verify that the example above satisfies this.\sidenote{Interesting to note as well that while probabilities in the Kolmogorov sense are pure dimensionless numbers, \textit{pdf's} have the dimensions of $[x]^{-N}$ where $N$ is the dimension of the space. This has natural parallels to the concept of mass and density in physics.} This normalization also brings us to define the \textbf{cumulative density function} of a distribution, as assures us that it is a monotonically increasing function of $x$ from $0$ to $1$.
 
@@ -245,7 +250,7 @@ Moving on to probability distributions for more than one random variable, things
 	\forall A,B \quad P\left( \left( x\in A\right) \cap \left( y\in B\right) \right)  = P\left( x\in A\right) \cdot P\left( y\in B\right) 
 	\]
 	
-\quad
+
 
 This can also be written as $P_{XY}(x,y)=P_X(x)\cdot P_Y(y)$.\todo{This condition is necessary, but not sufficient, so when you have an example, put it here}
 
@@ -296,4 +301,64 @@ The law of large numbers (LLN) is one of the most fundamental and well-known the
 
 Within this theorem we have defined an interesting property "under the rug", which is convergence in probability, which is nothing more than the limit in (\ref{eq:LLN}).\todo{Maybe, instead of defining it this half-assed way we could add a definition explicitly?}
 
-If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". 
+If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". \todo{Here, the professor adds some considerations that I don't think I fully understand. Let's discuss if we want to include them.}
+
+\begin{example}[Demonstration of the LLN]
+	The most general demonstration of the LLN is beyond the scope of this course and therefore this write-up, however we will look at a more limiting but still instructive example. Let's suppose that also the following integral exists (\textit{variance of} $X$):
+	\[
+	\sigma^2 \equiv \Var[X] \equiv \int_{O_X}\left( x-\E[x]\right)^2p_X(x)\dd x
+	\] 
+\begin{lemma}[Čebyšëv's theorem]
+	Let $X$ be a real-valued observable for which mean and variance $\mu$ and $\sigma^2$ exist and are well defined. In this case, the following inequality:
+	\begin{equation}
+	P\left( \left| x-\mu \right|>k\sigma \right)\leq \frac{1}{k^2}
+	\label{eq:chebyshev}
+	\end{equation}
+	exists for each $k\in\R^+$. While it's not the most useful upper bound it's useful in the demonstration of the LLN. 
+\end{lemma}
+
+\begin{example}[Demonstration of Čebyšëv's theorem]
+		\begin{align*}
+			P\left( \left| x-\mu \right|>k\sigma \right) &= \int_{\left| x-\mu \right|>k\sigma} p_X(x)\dd x \\
+		&= \int_{O_X} \mathscr{F}\left( \left| x-\mu \right|>k\sigma \right)p_X(x)\dd x
+	\end{align*}
+	We have introduced $\mathscr{F}$ as the indicator function of the set $X$:
+	\[
+	\mathscr{F}\left( \left| x-\mu \right|>k\sigma \right) = \begin{cases} 1 & \text{if } \left| x-\mu \right|>k\sigma  \\ 0 &  \text{otherwise} \end{cases}
+	\]
+	So substituting into the integrand this property:
+	\[
+	\mathscr{F}\left[ \frac{\left| x-\mu \right|}{k\sigma} > 1 \right] \leq \frac{\left| x-\mu \right|^2}{k^2\sigma^2} 
+	\]
+	we obtain 
+	\[
+	P\left( \left| x-\mu \right|>k\sigma \right) \leq \int \frac{1}{k^2\sigma^2}\cdot \underbrace{\left| x-\mu \right|^2 p_X(x)\dd x}_{\text{Variance}} = \frac{\Var[x]}{k^2\sigma^2} = \frac{1}{k^2}
+	\]
+	\qed
+\end{example}
+
+Now we can get to demonstrating the LLN, armed with the Čebyšëv inequality. We notice that the \textit{pdf} of the vectorial observable $\{x_i\}_N$ can be written as the product of the \textit{pdf's} of the single observables, assuming that the observations are all independent: $p(x_N)=\prod_i^N p_X(x_i)$. Therefore, we have that
+\begin{align*}
+	\Var{\bar{x}_N} &= \Var\left[ \frac{\sum_i x_i}{N} \right] = \frac{\Var\left[ \sum_i x_i \right]}{N^2} \\
+	&= \frac{1}{N^2}\int\left[ \sum_i x_i - \E\left[ \sum_i x_i \right] \right]^2\prod_i p_X(x_i)\dd x^N \\ 
+	&= \frac{1}{N^2}\int\left[ \sum_i x_i - \sum_i \mu \right]^2\prod_i p_X(x_i)\dd x^N & \text{(linearity of $\E$)}\\ 
+	&= \frac{1}{N^2}\int\left[ \sum_i \left( x_i - \mu \right) \right]^2\prod_i p_X(x_i)\dd x^N \\
+	&= \frac{1}{N^2}\int \sum_{i,j}\left[\left( x_i - \mu \right)\cdot\left( x_j - \mu \right)\right]\prod_i p_X(x_i)\dd x^N\\
+	&= \frac{1}{N^2}\sum_{i}\int \left( x_i - \mu \right)^2p_X(x_i)\dd x^N & \text{(independent events)}\\
+	&= \frac{\sigma^2}{N}
+\end{align*}
+Let's also note that
+	\[
+	\langle x \rangle = \int \bar{x}_N \prod_i p_X(x_i)\dd x^N = \mu
+	\]
+	
+Applying the Čebyšëv inequality (\ref{eq:chebyshev}) to the statistic $\bar{x}_N$, with $k=\varepsilon/\sqrt{\Var[{\bar{x}_N}]}$ we get:
+	\[
+	P\left( \left| \bar{x}_N-\mu \right| > \varepsilon\right) \leq \frac{\Var[{\bar{x}_N}]}{\varepsilon^2} = \frac{\sigma^2}{N\varepsilon^2} 
+	\]
+Regardless of $\varepsilon$, the right hand side can be made arbitrarily small with a large enough $N$, and so it immediately follows that
+	\[
+	\forall \varepsilon \lim_{N\to\infty} P\left( \left| \bar{x}_N-\mu \right| > \varepsilon\right)= 0 
+	\]
+	\qed
+\end{example}\todo{Phew... Look over all that to make sure nothing can be made clearer}
