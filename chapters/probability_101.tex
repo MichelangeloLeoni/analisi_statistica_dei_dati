@@ -377,10 +377,11 @@ If that didn't satisfy us the reader will be pleased to know that there is a str
 At first glance, this looks identical to what we have previously stated, but the subtle difference lies in the "probability of the limit" rather than the "limit of the probability". We can state that the limit of each succession coverges to $\mu$ "almost certainly" (which is stronger than convergence in probability and it actually implies the latter.) The SLLN is harder to prove and we won't even use it in the course of this text, but readers are welcome to take the opportunity to deepen their understanding on the matter.\sidenote{Or happily skip it and enjoy one less topic to study} The important topic to take away is that it exists, and that this "almost certain" convergence implies the existence of the expected value $\E[x]$. We shall not touch on the topic further.
 
 \section{Operations on statistics}
-ref{sec:stat-operations}
+\label{sec:stat-operations}
 
 We have, in the previous sections, talked about operators such as the distribution, expected value, and variance of random variables. It is now time to generalize these definitions to statistics, which we remind are \textit{functions} of the random variables themselves. 
 
+\subsubsection{Probability distribution of a statistic}
 Let's begin with the most pressing one: how do we define the \textit{distribution} of a \textit{statistic}? Well, if I know the discrete \textit{pmf} of $x$ then the \textit{pmf} of the statistic $f(x)$ is easily written as $pmf\left(x(f)\right)$, no surprises there. 
 
 Things get more interesting in the continuous case, where the interval in the variable space is does not necessarily have the same measure as its image in the statistic space. As we well know, we must multiply by the derivative of the statistic with respect to the random variable. To be more precise:
@@ -398,6 +399,25 @@ This simplifies considerably if we consider a monotonically increasing $f$, in w
 	\]
 taken with a "$1-$" before if $f$ is monotonically decreasing. The reader can readily verify that deriving the above expression one finds the one written in definition \ref{def:pdf_var_change}
 
+\begin{example}
+	Suppose we start from a known distribution in $x$, and want to find the \textit{function} $f$ that brings us to a known distribution $p_f(f)$. The, inverting \ref{def:pdf_var_change} we arrive at:
+	\[
+	\left| \dv{x}{f} \right| = \frac{p_f(f)}{p_x(x(f))}
+	\]
+	
+	To give an example, let's suppose $p_x(x) = 1; \, x\in[0,1]$ and $p_f(f) = ke^{-kf}; \, f\geq 0$ (uniform and exponential distributions, respectively). In this case:
+	\begin{align*}
+	\left| \dv{x}{f} \right| = p_f(f) \Rightarrow x(f) &= \pm \int_0^f p_f(f^\prime)\dd f^\prime + x(0) \\
+	&= \pm\left( 1-e^{-kf}\right) + \genfrac{\{}{\}}{0pt}{1}{0}{1}
+	\end{align*}
+	I choose the monotonically decreasing one:
+	\[
+	x(f) = e^{-kf} \Rightarrow f = -\frac{\ln{x}}{k}
+	\]
+\end{example}
+
+
+\subsubsection{Expected value of a statistic}
 Another important operator is the expected value. We defined it for a random variable in Def \ref{def:mean}, and we now look to generalize it to statistics.
 	\[
 	\E[f(X)] = \E_X[f] = \int f(x)p_X(x)\dd x \,\,\, \text{or} \,\,\, \sum_i f(x_i)P_X(x_i) \,\, \text{if X is discrete}
@@ -462,3 +482,48 @@ Generalizing this concept we arrive quite naturally to the mystic \textbf{covari
 	\operatorname{cov}[f,f] \equiv \Var[f]
 	\]
 \end{definition}
+We get that the covariance is null for independent variables, but not vice-versa ($f=x$, $g=x^2$)\todo{If we are feeling less lazy than I am now, we could show this proof in an example}
+
+\subsubsection{Moments of a statistic}
+We can further generalize the concept of mean and variance by introducing the \textbf{moments of a distribution}.
+\begin{definition}[$n$\textit{-th} order moment of a distribution]
+	\[
+	\mu_n(x_0) = \E\left[ (x-x_0)^n\right]
+	\]
+\end{definition}
+
+We have already encountered two of these, and tacking on the banal $0$-order case we have:\sidenote{Careful of the argument of these moments, they are not all evaluated for different $x_0$!}
+	\[
+	\mu_0(x_0) = 1 \quad \mu_1(0) = \mu \quad \mu_2(\mu_1) = \Var[x]
+	\]
+
+To translate between "central" ($x_0=0$, often denoted as $\mu_n^\prime$) moments and generic ones we can do so using the linearity of $\E$ and the Newton binomial expansion: 
+	\[
+	\mu_n(x_0) = \sum_{k=0}^n \binom{n}{k} \mu_k(0)(-x_0)^{n-k}
+	\]
+
+Two notes: 
+\begin{enumerate}
+	\item Even functions have all odd central moments equal to zero
+	\item Only $\mu_0(x_0) = 1$ is guaranteed to exist finite
+\end{enumerate}
+
+While the first condition is intuitive, as even distributions must be symmetric about their central moment by definition, the second one is important to deepen, and so an example is provided.\todo{Finish this example, I'm sure he does the calculation in some lecture so we can take it from there}
+
+\begin{example}
+	Cauchy (Lorentz) distribution:
+	\[
+	p(x) = \frac{1}{\pi} \frac{1}{1+x^2}
+	\]
+	proof...
+	
+	What this means is that the LLN is not applicable to Cauchy-distributed data!
+\end{example}
+
+The moments are quite a powerful tool, as if I know them all I can actually univocally determine the starting distribution.\todo{The following theorem can be proven, or at least expanded upon further}
+\begin{theorem}
+	If $p_1(x)$ and $p_2(x)$ have the same moments and $\left(p_1(x)-p_2(x)\right)$ is expandable in a power series then 
+	\[
+	p_1(x) = p_2(x)
+	\]
+\end{theorem}
