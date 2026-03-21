@@ -515,7 +515,7 @@ While the first condition is intuitive, as even distributions must be symmetric 
 	\[
 	p(x) = \frac{1}{\pi} \frac{1}{1+x^2}
 	\]
-	proof...
+	proof that $\mu_1$ does not exist and that $\mu_2$ diverges...I'm pretty sure that also all the odd moments DNE? Check it!
 	
 	What this means is that the LLN is not applicable to Cauchy-distributed data!
 \end{example}
@@ -527,3 +527,97 @@ The moments are quite a powerful tool, as if I know them all I can actually univ
 	p_1(x) = p_2(x)
 	\]
 \end{theorem}
+
+As we have seen, knowing the moments of a distribution is a powerful tool that has numerous implications, though actually calculating them can be non trivial. Luckily, we physicists love our good, old Taylor approximations and this is a good a time as any to put it into practice.
+
+\begin{align*}
+	f(\vec{x}) &\simeq f(\vec{\mu}) + \frac{\partial f}{\partial x_i}(x_i-\mu_i)+\frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}(x_i-\mu_i)(x_j-\mu_j)+\dots \\
+	&\Rightarrow \E[f(\vec{x})] \simeq f(\vec{\mu}) \frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}\operatorname{cov}[x_i,x_j]
+\end{align*}
+
+It's pretty easy to convince ourselves that
+	\[
+	\operatorname{cov}[f_1,f_2] = \sum_{i,j}\frac{\partial f_1}{\partial x_i}\frac{\partial f_2}{\partial x_j}\operatorname{cov}[x_1,x_j]+\dots
+	\]
+Which for uncorrelated $x$ (diagonal covariance matrix) simplifies to:
+	\[
+	\sigma_f^2 = \Var[f] = \sum_i \left| \frac{\partial f}{\partial x_i} \right|^2\sigma_i^2\sum \dots
+	\]
+	
+We recognize this as our familiar \textbf{formula for the propagation of errors}. Interesting to note that this formula comes from a Taylor approximation.\todo{This whole sequence isn't totally clear to me, so I'd like to learn it better and try to then explain it better, as I simply copied from the slides. Also, is this the right place to put this?}
+	
+\begin{definition}[Moment generating function]
+	We define \textit{moment generating function} for a distribution 
+	\[
+	M(t) = \E[e^{tx}]
+	\]
+	If M(t) exists, is finite and differentiable near the origin, then the distribution has infinite moments given from
+	\[
+	\mu^\prime_n = \frac{\partial^n M}{\partial t^n}\bigg\rvert_{t=0} \quad \mu_n(x_0) = \frac{\partial^n \left( Me^{-tx_0} \right)}{\partial t^n}\bigg\rvert_{t=0}
+	\]
+	Where
+	\[
+	\frac{\partial^n M}{\partial t^n} = \frac{\partial^n}{\partial t^n} \E\left[e^{tx}\right] =  \E\left[\frac{\partial^ne^{tx}}{\partial t^n}\right] = \E\left[x^ne^{tx}\right]\bigg\rvert_{t=0} = \E\left[ x^n \right] = \mu_n^\prime
+	\]
+	So the partial derivatives of this generating function are the moments themselves (about the central)
+\end{definition}
+	
+$M(t)$ has the nice property that for $x=x_1+x_2$ (with $x_1,x_2$ \textit{independent}) $M(t)=M_1(t)M_2(t)$. We see this right away if we explicitly write 
+	\[
+	M(t) = \E\left[ e^{t(x_1+x_2)}\right] = \E\left[ e^{tx_1}\right]\E\left[ e^{tx_2}\right] = M_1(t)M_2(t)
+	\]
+	
+This gives us a nice way to find the resulting pdf\sidenote{Or, at least its moments!} of the sum of two or more observables.
+\todo{There are some more properties and examples discussed in the slides that can be added here as we see fit, like the example that brings to the fact that the variance sums with the square.}
+
+On a similar vein to the moment generating function we can define the \textbf{characteristic function} of a probability distribution:
+
+\begin{definition}[Characteristic function]
+	In the cases where the moment generating function is not defined, we introduce the characteristic function of a probability distribution:
+	\[
+	\phi(t) = \E\left[ e^{itx} \right]
+	\]
+	with
+	\[
+	\mu_n^\prime = \frac{\partial^n \phi}{\partial (it)^n}\bigg\rvert_{t=0} = (-i)^n\frac{\partial^n \phi}{\partial t^n}\bigg\rvert_{t=0}
+	\]
+\end{definition}
+
+In general, this function has analogous properties as $M$, though it exists for a wider class of distributions. Interesting to note that the characteristic function is essentially the Fourier transform of the probability distribution.\todo{Paul Levy theorem, I have never once used this in my life. Should we include?}
+
+\section{Central Limit Theorem}
+Now seems like a great time to introduce what is probably the most important theorem we will talk about in this whole text. 
+
+\begin{theorem}[Central limit theorem]
+	Let $x$ be a real observable with a distribution $p(x)$ that admits the first two moments. 
+	Then, the distribution of the sample mean 
+	\[
+	\bar{x} = \frac{1}{N} \sum_{i=1}^{N} x_i
+	\]
+	in the limit of large $N$ tends to a distribution of universal form, independent of the specific shape of $p(x)$.
+\end{theorem}
+
+\begin{example}[Proof of the central limit theorem]
+	Let's begin by considering the transformation
+	\[
+	y = x-\mu; \quad y_n = \sqrt{N}\cdot\bar{y}_n = \sum_i\frac{y_i}{\sqrt{N}}
+	\]
+	We note that already we have $\Var[y_n]=\sigma^2$ independently of $n$, as the variance is additive and goes with the square of any multiplicative constant. Using the properties of the characteristic function we have just seen, we define:
+	\[
+	\phi_n(t)\equiv \phi_{y_n}(t) = \phi_y^N\left(\frac{t}{\sqrt{N}} \right)
+	\]
+	from which we write
+	\begin{align*}
+		\log\left(\phi_n(t)\right) &= N\log\left[ \phi_y \left(\frac{t}{\sqrt{N}}\right) \right] \simeq N\log\left[ 1 + \frac{\partial\phi_y}{\partial t}\frac{t}{\sqrt{N}} + \frac{\partial^2\phi_y}{\partial t^2}\frac{t^2}{2N} + o\left(\frac{t}{\sqrt{N}}\right)^2\right]\\
+		&=N\log\left[1+0-\frac{\sigma^2t^2}{2N}+ o\left(\frac{t}{\sqrt{N}}\right)^2\right]\simeq N \left(-\frac{\sigma^2t^2}{2N}+ o\left(\frac{t}{\sqrt{N}}\right)^2\right)\\
+		&=-\frac{\sigma^2t^2}{2}+ N\cdot o\left(\frac{t^2}{N}\right)\Rightarrow\log\left(\phi_n(t)\right)\rightarrow\log\phi(t)=-\frac{\sigma^2t^2}{2}\\
+		&\Rightarrow \phi(t) = \lim_{n\to\infty}\phi_n(t)=\exp\left(-\frac{\sigma^2t^2}{2}\right)
+	\end{align*}
+	
+	This $\phi(t)$ is universal, and does not depend on $p(x)$ \qed
+	
+\end{example}
+
+
+
+
