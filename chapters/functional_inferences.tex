@@ -113,4 +113,79 @@ Once again, we can talk about credibility ratios
  This formulation is not the only way to handle statistical inferences when $\mu$ does not have a well known and well defined distribution, and we will tackle different and more complex methods in the following sections.\todo{Could be expanded on further, this whole subsection I mean not just this last sentence}
 
 \section{Sufficient Statistics}
+
+We have already talked about statistics, which are functions of random variables that do not depend on other parameters or factors that are not the observables themselves. We will now dive deeper into distinguishing the different types of statistics. 
+
+\begin{definition}[Sufficient statistic]
+	Let $p(x;\mu)$ be the \textit{pdf} of $x$, depending on parameter $\mu$. Let $s(x)$ be a statistic (with dimensionality less than or equal to that of $x$) such that the probability of $x$ \textit{given} $s$ does not depend on $\mu$:
+	\[
+	p(x|s;\mu_1) = p(x|s;\mu_2) \forall\mu_1,\mu_2
+	\]
+	If this is the case, we say that the statistic $s$ is \textit{sufficient for} $\mu$.
+\end{definition}
+\begin{corollary}
+	Every invertible function f(s) of a sufficient statistic is also sufficient, because $p(x|f) = p(x_f(s)) = p(x|s)$
+\end{corollary}
+\begin{definition}[Ancillary statistic]
+	The less used complementary cousin of the sufficient statistic: if $s(x)$ is a statistic such that its \textit{pdf} is not dependent on $\mu$:
+	\[
+	p(s;\mu_1) = p(s;\mu_2) \, \forall \mu_1,\mu_2
+	\]
+	Then we say that the statistic is \textit{ancillary} for $\mu$
+\end{definition}
+\begin{theorem}[Factorization theorem]
+	The statistic $s(x)$ is sufficient for $\mu$ if and only if $p(x;\mu)$ can be factorized in a part that does not depend on $\mu$ and a part that depends on the on the observable $x$ only through $s(x)$ and $\mu$. Synthesized:
+	\[
+	s \text{ sufficient}\iff p(x;\mu) = f(x)\cdot g(s(x),\mu) \quad \text{with } f,g\geq0
+	\]
+	Important note: the domain of $x$ must be \textit{independent of} $\mu$
+\end{theorem}
+\begin{example}[Proof that factorization implies sufficiency, factorization theorem $\Leftarrow$]
+	\begin{align*}
+	p(s;\mu) &= \int_X p(s,x;\mu)\dd x = \int_X p(s|x;\mu)p(x;\mu)\dd x \\
+	&= \int_X \delta(s-s(x))p(x;\mu) \dd x = \int_X \delta(s-s(x))f(x)h(s(x),\mu) \dd x \\
+	&= \int_X \delta(s-s(x))f(x)h(s,\mu) \dd x = g(s,\mu)\int_X \delta(s-s(x))f(x)\dd x
+	\end{align*}
+	 
+	\begin{align*}
+	p(x|s;\mu) &= \frac{p(s|x;\mu)\cdot p(x;\mu)}{p(s;\mu)} = \frac{\delta(s-s(x))\cdot p(x;\mu)}{p(s;\mu)} =\\
+	&= \frac{\delta(s-s(x))\cdot f(x)\cdot g(s,\mu)}{g(s,\mu)\int_X \delta(s-s(x))f(x)\dd x} = \frac{\delta(s-s(x))\cdot f(x)}{\int_X\delta(s-s(x))f(x)\dd x}	
+	\end{align*}
+	which is independent of $\mu$. \qed	
+\end{example}
+
+\begin{example}[Proof that sufficiency implies factorization, factorization theorem $\Rightarrow$]
+	If
+	\[
+	p(s;\mu_1) = p(s;\mu_2) \, \forall \mu_1,\mu_2
+	\]
+	then 
+	
+	\[
+	p(x;\mu)=\frac{p(x|s;\mu)\cdot p(s;\mu)}{p(s|x;\mu)} = \frac{p(x|s)}{p(s|x)}\cdot p(s;\mu)
+	\]
+	\qed
+\end{example}
+
+In summary, sufficient statistics "compress" the data without losing any information on the parameter $\mu$. Once I have a sufficient statistic of the data I can make equally valid inferences on $\mu$ using only the statistic as I would with the whole dataset, and therefore have no reason to keep the whole set, if my goal is inferring $\mu$. The following principle sums it up quite nicely:
+
+\begin{theorem}[Sufficiency principle]
+	Let $s(x)$ be sufficient for $\mu$. Every possible inference on $\mu$ deriving from $x_0$ must be based exclusively on $s(x_0)$
+\end{theorem}
+
+Interesting to note that the Likelihood principle implies the sufficiency principle, if we let $L_x(\mu)=f(x)\cdot g(s(x),\mu)$. If we know $s(x)$ for all values of $x$, then we know $L_x(\mu)$ (up to an irrelevant multiplicative constant) for all values of $x$, which is nice in general but weaker than the Likelihood principle where we only need to know $p(x;s)$ for one observed value $x_0$, not all $x$. 
+
+
+ It's hard to overstate the simplicity yet power of this statement, and in the course of this text we will find ourselves dealing with sufficient statistics more often than entire lengths of data. 
+\todo{I didn't find a clever way to integrate the uniform distribution example here, so either we add it or we put it someplace else.}
+
+\begin{definition}[Minimal sufficient statistic]
+	A sufficient statistic is said to be \textit{minimal} if:
+	\[
+	\forall s_i:s_i\text{ sufficient}\Rightarrow s=s(s_i)
+	\]
+	This is equivalent to asking that the information can't be further reduced or compressed. 
+\end{definition}
+\todo{There will be exercises that clear these up quite nicely, add them here or ref them}
+
 \section{Fisher Information}
