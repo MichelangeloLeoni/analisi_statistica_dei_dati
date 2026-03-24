@@ -1,2 +1,116 @@
 \chapter{Functional Inferences}
-Functional inferences start here
+\todo{A quote here like in the previous chapter? Could be cool.}
+So far we have talked about the basics of Probability, and introduced key concepts like probability mass functions. While these abstractions are extremely useful and will follow us through the course of our lives as physicists, realistically we will rarely measure an observable extracted from a completely known \textit{pdf}. Actually, if the probability density function is completely known, measuring the observable brings us no new information other than the measure itself - we learn nothing new about the world. 
+
+Things start to get interesting when the distribution itself depends on some unknown parameter\sidenote{This parameter can be anything, it does not have to be observable, follow a \textit{pdf}, be a random variable, it can be anything that the density function of the observable depends on.}, and measuring the observable brings us new information on what that parameter may be. In this section we will write
+	\[
+	p_X(x;\mu)
+	\]
+to denote the \textit{pdf} of observable $x\in X$ dependent on some parameter $\mu\in M$, using the semicolon to distinguish observables from parameters. Our goal is that of the \textit{functional inference}, finding a \textit{function} that depends on the observables (statistic) that assigns a sort of "score" to every value of the parameters, indicating their plausibility. In short:
+	\[
+	s(x): x\rightarrow f_x(\mu); \quad f:A\rightarrow \R
+	\]
+
+\section{The Likelihood function}
+
+We begin with one of the most important definitions of the whole course:
+
+\begin{definition}[Likelihood function]
+	Let $x\sim p(x;\mu)\, , \mu\in M$. Given an observation $x_0$ of $x$, we define \textbf{Likelihood function} the value of the probability (or density) of $x_0$ as a function of $\mu$
+	\[
+	L: M \rightarrow \R_0^+:L_{x_0}(\mu)=p_(x_0;\mu)
+	\]
+\end{definition}
+
+The likelihood is not a probability nor probability density, but in general a non-negative function that indicates the "plausibility" (well, \textit{likelihood}) of extracting whichever $\mu$ given the measure $x_0$.
+
+\begin{example}
+	Likelihood Bernoulli
+	
+	Likelihood uniform
+	
+	Likelihood Gauss
+\end{example}\todo{Add some example of calculating Likelihoods, if we want we can change spot.}
+
+A few key properties of the Likelihood:
+\begin{enumerate}
+	\item $L$ only inherits the units from the observable, and can otherwise be discrete, continuous, multi-dimensional, independently from the observable's characteristics.
+	\item The Likelihood does not have to be integrable nor normalized, and its integral has no interesting interpretation.
+	\item When transforming variables, the Likelihood transforms like the \textit{pdf} (so with $||J(x)||$), and therefore the ratio $\frac{L\left(\mu_1\right)}{L\left(\mu_2\right)}$ of two Likelihoods remains constant.
+	\item Given a model for the observables, the functional form of the Likelihood is uniquely determined up to a multiplicative constant.
+	\item If we apply an invertible transformation in the 	\textit{parameter} space, the Likelihood changes functional form but maintains its value ($L_x(f(\mu)) = L_x(\mu)$). In particular, the value of the parameter for which the Likelihood is maximum is invariant. 
+	\item The Likelihood from the measure of many independent observables $x,y,\dots$ (or the same one measured many times independently), dependent on a certain set of parameters is the product of the individual Likelihoods. This means that more measurements can only better your Likelihood and that you can combine it with others to keep track of more observations. 
+	\item $\ell =\ln{L}$ maintains all the same, nice properties as $L$, swapping the multiplicative constant for an additive one. For this reason, it's often used in calculations.
+\end{enumerate}
+
+\begin{example}
+	Here he combines two Gaussian Likelihoods, see if you want.
+\end{example}\todo{this}
+
+It should be pretty clear now why the Likelihood is a natural tool if our goal is to draw conclusions about the parameters that govern the distributions from which we extract our observations. Though not interpretable as a probability, the likelihood still offers crucial information, and higher values can be interpreted as more plausible candidates for the parameter. Most importantly, where $L=0$, that value can be completely excluded as a possibility. Also, the multiplicative nature of repeated measures causes thinner and sharper peaks around the most likely values.
+
+In general, we have a promising way to write a functional inference, where the statistic is the likelihood function itself. 
+
+\begin{definition}[Likelihood principle]
+	Central to the Likelihoodist perspective is the idea that the Likelihood function is the sole vehicle for evidence, leading to the following formal requirements for any rational inference: 
+	\begin{enumerate}
+		\item Any possible inference about $\mu$ derived from the observation $x_0$ can be based exclusively on $L(\mu)$.
+		\item If two experiments yield the same $L(\mu)$ for a given $x$, the inferences that can be drawn about $\mu$ are identical.
+		\item Any conclusion about $\mu$ that depends on anything other than $L(\mu)$ is inadmissible.
+		\item Any conclusion about $\mu$ that depends on anything other than $L(\mu)$ must be rejected as mere irrationality or superstition.
+	\end{enumerate}
+\end{definition}
+
+As we can tell, there are strong opinions on the matter and the argument was controversial, with the debate not yet resolved to this day. As far as we are concerned, we will take a much more neutral approach to the matter, integrating the concept of Likelihood with other techniques, adopting its helpful properties but violating the \textit{Likelihood principle}.
+
+\subsection{Inferential use of the Bayes theorem}
+Let's assume, to start, that $\mu$ admits a probability distribution in $M$, namely $P(\mu)$, on which we hope to make some inferences. We write then, in this case,
+	\[
+	L_{x_0}(\mu)=p(x_0|\mu)
+	\]
+and using Bayes' theorem (\ref{th:Bayes}) we can write:
+	\[
+	p(\mu|x_0) = \frac{\overbrace{p(x_0|\mu)}^{L_{x_0}(\mu)}p(\mu)}{p(x_0)}
+	\]
+ 
+ In words: the \textbf{posterior} probability $p(\mu|x_0)$ is the product of the Likelihood times the \textbf{prior} probability $p(\mu)$ (times a multiplicative normalization factor $p(x_0$)). When it exists, it is naturally a better tool than the likelihood function for functional inferences as it builds upon it by adding the information tied to the distribution of $\mu$ itself. 
+ 
+ While the Likelihood function is not necessarily integrable, the product $p(\mu)\cdot L_{x_0}(\mu)$ must be, as the posterior must be normalized. 
+ 
+ 
+ If I can calculate this, i.e if $\mu$ admits a \textit{pdf} and I am lucky enough to know it, then I know everything I will ever need to know and can calculate anything I may be interested in, like the \textit{probability}\sidenote{Not just "plausibility" or likelihood, the actual Probability} of any interval of $M$ or which is the $\mu$ that maximizes the posterior, for example. 
+ 
+ \begin{example}
+ 	COVID
+ \end{example}\todo{do}
+ 
+ Often times, to avoid calculating the normalization, we talk about the ratio
+ 	\[
+ 	\frac{p(\mu_1|x_0)}{p(\mu_1|x_0)} = \overbrace{\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}}^{LR_{x_0}(\mu_1,\mu_2)} \cdot \frac{p(\mu_1)}{p(\mu_2)}
+ 	\]
+ where $LR$ (\textit{Bayes' factor}) "updates" the relative probability between two hypotheses (different $\mu$) at each observation. Given the multiplicative nature of the Likelihood, this formula can be used to track the "evolution" of the relative probability. 
+ 
+ \todo{Following example and also something about relative abundance?}
+ \begin{example}
+ 	PID muoni e pioni etc...
+ \end{example}
+
+\subsubsection{Subjectivist Bayesian Inference}
+
+Let's now talk about the more realistic scenario where $\mu$ does not admit a probability function (or it does, but we don't know it). The Bayesian (subjectivist) approach proceeds by \textit{assigning} a prior distribution to $\mu$, based on the \textit{degree of belief} $\pi(\mu)$. Then, the calculations proceed as before, and by treating the degree of belief as a probability we arrive to the posterior degree of belief:
+	\[
+	\pi_{x_0}(\mu) = \frac{L_{x_0}(\mu)\pi(\mu)}{\underbrace{\pi(x_0)}_{\sum_i p(x;\mu_i)\pi(\mu_i)}}
+	\]
+In this expression, we now talk about the "credibility" of a certain $\mu$, remembering that the degree of belief is not a probability. Often times, it can be difficult to choose the right prior, and not always will it even be integrable (when it is not we call it an "improper prior"), though its product with the likelihood must by all means be integrable. 
+
+
+Once again, we can talk about credibility ratios
+ 	\[
+	\frac{\pi(\mu_1|x_0)}{\pi(\mu_1|x_0)} = \overbrace{\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}}^{LR_{x_0}(\mu_1,\mu_2)} \cdot \frac{\pi(\mu_1)}{\pi(\mu_2)}
+	\]
+ and the quantity $\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}$ is called \textit{belief-updating ratio} while $\frac{\pi(\mu_1)}{\pi(\mu_2)}$ hold the significance of \textit{betting odds} in the game theory world.
+ 
+ This formulation is not the only way to handle statistical inferences when $\mu$ does not have a well known and well defined distribution, and we will tackle different and more complex methods in the following sections.\todo{Could be expanded on further, this whole subsection I mean not just this last sentence}
+
+\section{Sufficient Statistics}
+\section{Fisher Information}
