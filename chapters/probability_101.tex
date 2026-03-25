@@ -225,6 +225,8 @@ So much for discrete random variables, let's talk about the interesting stuff an
 	where $p_X(x)$ is the \textit{probability density function} of $x$ 
 \end{definition}\todo{If we find a better definition, let's be sure to put it here. This one works, but it's not satisfying}
 
+\todo{Maybe we should include here a brief discussion of pdf's properties, e.g. how they add up, ecc.}
+
 We use the term "function", but if we intend the integral in the Lebesgue sense we can extend the definition to \textit{pdf's} that are not functions but rather distributions. In general, this allows us a series of liberties that functions formally would not allow, such as mixing discrete and continuous variables. It's not guaranteed that a \textit{pdf} satisfies the Kolmogorov axioms, and the following example shows that while $p(x)\geq 0$ not necessarily $p(x) < 1$.
 
 	\[
@@ -351,6 +353,7 @@ Therefore, we have that
 	&= \frac{1}{N^2}\sum_{i}\int \left( x_i - \mu \right)^2p_X(x_i)\dd x^N & \text{(independent events)}\\
 	&= \frac{\sigma^2}{N}
 \end{align*}
+
 Let's also note that
 	\[
 	\langle x \rangle = \int \bar{x}_N \prod_i p_X(x_i)\dd x^N = \mu
@@ -366,6 +369,7 @@ Regardless of $\varepsilon$, the right hand side can be made arbitrarily small w
 	\]
 	\qed
 \end{example}\todo{Phew... Look over all that to make sure nothing can be made clearer}
+\todo{We used here a property of the Var we have not yet stated. While trivial if you look at the Var definition it might be useful to have a list of properties for quick reference}
 
 If that didn't satisfy us the reader will be pleased to know that there is a stronger version of the Law of Large Numbers, appropriately called "Strong-LLN". 
 
