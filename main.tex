@@ -10,7 +10,7 @@
 %------------------------------------------------
 % MATHEMATICS
 %------------------------------------------------
-\usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools}
+\usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools, cancel}
 %------------------------------------------------
 % GRAPHICS
 %------------------------------------------------
@@ -35,11 +35,14 @@
 	\textsuperscript{\thesidenote}%
 	\marginpar{\footnotesize\textbf{\thesidenote}\hspace{0.5em}#1}%
 }
-\titleformat{\chapter}
-{\normalfont\Huge\bfseries}
-{}
-{0pt}
-{}
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}
+{\filleft\Large\textsf{\chaptertitlename} \Huge\thechapter} % The Label (Chapter 1 or Appendix A)
+{20pt} % Space between label and title
+{\titlerule\vspace{10pt}\Huge} % The Title style
+[\vspace{20pt}\titlerule]
+
+\titlespacing*{\chapter}{0pt}{0pt}{40pt}
 
 %------------------------------------------------
 % COLORS AND BOXES
@@ -164,5 +167,16 @@
 \include{chapters/significance_tests}
 
 \include{chapters/goodness_of_fit}
+
+
+% --- APPENDICES ---
+\appendix
+\include{appendices/important_distributions}
+\include{appendices/statistical_tables}
+
+\backmatter
+% Bibliography or Index goes here
+\end{document}
+
 
 \end{document}

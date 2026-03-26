@@ -188,4 +188,96 @@ Interesting to note that the Likelihood principle implies the sufficiency princi
 \end{definition}
 \todo{There will be exercises that clear these up quite nicely, add them here or ref them}
 
+\todo{Conditionality principle, Birnbaum argumentation, both things I'd happily skip... Shall we?}
+
+So now we have talked at lengths about this beautiful concept called the sufficient statistic and how it is going to be the resolution to all of our problems, and provided some examples of well-known sufficient statistics for important distributions.\todo{Have we? Either add them or change this phrase to reference the appendix where all the important distributions and their properties will be.} All we need now is a way to more generally find the sufficient statistic for a given distribution, and luckily there is a way through the following theorem:
+
+\begin{theorem}[Darmois theorem]
+	Given a real observable $x$ distributed according to $p(x;\mu)$ with domain independent from $\mu$, we suppose that, given $N$ observations ${x_k}_N$, there exists a sufficient statistic for $\mu$ $s_i\left({x_k}_N\right)$ with values in $\R^n$ (with $n$ independent from $N$).
+	
+	In this case, the \textit{pdf} can be written as:
+	\[
+	p(x;\mu) = \exp{\left[ \sum_{i=1}^n \alpha_i(x)a_i(\mu) + \beta(x) +\gamma(\mu)\right]}
+	\]
+	
+	And the sufficient statistic $s$ can be expressed as
+	\[
+	s_i(x)=\sum_{k=1}^N \alpha_i(x_k)
+	\]
+\label{th:darmois}
+\end{theorem}
+
+Basically, what this theorem is saying is that if I can write my \textit{pdf} in exponential form, and seperate it into a sum terms as shown in \ref{th:darmois} then I can identify the sufficient statistic for $p$. This is great and will be used when possible, however it's easy to imagine that the class of functions that can be written as exponentials is not as large as we'd like.
+
 \section{Fisher Information}
+
+Let's take a step back and remember what we are here for. In this chapter, we want to explore different functions that apply a "plausibility score" to different states of a certain parameter. We saw the Likelihood and digressed into talking about sufficient statistics. Let's put these together and explore a new concept in the field of functional inferences:
+
+\begin{definition}[Fisher score function]
+	\[
+	S_x(\mu) = \frac{\partial \ln L_x(\mu)}{\partial \mu} = \frac{\partial \ln p(x;\mu)}{\partial \mu}
+	\]
+\end{definition}
+
+This expression is a function of $\mu$, though for fixed $\mu$ it can be by all means considered a statistic, and for example, at a fixed $\mu$:
+	\[
+	\E\left[ S_x(\mu) \right] = \int \frac{\partial \ln p(x;\mu)}{\partial \mu}p(x;\mu)\dd x
+	\]
+
+We note that, if the domain of $x$ is independent of $\mu$ and we have sufficient regularity in $p$ then we can commute the derivative with the integral and we get
+
+	\begin{align*}
+	\E\left[ S_x(\mu) \right] &= \int\frac{1}{p(x;\mu)}\frac{\partial p(x;\mu)}{\partial \mu} p(x;\mu) \dd x \\
+	&= \int \frac{\partial p(x;\mu)}{\partial\mu} \dd x = \frac{\partial}{\partial \mu}\underbrace{\int p(x;\mu)\dd x}_1 \equiv 0\quad \forall \mu
+	\end{align*}
+
+This means that under sufficient regularity (and if the domain of the observable is independent of the parameter), then the expected value of the Fisher score is identically null.
+
+\begin{definition}[Fisher Information function]
+	\[
+	I(\mu) = \E\left[ S^2_x(\mu) \right] = \E\left[\left( \frac{\partial \\ln L_x(\mu)}{\partial\mu}\right)^2\right]
+	\]
+\end{definition}
+
+Under the same principles of sufficient regularity, given that the expected value of the Fisher score is zero, then the Fisher Information will be equal to the variance of the score. 
+
+Generalizing to more parameters, we have the \textit{Fisher Information matrix} defined as:
+	\[
+	I_{ij}(\mu) = \E\left[ \frac{\partial \ln L_x(\mu)}{\partial \mu_i}\cdot \frac{\partial \ln L_x(\mu)}{\partial \mu_j}\right]
+	\]
+
+This matrix, under the usual regularity requisites, can be expanded in the following way:
+
+\begin{align*}
+	I_{ij}(\mu) &= \int \frac{\partial \ln p(x;\mu)}{\partial \mu_i} \frac{\partial \ln p(x;\mu)}{\partial \mu_j} p(x;\mu)\dd x = \int \frac{\partial \ln p(x;\mu)}{\partial \mu_i} \frac{\partial p(x;\mu)}{\partial \mu_j} \dd x \\
+	&= \int\left[ \frac{\partial}{\partial\mu_i}\left(p(x;\mu)\frac{\partial \ln p(x;\mu)}{\partial \mu_i}\right) - p(x;\mu)\frac{\partial^2\ln p(x;\mu)}{\partial \mu_i \partial\mu_j}\right]\dd x \\
+	&= \frac{\partial}{\partial \mu_i}\E\left[S_x(\mu)\right] - \E\left[\frac{\partial^2 \ln p(x;\mu)}{\partial \mu_i\partial\mu_j}\right] \\ 
+	&= \E\left[-\frac{\partial^2\ln L(\mu)}{\partial\mu_i\partial\mu_j}\right]
+\end{align*}
+
+This expression makes it clear that the Fisher Information is linear in $\ln L$, and since the Likelihood is multiplicative in the number of observations, the Fisher Information is additive (under the usual assumptions). Since we want the Information to represent how much the observations tell us about the parameter $\mu$, this is a property that we happily accept. 
+
+To put everything together, let's extend the concept of Fisher Information to \textit{statistics}, given a statistic $s(x)$ let's call the \textit{Information} of $s$ on $\mu$ the quantity:
+	\[
+	I_s(\mu) = \E \left[\left( \frac{\partial\ln p(s(x);\mu)}{\partial \mu}\right)^2 \right] 
+	\]
+	
+If we consider a sufficient statistic for $\mu$, then we have:
+
+\begin{align*}
+	p(x;\mu)&=p(x|s)p_s(s;\mu) \Rightarrow \ln p(x;\mu) = \ln p_s (s;\mu) + \ln p(x|s) \\
+	&\Rightarrow \frac{\partial}{\partial \mu}\ln p(x;\mu) = \frac{\partial}{\partial\mu}\ln p_s(s,\mu) + \cancelto{0}{\frac{\partial}{\partial \mu}\ln p(x|s)} = \frac{\partial}{\partial\mu}\ln p_s(s;\mu)\\
+	&\Rightarrow \E\left[\left(\frac{\partial\ln p(x;\mu)}{\partial\mu}\right)^2\right] = \E\left[\left(\frac{\partial\ln p_s(s;\mu)}{\partial\mu}\right)^2\right]\\
+	&\Rightarrow I_s(\mu) = I(\mu)
+\end{align*}
+
+Therefore, the Information of a sufficient statistic is the same as the Information of the original data itself. Given a generic statistic (not necessarily sufficient), it can be shown that
+	\[
+	I_{s(x)}(\mu)\leq I(\mu)
+	\]
+and if the statistic $s(x)$ is an invertible function of $x$, we have that an invertible transformation does not change the Information:
+	\[
+	I(\mu)\equiv I_{x(s)}\leq I_s(\mu)
+	\]
+
+All of these are properties that we would expect of a function that symbolizes the information of an observable/statistic, and if I cannot find a sufficient statistic for my observable a good idea might be to find a statistic that minimizes the Fisher Information loss.
