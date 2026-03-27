@@ -18,7 +18,7 @@ build:
 
 clean:
 	-$(RM) *.aux *.log *.out *.toc
-	-$(RM) $(call FixPath,chapters/*.aux chapters/*.log)
+	-$(RM) $(call FixPath,chapters/*.aux chapters/*.log appendices/*.aux appendices/*.log)
 
 cleanall: clean
 	-$(RM) $(MAIN).pdf
