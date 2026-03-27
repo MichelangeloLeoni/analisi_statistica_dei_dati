@@ -491,7 +491,7 @@ Generalizing this concept we arrive quite naturally to the mystic \textbf{covari
 	\[
 	\operatorname{cov}[f,f] \equiv \Var[f]
 	\]
-\end{definition}
+\end{definition}\todo{Should we define here the Cov matrix and Corr?}
 We get that the covariance is null for independent variables, but not vice-versa, as the following example demonstrate.
 
 \begin{example}
@@ -545,7 +545,7 @@ While the first condition is intuitive, as even distributions must be symmetric 
 	proof that $\mu_1$ does not exist and that $\mu_2$ diverges...I'm pretty sure that also all the odd moments DNE? Check it!
 	
 	What this means is that the LLN is not applicable to Cauchy-distributed data!
-\end{example}
+\end{example}\todo{Based on my notes: For a distribution symmetric around zero, all odd central moments are zero (if they exist), while the even central moments may exist or diverge depending on the tails of the distribution.}
 
 The moments are quite a powerful tool, as if I know them all I can actually univocally determine the starting distribution.\todo{The following theorem can be proven, or at least expanded upon further}
 \begin{theorem}
@@ -558,8 +558,9 @@ The moments are quite a powerful tool, as if I know them all I can actually univ
 As we have seen, knowing the moments of a distribution is a powerful tool that has numerous implications, though actually calculating them can be non trivial. Luckily, we physicists love our good, old Taylor approximations and this is a good a time as any to put it into practice.
 
 \begin{align*}
-	f(\vec{x}) &\simeq f(\vec{\mu}) + \frac{\partial f}{\partial x_i}(x_i-\mu_i)+\frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}(x_i-\mu_i)(x_j-\mu_j)+\dots \\
-	&\Rightarrow \E[f(\vec{x})] \simeq f(\vec{\mu}) \frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}\operatorname{cov}[x_i,x_j]
+	f(\vec{x}) = f(\vec{\mu}) + &\frac{\partial f}{\partial x_i}(x_i-\mu_i)+\frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}(x_i-\mu_i)(x_j-\mu_j)+o\left(\left(\vec{x}-\vec{\mu}\right)^3\right) \\
+	\Rightarrow \E[f(\vec{x})] &\simeq \E[f(\vec{\mu})] + \frac{\partial f}{\partial x_i}\cancelto{0}{\E[x_i-\mu_i]} \quad + \frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}\E[(x_i-\mu_i)(x_j-\mu_j)] \\
+	&\simeq f(\vec{\mu}) + \frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}\operatorname{cov}[x_i,x_j]
 \end{align*}
 
 It's pretty easy to convince ourselves that
