@@ -1,5 +1,9 @@
 appunti_lezioni/
 
+# Python venv
+.venv/
+venv/
+
 # Compiled LaTeX files
 *.pdf
 
