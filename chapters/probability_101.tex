@@ -566,7 +566,7 @@ As we have seen, knowing the moments of a distribution is a powerful tool that h
 We now consider the linear approximation (where $\E[f(\vec{x})]\approx f(\vec{\mu})$ and $f(\vec{x}) \approx f(\vec{\mu}) + \frac{\partial f}{\partial x_i}(x_i-\mu_i)$). In this regime, we have:
 
 	\[
-	f(\vec{x}) - \E[f(\vec{x})] \approx \frac{\partial f}{\partial x_i}(x_i-\mu_i)
+	f(\vec{x}) - \E[f(\vec{x})] \approx \sum_i \frac{\partial f}{\partial x_i}(x_i-\mu_i)
 	\]
 	
 To compute the covariance of two functions $f_1$ and $f_2$, we consider:
