@@ -563,16 +563,31 @@ As we have seen, knowing the moments of a distribution is a powerful tool that h
 	&\simeq f(\vec{\mu}) + \frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}\operatorname{cov}[x_i,x_j]
 \end{align*}
 
-It's pretty easy to convince ourselves that
+We now consider the linear approximation (where $\E[f(\vec{x})]\approx f(\vec{\mu})$ and $f(\vec{x}) \approx f(\vec{\mu}) + \frac{\partial f}{\partial x_i}(x_i-\mu_i)$). In this regime, we have:
+
 	\[
-	\operatorname{cov}[f_1,f_2] = \sum_{i,j}\frac{\partial f_1}{\partial x_i}\frac{\partial f_2}{\partial x_j}\operatorname{cov}[x_1,x_j]+\dots
+	f(\vec{x}) - \E[f(\vec{x})] \approx \frac{\partial f}{\partial x_i}(x_i-\mu_i)
+	\]
+	
+To compute the covariance of two functions $f_1$ and $f_2$, we consider:
+
+	\begin{align*}
+		\operatorname{cov}[f_1,f_2]&=\E \left[(f_1(\vec{x})-\E[f_1(\vec{x})])(f_2(\vec{x})-\E[f_2(\vec{x})])\right] \\
+		&\approx \E \left[\left(\sum_i\frac{\partial f_1}{\partial x_i}(x_i-\mu_i)\right)\left(\sum_j\frac{\partial f_2}{\partial x_j}(x_j-\mu_j)\right)\right] \\
+		&= \sum_i \sum_j \frac{\partial f_1}{\partial x_1} \frac{\partial f_2}{\partial x_j} \E \left[(x_i-\mu_i)(x_j-\mu_j)\right]
+	\end{align*}
+
+Which directly leads to:
+	\[
+	\operatorname{cov}[f_1,f_2] \approx \sum_{i,j}\frac{\partial f_1}{\partial x_i}\frac{\partial f_2}{\partial x_j}\operatorname{cov}[x_i,x_j]
 	\]
 Which for uncorrelated $x$ (diagonal covariance matrix) simplifies to:
 	\[
-	\sigma_f^2 = \Var[f] = \sum_i \left| \frac{\partial f}{\partial x_i} \right|^2\sigma_i^2\sum \dots
+	\sigma_f^2 = \Var[f] = \sum_i \left| \frac{\partial f}{\partial x_i} \right|^2\sigma_i^2 +\dots
 	\]
 	
 We recognize this as our familiar \textbf{formula for the propagation of errors}. Interesting to note that this formula comes from a Taylor approximation.\todo{This whole sequence isn't totally clear to me, so I'd like to learn it better and try to then explain it better, as I simply copied from the slides. Also, is this the right place to put this?}
+\todo{I tried to rewrite this part to make it clearer. I don't know if I accomplished the goal}
 	
 \begin{definition}[Moment generating function]
 	We define \textit{moment generating function} for a distribution 
