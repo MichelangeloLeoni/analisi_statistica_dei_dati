@@ -439,7 +439,7 @@ $\E_X$ is a linear operator, and for the LLN $\E_X[x]=\mu$. We also take the opp
 This type of formalism brings us to say something quite cool: the expected value of any statistic of the observable $X$ is independent of the base observables on which the probability itself is defined, and instead only depends on the probability in $S$, the space of all the elemental events. To put it mathematically:
 
 	\[
-	\E_X[f] = \int f(x)p_X(x)\dd x = \int fp_F(f)\dd f = \E_f[f] = \mu_f
+	\E_X[f] = \int f(x)p_X(x)\dd x = \int fp_F(f)\dd f = \E_F[f] = \mu_f
 	\]
 
 Therefore, we don't lose any generality if we omit the index and just write $\E[f]$.
@@ -487,7 +487,24 @@ Generalizing this concept we arrive quite naturally to the mystic \textbf{covari
 	\operatorname{cov}[f,f] \equiv \Var[f]
 	\]
 \end{definition}
-We get that the covariance is null for independent variables, but not vice-versa ($f=x$, $g=x^2$)\todo{If we are feeling less lazy than I am now, we could show this proof in an example}
+We get that the covariance is null for independent variables, but not vice-versa, as the following example demonstrate.
+
+\begin{example}
+Let's consider the case where $F=f(X)=X$ and $G=g(X)=X^2$, and let $X$ follow a uniform distribution centered at zero:
+	\[
+	p(x) = \begin{cases} \frac{1}{2} & \text{if } x \in [-1,1] \\ 0 &  \text{otherwise} \end{cases}
+	\]
+(which the reader can easily verify as correctly normalized).\\
+The covariance between the two is calculated as:
+	\[
+	\operatorname{cov}[f,g]=\E\left[X^3\right]-\E\left[X\right]\E\left[X^2\right]
+	\]
+since the distribution is centered at zero, we have that $\E\left[x\right]=\mu=0$, thus leaving us with:
+	\[
+	\operatorname{cov}[f,g]=\E\left[X^3\right]
+	\]
+However, because $x^3$ is an odd function, its expected value over a symmetric interval is zero. This results in a null covariance, even though the two variables are clearly not independent.
+\end{example}
 
 \subsubsection{Moments of a statistic}
 We can further generalize the concept of mean and variance by introducing the \textbf{moments of a distribution}.
