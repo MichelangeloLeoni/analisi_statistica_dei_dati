@@ -69,9 +69,10 @@ Let's assume, to start, that $\mu$ admits a probability distribution in $M$, nam
 	L_{x_0}(\mu)=p(x_0|\mu)
 	\]
 and using Bayes' theorem (\ref{th:Bayes}) we can write:
-	\[
+	\begin{equation}
 	p(\mu|x_0) = \frac{\overbrace{p(x_0|\mu)}^{L_{x_0}(\mu)}p(\mu)}{p(x_0)}
-	\]
+	\label{def:posterior}
+	\end{equation}
  
  In words: the \textbf{posterior} probability $p(\mu|x_0)$ is the product of the Likelihood times the \textbf{prior} probability $p(\mu)$ (times a multiplicative normalization factor $p(x_0$)). When it exists, it is naturally a better tool than the likelihood function for functional inferences as it builds upon it by adding the information tied to the distribution of $\mu$ itself. 
  

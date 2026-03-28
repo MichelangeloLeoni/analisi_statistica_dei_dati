@@ -1,2 +1,42 @@
 \chapter{Point Estimations}
-Point estimations start here, I am going to get to this tonight!
+We have thus far talked about functional inferences, where we try to find a function that expresses some degree of "plausibility" for different values of $\mu$ starting from the observations of $x$ and its distribution $p(x;\mu)$. 
+
+We now pivot to something entirely different, and our aim will be, starting from the measurements of $x$\sidenote{That is all we can do, after all, measure x! Remember, our job as data analysts is to infer something from the measured data.}, to extract a single value for the parameter $\mu$, attributing to that value some uncertainty. We have seen this many times in our lives, and usually write it in the synthetic form:
+	\[
+	\mu = \hat{\mu} \pm e
+	\]
+Where $\hat{\mu}$ is the \textit{point estimation} of the parameter $\mu$. The idea is that this point estimation gives us the "best estimate" for the parameter $\mu$, whatever that means. 
+
+Remember, we can't measure parameters, so usually when we read that a parameter (let's say, the lifetime of the muon) was \textit{measured}, it really means that it was \textit{estimated through a point estimation} and the value of that estimation is provided, usually with an associated statistic uncertainty. 
+
+Our job during this chapter will be to explore the different kinds of point estimators and to understand their properties so that we can decide, in the course of our data analyst careers, which tool is right for which job. Unfortunately, there is no "best way" that fits all of the situations we might find ourselves in, and the expert analyst is the one that knows how to justify their choice in a convincing matter.\sidenote{Note: not the one who makes the \textit{best} choice, as often it's unclear which properties we can afford to abandon in favor of others.}
+
+\section{Bayesian point estimator}
+Let's, as we have done before, discuss the Bayesian case first, where our parameter $\mu$ follows a \textit{pdf}. In this case, it's natural to start from the posterior as described in (\ref{def:posterior}), $p(\mu|x_0)$, and take its maximum as the estimator $\hat{\mu}$ for $\mu$. 
+
+This is a natural yet unsatisfying approach - I know everything I could ever hope to know about $mu$ through the full knowledge of the posterior and I waste the whole shape of the distribution only considering the maximum? We can definitely do better than that, and often when we are fortunate enough to find ourselves in this situation we can choose to abandon point estimates entirely in favor of other techniques that fully use the information contained in the posterior. 
+
+For example, usually we can talk about the problem in terms of minimizing some sort of risk function $r(\tilde{\mu},\mu)$, which for example can have the form $r = (\tilde{\mu}-\mu)^2$ (quadratic risk). We intend that
+	\[
+	\tilde{\mu} = \E_\mu[\mu] = \int\mu\cdot p(\mu|x_0)\dd \mu
+	\]
+
+From this we can see that taking the maximum of the posterior is equivalent to using the risk function $r(\tilde{\mu},\mu)=P(\tilde{\mu}\neq\mu)$, which makes sense to use if $\mu$ is discrete. 
+\todo{example of quadratic and maximum risk?}
+
+To be honest, this formalism will not be looked further upon, and is rarer to find with respect to the "classic" frequentist approach, which is the one that is blindly intended when not specified, and on which we will spend the rest of the chapter.
+
+\section{The classic point estimator}
+
+What is an "estimate of $\mu$"? Well, really any statistic $s(x)$ can be an estimate of $\mu$, we will baptize it \textit{estimator} and denote it with the symbol $\hat{\mu}$. What we will try to answer in this section is how \textit{good} a certain estimator $\hat{\mu}$ is.
+
+For example, I can choose $\hat{\mu}=42$\sidenote{It is the answer to the life, the universe, and everything after all!}. We can imagine that this estimator will not be particularly good nor interesting, and it's not unreasonable to request that the estimator for $\mu$ have something to do with $\mu$ itself.
+
+Let's take a look at the situation we find ourselves in. Differently from the Bayesian case, we want to estimate a parameter that is not governed by a probability function, much less defined on a metric, and try to build a formalism that quantitatively tells us how "close" we are to estimating the parameter itself.\sidenote{Naturally, we can't talk about the "probability of guessing" $\mu$, as the phrase itself is not well defined, and we can't attribute a "real" value to the parameter any better than we can estimate it.} So how do we approach this daunting task?
+
+The answer lies in the fact that, much like the measurements, the estimate can be repeated an infinite number of times. Therefore, there exists the \textit{pdf} of $s(x)$ (and the estimator of $N$ measurements can be generally written as $s_N(\{x_i\})$). L
+
+
+
+
+
