@@ -272,6 +272,7 @@ Finally, to end our parallels with Kolmogorov probability we consider a partitio
 where astute readers will have identified the total probability law. This process is called \textit{marginalizing}, and $P_X(x)$ is the \textit{marginalized} distribution of $P_{XY}(x,y)$ with respect to $y$. This concept, although easy, has been known to be a "surprise question" at the exams that students tend to overlook.\sidenote{One of the authors speaks from experience.}
 
 \subsection{The law of large numbers}
+\label{subsec:LLN}
 The law of large numbers (LLN) is one of the most fundamental and well-known theorems of this field. Let's start with a few definitions:
 \begin{definition}[Arithmetic mean]
 	Given a random variable $X$, we define \textbf{arithmetic mean} (or \textit{sample mean on N}) the statistic:
@@ -301,11 +302,10 @@ The law of large numbers (LLN) is one of the most fundamental and well-known the
 	\end{equation}
 \end{theorem}
 
-\quad
 
 Within this theorem we have defined an interesting property "under the rug", which is convergence in probability, which is nothing more than the limit in (\ref{eq:LLN}).\todo{Maybe, instead of defining it this half-assed way we could add a definition explicitly?}
 
-If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". \todo{Here, the professor adds some considerations that I don't think I fully understand. Let's discuss if we want to include them.}
+If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". \todo{Here, the professor adds some considerations that I don't think I fully understand. Let's discuss if we want to include them.}\sidenote{For those of you who are not on their first read of these notes, or have some prior knowledge on point estimators, we can say that "the arithmetic mean is a consistent estimator of the mean $\E[x]$ of the distribution."}
 
 \begin{example}[Proof of the LLN]
 	The most general proof of the LLN is beyond the scope of this course and therefore this write-up, however we will look at a more limiting but still instructive example. Let's suppose that also the following integral exists (\textit{variance of} $X$):
@@ -492,7 +492,7 @@ Generalizing this concept we arrive quite naturally to the mystic \textbf{covari
 	\operatorname{cov}[f,f] \equiv \Var[f]
 	\]
 \end{definition}\todo{Should we define here the Cov matrix and Corr?}
-We get that the covariance is null for independent variables, but not vice-versa, as the following example demonstrate.
+We get that the covariance is null for independent variables, but not vice-versa, as the following example demonstrates.
 
 \begin{example}
 Let's consider the case where $F=f(X)=X$ and $G=g(X)=X^2$, and let $X$ follow a uniform distribution centered at zero:

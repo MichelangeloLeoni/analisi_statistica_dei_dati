@@ -34,9 +34,110 @@ For example, I can choose $\hat{\mu}=42$\sidenote{It is the answer to the life, 
 
 Let's take a look at the situation we find ourselves in. Differently from the Bayesian case, we want to estimate a parameter that is not governed by a probability function, much less defined on a metric, and try to build a formalism that quantitatively tells us how "close" we are to estimating the parameter itself.\sidenote{Naturally, we can't talk about the "probability of guessing" $\mu$, as the phrase itself is not well defined, and we can't attribute a "real" value to the parameter any better than we can estimate it.} So how do we approach this daunting task?
 
-The answer lies in the fact that, much like the measurements, the estimate can be repeated an infinite number of times. Therefore, there exists the \textit{pdf} of $s(x)$ (and the estimator of $N$ measurements can be generally written as $s_N(\{x_i\})$). L
+The answer lies in the fact that, much like the measurements, the estimate can be repeated an infinite number of times. Therefore, there exists the \textit{pdf} of $s(x)$ (and the estimator of $N$ measurements can be generally written as $s_N(\{x_i\})$). 
+\begin{definition}[Consistent estimator]
+	The estimator $s_N(\{x_i\})$ is a \textit{consistent} estimator of $\mu$ if
+	\[
+	\lim_{N\to\infty} P(|s_N(x)-\mu|>\varepsilon)=0
+	\]
+	which, we hope you remember, means that $s_N$ \textit{converges in probability to} $\mu$.
+\label{def:consistent_estimator}
+\end{definition}
 
+Generally, we believe it's more clear to denote the estimator for $\mu$ as $\hat{\mu}$, and so from now on we'll use this notation, remembering that $\hat{\mu}$ is a statistic (and so is a function of the data) that admits \textit{pdf}.
 
+This property is so important that if $\hat{\mu}$ is not at least consistent for $\mu$ then  it is not even considered an estimator to begin with; frankly, it's non-negotiable that an estimator be at least consistent. For this reason, if we ever talk about any sort of estimator, this property is silently assumed. 
 
+With this property we can re-state the LLN \ref{subsec:LLN} as "the arithmetic mean is a consistent estimator of the mean $\E[x]$ of the distribution." We have already stated this, but it's helpful to remember if things get confusing; when we need a concrete example of an estimator let's think of the sample mean as a (consistent) estimator for the mean of a distribution.
 
+At this point, it becomes interesting to consider the variance of the estimator\sidenote{Remember, $\hat{\mu}$ admits a \textit{pdf}, so talking about the variance makes sense}, and since we know that it converges to the parameter at high statistics, we want to quantify "how precisely" it does so. In fact, when we write 
+	\[
+	\mu = \hat{\mu} \pm e
+	\]
+we usually intend 
+	\[
+	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\mu\right]}\bigg\rvert_{\mu=\hat{\mu}}	
+	\]
+where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
 
+In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \textit{bias}.
+\begin{definition}[Bias of an estimator]
+	Given an estimator $\hat{\mu}(x)$ of $\mu$ we define the \textit{bias function} as:
+	\[
+	b_{\hat{\mu}}(\mu)=\E[\hat{\mu}]-\mu
+	\]
+\end{definition}
+\todo{Be VERY careful about the mu's and mu hats. The professor uses them in a non clear way and I'd like to be very precise about this formalism}
+We note that the bias function is a function of $\mu$, though usually it will be written (somewhat improperly) as $b(\hat\mu)$. The most desirable case is when the bias is identically null for all $\mu$. In this case, we say that the estimator is \textit{unbiased}, and if this condition cannot be met for all $\mu$ it's at least favorable that the bias be much smaller than the variance. When we write
+	\[
+	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat{\mu}\right]}
+	\] 
+we silently intend that the aforementioned condition is met $\left(b(\hat{\mu})\ll\sqrt{\Var[\hat{\mu}]}\right)$.
+
+When we can't make do with an unbiased estimator, we can at least try to find one that is asymptotically so:
+	\[
+	\forall \mu:\, \lim_{N\to\infty}b_N(\mu)=0
+	\]
+\todo{More questions and counterexamples}
+
+Question: can we arbitrarily reduce the variance and bias of an estimator or is there a limit? Unfortunately, the answer is that there is, and we introduce an important theorem for this course:
+\begin{theorem}[Cramer-Rao]
+	Let's suppose that the Fisher score \ref{def:Fisher_S} exists $\forall x$ and that $\frac{\partial}{\partial\mu}$ commutes with $\E$. Considering $\hat\mu$, an estimator for $\mu$, then there exists a lower limit to the variance of $\hat\mu$
+\end{theorem}
+\begin{example}[Proof of the C-R theorem]
+	We start from the following identity:
+	\[
+	\Var\left[\hat\mu\right]\cdot I_{\hat\mu} = \E\left[\left(\hat\mu-\E\left[\hat\mu\right]\right)^2\right]\cdot\E\left[\left(\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right)^2\right]
+	\]
+	Where $I_{\hat\mu}$ is the Fisher Information contained in the estimator $\hat\mu$ (which we remember to be, \textit{in primis}, a statistic).
+	
+	From the Schwartz inequality: 
+	\[
+	\Var\left[\hat\mu\right]\cdot I_{\hat\mu}\geq \E\left[\left(\hat\mu-\E\left[\hat\mu\right]\right)\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right]^2
+	\]
+	
+	We'll split $\E\left[\left(\hat\mu-\E\left[\hat\mu\right]\right)\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right]$ into two parts:
+	\begin{align*}
+		1.) \quad \E\left[\hat\mu\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right] &= \int \hat\mu\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu} p(\hat\mu;\mu)\dd \hat\mu \\
+		&= \int \hat\mu\cdot\frac{\partial p(\hat\mu;\mu)}{\partial\mu}\dd \hat\mu = \frac{\partial}{\partial\mu}\int \hat\mu\cdot p(\hat\mu;\mu)\dd \hat\mu \\
+		&=\frac{\partial}{\partial\mu}\E\left[\hat\mu\right] = \frac{\partial}{\partial\mu}\left[\mu+b(\hat\mu)\right]\\
+		&= 1 + \frac{\partial b}{\partial\mu}
+	\end{align*}
+	\begin{align*}
+		2.) \quad \E\left[-\E\left[\hat\mu\right]\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right] &= -\E\left[\hat\mu\right]\int \frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu} p(\hat\mu;\mu)\dd \hat\mu \\
+		&= -\E\left[\hat\mu\right]\int\frac{\partial p(\hat\mu;\mu)}{\partial\mu}\dd \hat\mu \\
+		&= -\E\left[\hat\mu\right]\frac{\partial}{\partial\mu}\int p(\hat\mu;\mu)\dd \hat\mu \\
+		&=-\E\left[\hat\mu\right]\frac{\partial}{\partial\mu}1 = 0
+	\end{align*}
+	
+	Putting everything together we get the Cramer-Rao inequality:
+	\[
+	\Var\left[\hat\mu\right]\geq \left(1+\frac{\partial b}{\partial\mu}\right)^2 I_{\hat\mu}^{-1} \geq \left(1+\frac{\partial b}{\partial\mu}\right)^2 I_{x}^{-1}
+	\]
+	\qed
+	
+	The inequalities become equal when we have minimum variance and sufficiency, respectively. 
+\label{def:CR}
+\end{example}
+
+This is awesome, we have an elegant expression that ties together so many concepts that we have studied and justifies their use in the theory of Probability. We also have a way to write the \textbf{Minimum Variance Bound} (MVB), expressing the limit under which the variance of an estimator cannot drop. We can quantitatively define the efficiency of an estimator as
+	\[
+	\varepsilon_{\hat\mu}(\mu) = \left(1+\frac{\partial b}{\partial \mu}\right)^2 I_x^{-1}\Var^{-1}\left[\hat\mu\right]
+	\]
+
+which is defined between zero and one, and when maximal allows us to say that the estimator is \textit{efficient}.
+
+\begin{corollary}
+	If the Fisher Information is linear in $N$, then
+	\[
+	\Var\left[\hat\mu(x)\right] \geq \frac{k}{N}
+	\]
+	
+	As the measurements increase in number, the variance decreases as $\frac{1}{N}$, though it only holds if the Likelihood satisfies some basic regularity conditions.
+\end{corollary}\todo{is there a counter-example?}
+
+Generalizing the Cramer-Rao inequality to multiple statistics and parameters:
+	\[
+	\Cov\left[\hat\mu\right]_{ij}\geq\left(1+\frac{\partial b_i}{\partial \mu_k}\right)I^{-1}_{kl}\left(1+\frac{\partial b_l}{\partial \mu_j}\right)
+	\]
+Where by "$\geq$" we intend that the difference between the left and right hand sides returns a positively-defined matrix.
