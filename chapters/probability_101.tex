@@ -645,7 +645,7 @@ Now seems like a great time to introduce what is probably the most important the
 	\[
 	y = x-\mu; \quad y_n = \sqrt{N}\cdot\bar{y}_n = \sum_i\frac{y_i}{\sqrt{N}}
 	\]
-	We note that already we have $\Var[y_n]=\sigma^2$ independently of $n$, as the variance is additive and goes with the square of any multiplicative constant. Using the properties of the characteristic function we have just seen, we define:
+	We note that already we have $\E[y_n]=0$ and $\Var[y_n]=\sigma^2$ independently of $n$, as the variance is additive and goes with the square of any multiplicative constant. Using the properties of the characteristic function we have just seen, we define:
 	\[
 	\phi_n(t)\equiv \phi_{y_n}(t) = \phi_y^N\left(\frac{t}{\sqrt{N}} \right)
 	\]
@@ -660,8 +660,24 @@ Now seems like a great time to introduce what is probably the most important the
 	This $\phi(t)$ is universal, and does not depend on $p(x)$ \qed
 	
 \end{example}
-\todo{Finish this section. AKA: explain why this form of the characteristic function gives us a Gaussian distribution in the end}
 
+We now want to recover the shape of this particular distribution whose characteristic function is $\phi(t)$. In other words, we want to perform a reverse Fourier transform to recover the explicit form of the limit distribution.
+ 
+	\begin{align*}
+	g(x)&=\frac{1}{2 \pi}\int_{-\infty}^{\infty}\exp\left(\frac{-\sigma^2t^2}{2}dt\right)\exp\left(-itx\right) dt\\
+	&=\frac{1}{2 \pi}\int_{-\infty}^{\infty}\exp\left(\frac{-\sigma^2t^2-2itx-i^2x^2/ \sigma^2+i^2x^2/ \sigma^2}{2}\right) dt\\
+	&=\frac{1}{2 \pi}\int_{-\infty}^{\infty}\exp\left(-\frac{\left(\sigma t -ix/\sigma \right)^2}{2}\right)\exp\left(-\frac{x^2}{2\sigma^2}\right) dt\\
+	&=\frac{\exp\left(-\frac{x^2}{2\sigma^2}\right)}{2 \pi}\int_{-\infty}^{\infty}\exp\left(-\frac{\left(\sigma t -ix/\sigma \right)^2}{2}\right)dt\\
+	\end{align*}\todo{The undersized integral symbols really bother me :(, we should try to fix this in the future}
 
+The integrand is a holomorphic function with no poles\sidenote{whatever that means} thus we can perform the substitution $z=\sigma t -ix/\sigma$:
 
+	\begin{align*}
+	g(x)&=\frac{\exp\left(-\frac{x^2}{2\sigma^2}\right)}{2 \pi\sigma}\int_{-\infty}^{\infty}\exp\left(-\frac{z^2}{2}\right)dz\\
+	&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{x^2}{2\sigma^2}\right)
+	\end{align*}
+
+This is the Gaussian (or normal) \textit{pdf}, and the way we derived it highlights its fundamental importance in statistics. It is important to emphasize that the shape of this limit distribution does not depend on the original distribution of $x$.\\
+One can easily verify that the expected value and variance of the Gaussian coincide with those computed for $y_n$ at the beginning of the demonstration. \\
+In passing, we note that the sum of Gaussian distributions it is still a Gaussian. We will not go into detail about the properties of Gaussian distributions now, since we will encounter this important distribution many times throughout the rest of these notes.\todo{The section that comes after the dim of clt should be reviewed}
 

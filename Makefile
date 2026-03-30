@@ -14,8 +14,8 @@ MAIN = main
 PY = src
 
 all: 
-	build 
-	clean
+	$(MAKE) build
+	$(MAKE) clean
 
 build:
 	pdflatex $(MAIN).tex
