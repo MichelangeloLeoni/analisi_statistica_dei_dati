@@ -49,11 +49,51 @@ The likelihood is not a probability nor probability density, but in general a no
 	We can see that the likelihood suggests that the most likely values of $p$ are $1$, $0$, and $1/2$ for the three cases, respectively. This is consistent with intuition: if we observe one success in one trial, a naive estimate of the success probability is $p=1$.
 \end{example}\todo{I totally written this part from scratch, especially the conclusions. We should review this example in the future.}
 
-\begin{example}	
-	Likelihood uniform
+\begin{example}
+	We want to determine the likelihood function for a uniform distribution. Consider a random variable distributed as:
+	\[
+	X \sim \mathcal{U}([0,m])
+	\]
+	whose probability density function is
+	\[
+	f(x;m)=
+	\begin{cases}
+		\frac{1}{m} & \text{if } x \in [0,m] \\
+		0 & \text{otherwise}
+	\end{cases}
+	\]
 	
-	Likelihood Gauss
-\end{example}\todo{Add some example of calculating Likelihoods, if we want we can change spot.}
+	Given a single observation $x_0$, the likelihood function is obtained by viewing the density as a function of the parameter $m$:
+	\[
+	L_{x_0}(m) = f(x_0;m)
+	\]
+	
+	From the definition of the density, we have:
+	\[
+	L_{x_0}(m)=
+	\begin{cases}
+		\frac{1}{m} & \text{if } m \ge x_0 \\
+		0 & \text{if } m < x_0
+	\end{cases}
+	\]
+	
+	Equivalently, we can write it using the indicator function:
+	\[
+	L_{x_0}(m)=\frac{1}{m}\,\mathscr{F}(m>x_0)
+	\]
+	
+	We observe that the likelihood is a decreasing function of $m$ on the interval $[x_0,+\infty)$, and is zero for $m < x_0$.	
+	\begin{figure}[H]
+		\centering
+		\input{images/uniform_likelihood.pgf}
+		\caption{Likelihood function for a single observation from a uniform distribution.}
+		\label{fig:uniform_likelihood}
+	\end{figure}
+\end{example}
+
+\begin{example}
+Likelihood Gauss
+\end{example}
 
 A few key properties of the Likelihood:
 \begin{enumerate}
