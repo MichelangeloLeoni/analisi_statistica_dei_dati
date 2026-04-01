@@ -47,7 +47,7 @@ The likelihood is not a probability nor probability density, but in general a no
 		\label{fig:binomial_likelihood}
 	\end{figure}
 	We can see that the likelihood suggests that the most likely values of $p$ are $1$, $0$, and $1/2$ for the three cases, respectively. This is consistent with intuition: if we observe one success in one trial, a naive estimate of the success probability is $p=1$.
-\end{example}\todo{I totally written this part from scratch, especially the conclusions. We should review this example in the future.}
+\end{example}
 
 \begin{example}
 	We want to determine the likelihood function for a uniform distribution. Consider a random variable distributed as:
@@ -89,7 +89,7 @@ The likelihood is not a probability nor probability density, but in general a no
 		\caption{Likelihood function for a single observation from a uniform distribution.}
 		\label{fig:uniform_likelihood}
 	\end{figure}
-\end{example}
+\end{example}\todo{I totally written this part from scratch, especially the conclusions. We should review this example in the future.}
 
 \begin{example}
 Likelihood Gauss
@@ -101,8 +101,19 @@ A few key properties of the Likelihood:
 	\item The Likelihood does not have to be integrable nor normalized, and its integral has no interesting interpretation.
 	\item When transforming variables, the Likelihood transforms like the \textit{pdf} (so with $||J(x)||$), and therefore the ratio $\frac{L\left(\mu_1\right)}{L\left(\mu_2\right)}$ of two Likelihoods remains constant.
 	\item Given a model for the observables, the functional form of the Likelihood is uniquely determined up to a multiplicative constant.
-	\item If we apply an invertible transformation in the 	\textit{parameter} space, the Likelihood changes functional form but maintains its value ($L_x(f(\mu)) = L_x(\mu)$). In particular, the value of the parameter for which the Likelihood is maximum is invariant. 
-	\item The Likelihood from the measure of many independent observables $x,y,\dots$ (or the same one measured many times independently), dependent on a certain set of parameters is the product of the individual Likelihoods. This means that more measurements can only better your Likelihood and that you can combine it with others to keep track of more observations. 
+	\item If we apply an invertible transformation in the 	\textit{parameter} space, the Likelihood changes functional form but maintains its value ($L_x(f(\mu)) = L_x(\mu)$). 
+	\begin{example}
+		$L_{t}(\lambda)=\lambda e^{-\lambda t}=\lambda(\tau) e^{-\lambda(\tau) t}=\frac{e^{-t/\tau}}{\tau}\equiv L_{t}(\tau)$
+	\end{example}
+	In particular, the value of the parameter for which the Likelihood is maximum is invariant. 
+	\item The Likelihood from the measure of many independent observables $x,y,\dots$ (or the same one measured many times independently), dependent on a certain set of parameters is the product of the individual Likelihoods. 
+	\begin{example}
+		Consider $x_i \sim \mathcal{U}([0,m])$ then:
+		\[
+		L_{\vec{x}}(m)=\frac{1}{m^N}\,\mathscr{F}(m>\max\{x_i\})
+		\]
+	\end{example}
+	This means that more measurements can only better your Likelihood and that you can combine it with others to keep track of more observations. 
 	\item $\ell =\ln{L}$ maintains all the same, nice properties as $L$, swapping the multiplicative constant for an additive one. For this reason, it's often used in calculations.
 \end{enumerate}
 
