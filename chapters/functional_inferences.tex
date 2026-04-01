@@ -161,7 +161,7 @@ and using Bayes' theorem (\ref{th:Bayes}) we can write:
  
  Often times, to avoid calculating the normalization, we talk about the ratio
  	\[
- 	\frac{p(\mu_1|x_0)}{p(\mu_1|x_0)} = \overbrace{\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}}^{LR_{x_0}(\mu_1,\mu_2)} \cdot \frac{p(\mu_1)}{p(\mu_2)}
+ 	\frac{p(\mu_1|x_0)}{p(\mu_2|x_0)} = \overbrace{\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}}^{LR_{x_0}(\mu_1,\mu_2)} \cdot \frac{p(\mu_1)}{p(\mu_2)}
  	\]
  where $LR$ (\textit{Bayes' factor}) "updates" the relative probability between two hypotheses (different $\mu$) at each observation. Given the multiplicative nature of the Likelihood, this formula can be used to track the "evolution" of the relative probability. 
  
