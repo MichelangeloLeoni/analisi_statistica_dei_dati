@@ -25,8 +25,29 @@ We begin with one of the most important definitions of the whole course:
 The likelihood is not a probability nor probability density, but in general a non-negative function that indicates the "plausibility" (well, \textit{likelihood}) of extracting whichever $\mu$ given the measure $x_0$.
 \todo{In the next example we are going to talk about distributions, such as the Bernoulli, we have not introduced yet. We should find a pleasing way to introduce them before.}
 \begin{example}
-	We want to find how the likelihood of a Bernoulli distribution would look like.
-\end{example}
+	We want to determine the likelihood function for a binomial distribution. The binomial distribution gives the probability of observing $k$ successes in $n$ independent trials:
+	\[
+	\mathcal{B}=\binom{n}{k}p^k(1-p)^{n-k}.
+	\]
+	Applying the definition of likelihood, we obtain:
+	\[
+	L_{x_0}(\mu)=p(x_0;\mu)\ \Rightarrow\ L_{n_0,k_0}(p)=\mathcal{B}(n_0,k_0;p).
+	\]
+	We consider three different cases:
+	\begin{align*}
+		L_{n=1,k=1}(p) &= p, \\
+		L_{n=1,k=0}(p) &= 1-p, \\
+		L_{n=50,k=25}(p) &= \binom{50}{25}p^{25}(1-p)^{25}.
+	\end{align*}
+	We plot these three likelihood functions in the graph below:
+	\begin{figure}[H]
+		\centering
+		\input{images/binomial_likelihood.pgf}
+		\caption{Likelihood functions for different values of $n$ and $k$.}
+		\label{fig:binomial_likelihood}
+	\end{figure}
+	We can see that the likelihood suggests that the most likely values of $p$ are $1$, $0$, and $1/2$ for the three cases, respectively. This is consistent with intuition: if we observe one success in one trial, a naive estimate of the success probability is $p=1$.
+\end{example}\todo{I totally written this part from scratch, especially the conclusions. We should review this example in the future.}
 
 \begin{example}	
 	Likelihood uniform
