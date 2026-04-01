@@ -27,13 +27,13 @@
 \usepackage{titlesec}
 \usepackage{marginnote}
 \usepackage{ifoddpage}
-
+\usepackage{sidenotes}
 
 \renewcommand*{\marginfont}{\footnotesize}
 
-\newcounter{sidenote}
+\newcounter{mysidenote}
 
-\newcommand{\sidenote}[1]{%
+\newcommand{\mysidenote}[1]{%
 	\refstepcounter{sidenote}%
 	\textsuperscript{\thesidenote}%
 	\marginpar{\footnotesize\textbf{\thesidenote}\hspace{0.5em}#1}%

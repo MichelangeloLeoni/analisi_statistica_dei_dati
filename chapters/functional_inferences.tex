@@ -199,8 +199,9 @@ We have already talked about statistics, which are functions of random variables
 	If this is the case, we say that the statistic $s$ is \textit{sufficient for} $\mu$.
 \end{definition}
 \begin{corollary}
-	Every invertible function f(s) of a sufficient statistic is also sufficient, because $p(x|f) = p(x_f(s)) = p(x|s)$
+	Every invertible function f(s) of a sufficient statistic is also sufficient, because $p(x|f) = p(x | f(s)) = p(x|s)$\sidenotemark
 \end{corollary}
+	\sidenotetext{Since $f(s)$ is an invertible function, it uniquely determines $s$, ergo: conditioning on $f(s)$ is the same as conditioning on $s$}
 \begin{definition}[Ancillary statistic]
 	The less used complementary cousin of the sufficient statistic: if $s(x)$ is a statistic such that its \textit{pdf} is not dependent on $\mu$:
 	\[
@@ -209,17 +210,18 @@ We have already talked about statistics, which are functions of random variables
 	Then we say that the statistic is \textit{ancillary} for $\mu$
 \end{definition}
 \begin{theorem}[Factorization theorem]
-	The statistic $s(x)$ is sufficient for $\mu$ if and only if $p(x;\mu)$ can be factorized in a part that does not depend on $\mu$ and a part that depends on the on the observable $x$ only through $s(x)$ and $\mu$. Synthesized:
+	The statistic $s(x)$ is sufficient for $\mu$ if and only if $p(x;\mu)$ can be factorized in a part that does not depend on $\mu$ and a part that depends on the observable $x$ only through $s(x)$ and $\mu$. Synthesized:
 	\[
 	s \text{ sufficient}\iff p(x;\mu) = f(x)\cdot g(s(x),\mu) \quad \text{with } f,g\geq0
 	\]
 	Important note: the domain of $x$ must be \textit{independent of} $\mu$
 \end{theorem}
+
 \begin{example}[Proof that factorization implies sufficiency, factorization theorem $\Leftarrow$]
 	\begin{align*}
 	p(s;\mu) &= \int_X p(s,x;\mu)\dd x = \int_X p(s|x;\mu)p(x;\mu)\dd x \\
-	&= \int_X \delta(s-s(x))p(x;\mu) \dd x = \int_X \delta(s-s(x))f(x)h(s(x),\mu) \dd x \\
-	&= \int_X \delta(s-s(x))f(x)h(s,\mu) \dd x = g(s,\mu)\int_X \delta(s-s(x))f(x)\dd x
+	&= \sidenotemark \int_X \delta(s-s(x))p(x;\mu) \dd x = \int_X \delta(s-s(x))f(x)g(s(x),\mu) \dd x \\
+	&= g(s,\mu)\int_X \delta(s-s(x))f(x)\dd x
 	\end{align*}
 	 
 	\begin{align*}
@@ -228,19 +230,21 @@ We have already talked about statistics, which are functions of random variables
 	\end{align*}
 	which is independent of $\mu$. \qed	
 \end{example}
+\sidenotetext{Since $s(x)$ is deterministic, the conditional distribution of $s$ given $x$ is a Dirac delta.}
 
 \begin{example}[Proof that sufficiency implies factorization, factorization theorem $\Rightarrow$]
 	If
 	\[
-	p(s;\mu_1) = p(s;\mu_2) \, \forall \mu_1,\mu_2
+	p(x | s;\mu_1) = p(x | s;\mu_2) \, \forall \mu_1,\mu_2
 	\]
 	then 
 	
 	\[
-	p(x;\mu)=\frac{p(x|s;\mu)\cdot p(s;\mu)}{p(s|x;\mu)} = \frac{p(x|s)}{p(s|x)}\cdot p(s;\mu)
+	p(x;\mu)=\frac{p(x|s;\mu)\cdot p(s;\mu)}{p(s|x;\mu)} =\sidenotemark \frac{p(x|s)}{p(s|x)}\cdot p(s;\mu)
 	\]
 	\qed
 \end{example}
+\sidenotetext{$p(s|x; \mu)=\delta(s-s(x))$ as said before and $p(x|s;\mu)$ is independent of $\mu$ by hypothesis}
 
 In summary, sufficient statistics "compress" the data without losing any information on the parameter $\mu$. Once I have a sufficient statistic of the data I can make equally valid inferences on $\mu$ using only the statistic as I would with the whole dataset, and therefore have no reason to keep the whole set, if my goal is inferring $\mu$. The following principle sums it up quite nicely:
 
