@@ -395,7 +395,7 @@ To put everything together, let's extend the concept of Fisher Information to \t
 If we consider a sufficient statistic for $\mu$, then we have:
 
 \begin{align*}
-	p(x;\mu)&=p(x|s)p_s(s;\mu) \Rightarrow \ln p(x;\mu) = \ln p_s (s;\mu) + \ln p(x|s) \\
+	p(x;\mu)&=p(x|s;\mu)p_s(s;\mu)=p(x|s)p_s(s;\mu) \\ &\Rightarrow \ln p(x;\mu) = \ln p_s (s;\mu) + \ln p(x|s) \\
 	&\Rightarrow \frac{\partial}{\partial \mu}\ln p(x;\mu) = \frac{\partial}{\partial\mu}\ln p_s(s,\mu) + \cancelto{0}{\frac{\partial}{\partial \mu}\ln p(x|s)} = \frac{\partial}{\partial\mu}\ln p_s(s;\mu)\\
 	&\Rightarrow \E\left[\left(\frac{\partial\ln p(x;\mu)}{\partial\mu}\right)^2\right] = \E\left[\left(\frac{\partial\ln p_s(s;\mu)}{\partial\mu}\right)^2\right]\\
 	&\Rightarrow I_s(\mu) = I(\mu)
@@ -405,9 +405,14 @@ Therefore, the Information of a sufficient statistic is the same as the Informat
 	\[
 	I_{s(x)}(\mu)\leq I(\mu)
 	\]
-and if the statistic $s(x)$ is an invertible function of $x$, we have that an invertible transformation does not change the Information:
+and if the statistic $s(x)$ is an invertible function of $x$, we have:
 	\[
 	I(\mu)\equiv I_{x(s)}\leq I_s(\mu)
 	\]
+which tells us that:
+	\[
+	I(\mu) = I_s(\mu)
+	\]
+Thus implying that an invertible transformation does not change the Information.
 
 All of these are properties that we would expect of a function that symbolizes the information of an observable/statistic, and if I cannot find a sufficient statistic for my observable a good idea might be to find a statistic that minimizes the Fisher Information loss.
