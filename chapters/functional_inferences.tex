@@ -214,7 +214,7 @@ We have already talked about statistics, which are functions of random variables
 	\[
 	s \text{ sufficient}\iff p(x;\mu) = f(x)\cdot g(s(x),\mu) \quad \text{with } f,g\geq0
 	\]
-	Important note: the domain of $x$ must be \textit{independent of} $\mu$
+	Important note: the domain of $x$ must be \textit{independent of} $\mu$ (see \ref{ex:uniform_sufficient_statistics})
 \end{theorem}
 
 \begin{example}[Proof that factorization implies sufficiency, factorization theorem $\Leftarrow$]
@@ -246,7 +246,59 @@ We have already talked about statistics, which are functions of random variables
 \end{example}
 \sidenotetext{$p(s|x; \mu)=\delta(s-s(x))$ as said before and $p(x|s;\mu)$ is independent of $\mu$ by hypothesis}
 
-In summary, sufficient statistics "compress" the data without losing any information on the parameter $\mu$. Once I have a sufficient statistic of the data I can make equally valid inferences on $\mu$ using only the statistic as I would with the whole dataset, and therefore have no reason to keep the whole set, if my goal is inferring $\mu$. The following principle sums it up quite nicely:
+In summary, sufficient statistics "compress" the data without losing any information on the parameter $\mu$. Once I have a sufficient statistic of the data I can make equally valid inferences on $\mu$ using only the statistic as I would with the whole dataset, and therefore have no reason to keep the whole set, if my goal is inferring $\mu$. 
+
+\begin{example}\label{ex:uniform_sufficient_statistics}
+	Consider $x$ following a uniform distribution $\mathcal{U}([0,m])$.
+	
+	\textbf{A misleading approach.} One might naively write the pdf as
+	\[
+	p(x;m)=\frac{1}{m}, 
+	\quad
+	p(\vec{x};m)=\frac{1}{m^N},
+	\]
+	and conclude that the likelihood is constant in $\vec{x}$. This could suggest that any statistic (for instance $s=x_1$) is sufficient.
+	
+	However, this reasoning is incorrect because it neglects the support of the distribution, which depends on $m$.
+
+	\textbf{Correct formulation.} The pdf must include indicator functions:
+	\[
+	p(x;m)=\frac{1}{m}\,\mathbb{I}_{[0,m]}(x),
+	\quad
+	p(\vec{x};m)=\frac{1}{m^N}\prod_{i=1}^N \mathbb{I}_{[0,m]}(x_i).
+	\]
+	
+	We can rewrite the joint indicator as
+	\[
+	\prod_{i=1}^N \mathbb{I}_{[0,m]}(x_i)
+	=
+	\mathbb{I}_{\{0 \le \min_i x_i\}}
+	\mathbb{I}_{\{\max_i x_i \le m\}}.
+	\]
+	
+	Thus,
+	\[
+	p(\vec{x};m)
+	=
+	\frac{1}{m^N}
+	\mathbb{I}_{\{0 \le \min_i x_i\}}
+	\mathbb{I}_{\{\max_i x_i \le m\}}.
+	\]
+
+	We can now write
+	\[
+	p(\vec{x};m)
+	=
+	\underbrace{\mathbb{I}_{\{0 \le \min_i x_i\}}}_{f(\vec{x})}
+	\cdot
+	\underbrace{\frac{1}{m^N}\mathbb{I}_{\{\max_i x_i \le m\}}}_{g(\max\{\vec{x}\},m)}.
+	\]
+	
+	Using the factorization theorem we can see that $\max\{\vec{x}\}$ is a sufficient statistic for $m$. We also note that clearly $g(\max\{\vec{x}\},m)$ is not the pdf of $\max\{\vec{x}\}$ given $m$.
+\end{example}
+\todo{I'm still a bit confused by the requirement of a domain of $x$ independent of $\mu$. When presenting the theorem that is said to be a necessary condition, but in the example above we apply the theorem anyway and it is said to work. In the lecture notes the focus of this requirement shifts from a condition necessary for the theorem to work to a condition for the $g$ to be unique and a proper pdf. This is a bit FRANK to me.}
+
+The following principle sums up the concept quite nicely:
 
 \begin{theorem}[Sufficiency principle]
 	Let $s(x)$ be sufficient for $\mu$. Every possible inference on $\mu$ deriving from $x_0$ must be based exclusively on $s(x_0)$
@@ -254,9 +306,7 @@ In summary, sufficient statistics "compress" the data without losing any informa
 
 Interesting to note that the Likelihood principle implies the sufficiency principle, if we let $L_x(\mu)=f(x)\cdot g(s(x),\mu)$. If we know $s(x)$ for all values of $x$, then we know $L_x(\mu)$ (up to an irrelevant multiplicative constant) for all values of $x$, which is nice in general but weaker than the Likelihood principle where we only need to know $p(x;s)$ for one observed value $x_0$, not all $x$. 
 
-
  It's hard to overstate the simplicity yet power of this statement, and in the course of this text we will find ourselves dealing with sufficient statistics more often than entire lengths of data. 
-\todo{I didn't find a clever way to integrate the uniform distribution example here, so either we add it or we put it someplace else.}
 
 \begin{definition}[Minimal sufficient statistic]
 	A sufficient statistic is said to be \textit{minimal} if:
