@@ -23,14 +23,77 @@ We begin with one of the most important definitions of the whole course:
 \end{definition}
 
 The likelihood is not a probability nor probability density, but in general a non-negative function that indicates the "plausibility" (well, \textit{likelihood}) of extracting whichever $\mu$ given the measure $x_0$.
+\todo{In the next example we are going to talk about distributions, such as the Bernoulli, we have not introduced yet. We should find a pleasing way to introduce them before.}
+\begin{example}
+	We want to determine the likelihood function for a binomial distribution. The binomial distribution gives the probability of observing $k$ successes in $n$ independent trials:
+	\[
+	\mathcal{B}=\binom{n}{k}p^k(1-p)^{n-k}.
+	\]
+	Applying the definition of likelihood, we obtain:
+	\[
+	L_{x_0}(\mu)=p(x_0;\mu)\ \Rightarrow\ L_{n_0,k_0}(p)=\mathcal{B}(n_0,k_0;p).
+	\]
+	We consider three different cases:
+	\begin{align*}
+		L_{n=1,k=1}(p) &= p, \\
+		L_{n=1,k=0}(p) &= 1-p, \\
+		L_{n=50,k=25}(p) &= \binom{50}{25}p^{25}(1-p)^{25}.
+	\end{align*}
+	We plot these three likelihood functions in the graph below:
+	\begin{figure}[H]
+		\centering
+		\input{images/binomial_likelihood.pgf}
+		\caption{Likelihood functions for different values of $n$ and $k$.}
+		\label{fig:binomial_likelihood}
+	\end{figure}
+	We can see that the likelihood suggests that the most likely values of $p$ are $1$, $0$, and $1/2$ for the three cases, respectively. This is consistent with intuition: if we observe one success in one trial, a naive estimate of the success probability is $p=1$.
+\end{example}
 
 \begin{example}
-	Likelihood Bernoulli
+	We want to determine the likelihood function for a uniform distribution. Consider a random variable distributed as:
+	\[
+	X \sim \mathcal{U}([0,m])
+	\]
+	whose probability density function is
+	\[
+	f(x;m)=
+	\begin{cases}
+		\frac{1}{m} & \text{if } x \in [0,m] \\
+		0 & \text{otherwise}
+	\end{cases}
+	\]
 	
-	Likelihood uniform
+	Given a single observation $x_0$, the likelihood function is obtained by viewing the density as a function of the parameter $m$:
+	\[
+	L_{x_0}(m) = f(x_0;m)
+	\]
 	
-	Likelihood Gauss
-\end{example}\todo{Add some example of calculating Likelihoods, if we want we can change spot.}
+	From the definition of the density, we have:
+	\[
+	L_{x_0}(m)=
+	\begin{cases}
+		\frac{1}{m} & \text{if } m \ge x_0 \\
+		0 & \text{if } m < x_0
+	\end{cases}
+	\]
+	
+	Equivalently, we can write it using the indicator function:
+	\[
+	L_{x_0}(m)=\frac{1}{m}\,\mathscr{F}(m>x_0)
+	\]
+	
+	We observe that the likelihood is a decreasing function of $m$ on the interval $[x_0,+\infty)$, and is zero for $m < x_0$.	
+	\begin{figure}[H]
+		\centering
+		\input{images/uniform_likelihood.pgf}
+		\caption{Likelihood function for a single observation from a uniform distribution.}
+		\label{fig:uniform_likelihood}
+	\end{figure}
+\end{example}\todo{I totally written this part from scratch, especially the conclusions. We should review this example in the future.}
+
+\begin{example}
+Likelihood Gauss
+\end{example}
 
 A few key properties of the Likelihood:
 \begin{enumerate}
@@ -38,8 +101,19 @@ A few key properties of the Likelihood:
 	\item The Likelihood does not have to be integrable nor normalized, and its integral has no interesting interpretation.
 	\item When transforming variables, the Likelihood transforms like the \textit{pdf} (so with $||J(x)||$), and therefore the ratio $\frac{L\left(\mu_1\right)}{L\left(\mu_2\right)}$ of two Likelihoods remains constant.
 	\item Given a model for the observables, the functional form of the Likelihood is uniquely determined up to a multiplicative constant.
-	\item If we apply an invertible transformation in the 	\textit{parameter} space, the Likelihood changes functional form but maintains its value ($L_x(f(\mu)) = L_x(\mu)$). In particular, the value of the parameter for which the Likelihood is maximum is invariant. 
-	\item The Likelihood from the measure of many independent observables $x,y,\dots$ (or the same one measured many times independently), dependent on a certain set of parameters is the product of the individual Likelihoods. This means that more measurements can only better your Likelihood and that you can combine it with others to keep track of more observations. 
+	\item If we apply an invertible transformation in the 	\textit{parameter} space, the Likelihood changes functional form but maintains its value ($L_x(f(\mu)) = L_x(\mu)$). 
+	\begin{example}
+		$L_{t}(\lambda)=\lambda e^{-\lambda t}=\lambda(\tau) e^{-\lambda(\tau) t}=\frac{e^{-t/\tau}}{\tau}\equiv L_{t}(\tau)$
+	\end{example}
+	In particular, the value of the parameter for which the Likelihood is maximum is invariant. 
+	\item The Likelihood from the measure of many independent observables $x,y,\dots$ (or the same one measured many times independently), dependent on a certain set of parameters is the product of the individual Likelihoods. 
+	\begin{example}
+		Consider $x_i \sim \mathcal{U}([0,m])$ then:
+		\[
+		L_{\vec{x}}(m)=\frac{1}{m^N}\,\mathscr{F}(m>\max\{x_i\})
+		\]
+	\end{example}
+	This means that more measurements can only better your Likelihood and that you can combine it with others to keep track of more observations. 
 	\item $\ell =\ln{L}$ maintains all the same, nice properties as $L$, swapping the multiplicative constant for an additive one. For this reason, it's often used in calculations.
 \end{enumerate}
 
@@ -87,7 +161,7 @@ and using Bayes' theorem (\ref{th:Bayes}) we can write:
  
  Often times, to avoid calculating the normalization, we talk about the ratio
  	\[
- 	\frac{p(\mu_1|x_0)}{p(\mu_1|x_0)} = \overbrace{\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}}^{LR_{x_0}(\mu_1,\mu_2)} \cdot \frac{p(\mu_1)}{p(\mu_2)}
+ 	\frac{p(\mu_1|x_0)}{p(\mu_2|x_0)} = \overbrace{\frac{L_{x_0}(\mu_1)}{L_{x_0}(\mu_2)}}^{LR_{x_0}(\mu_1,\mu_2)} \cdot \frac{p(\mu_1)}{p(\mu_2)}
  	\]
  where $LR$ (\textit{Bayes' factor}) "updates" the relative probability between two hypotheses (different $\mu$) at each observation. Given the multiplicative nature of the Likelihood, this formula can be used to track the "evolution" of the relative probability. 
  
@@ -125,8 +199,9 @@ We have already talked about statistics, which are functions of random variables
 	If this is the case, we say that the statistic $s$ is \textit{sufficient for} $\mu$.
 \end{definition}
 \begin{corollary}
-	Every invertible function f(s) of a sufficient statistic is also sufficient, because $p(x|f) = p(x_f(s)) = p(x|s)$
+	Every invertible function f(s) of a sufficient statistic is also sufficient, because $p(x|f) = p(x | f(s)) = p(x|s)$\sidenotemark
 \end{corollary}
+	\sidenotetext{Since $f(s)$ is an invertible function, it uniquely determines $s$, ergo: conditioning on $f(s)$ is the same as conditioning on $s$}
 \begin{definition}[Ancillary statistic]
 	The less used complementary cousin of the sufficient statistic: if $s(x)$ is a statistic such that its \textit{pdf} is not dependent on $\mu$:
 	\[
@@ -135,17 +210,18 @@ We have already talked about statistics, which are functions of random variables
 	Then we say that the statistic is \textit{ancillary} for $\mu$
 \end{definition}
 \begin{theorem}[Factorization theorem]
-	The statistic $s(x)$ is sufficient for $\mu$ if and only if $p(x;\mu)$ can be factorized in a part that does not depend on $\mu$ and a part that depends on the on the observable $x$ only through $s(x)$ and $\mu$. Synthesized:
+	The statistic $s(x)$ is sufficient for $\mu$ if and only if $p(x;\mu)$ can be factorized in a part that does not depend on $\mu$ and a part that depends on the observable $x$ only through $s(x)$ and $\mu$. Synthesized:
 	\[
 	s \text{ sufficient}\iff p(x;\mu) = f(x)\cdot g(s(x),\mu) \quad \text{with } f,g\geq0
 	\]
 	Important note: the domain of $x$ must be \textit{independent of} $\mu$
 \end{theorem}
+
 \begin{example}[Proof that factorization implies sufficiency, factorization theorem $\Leftarrow$]
 	\begin{align*}
 	p(s;\mu) &= \int_X p(s,x;\mu)\dd x = \int_X p(s|x;\mu)p(x;\mu)\dd x \\
-	&= \int_X \delta(s-s(x))p(x;\mu) \dd x = \int_X \delta(s-s(x))f(x)h(s(x),\mu) \dd x \\
-	&= \int_X \delta(s-s(x))f(x)h(s,\mu) \dd x = g(s,\mu)\int_X \delta(s-s(x))f(x)\dd x
+	&= \sidenotemark \int_X \delta(s-s(x))p(x;\mu) \dd x = \int_X \delta(s-s(x))f(x)g(s(x),\mu) \dd x \\
+	&= g(s,\mu)\int_X \delta(s-s(x))f(x)\dd x
 	\end{align*}
 	 
 	\begin{align*}
@@ -154,19 +230,21 @@ We have already talked about statistics, which are functions of random variables
 	\end{align*}
 	which is independent of $\mu$. \qed	
 \end{example}
+\sidenotetext{Since $s(x)$ is deterministic, the conditional distribution of $s$ given $x$ is a Dirac delta.}
 
 \begin{example}[Proof that sufficiency implies factorization, factorization theorem $\Rightarrow$]
 	If
 	\[
-	p(s;\mu_1) = p(s;\mu_2) \, \forall \mu_1,\mu_2
+	p(x | s;\mu_1) = p(x | s;\mu_2) \, \forall \mu_1,\mu_2
 	\]
 	then 
 	
 	\[
-	p(x;\mu)=\frac{p(x|s;\mu)\cdot p(s;\mu)}{p(s|x;\mu)} = \frac{p(x|s)}{p(s|x)}\cdot p(s;\mu)
+	p(x;\mu)=\frac{p(x|s;\mu)\cdot p(s;\mu)}{p(s|x;\mu)} =\sidenotemark \frac{p(x|s)}{p(s|x)}\cdot p(s;\mu)
 	\]
 	\qed
 \end{example}
+\sidenotetext{$p(s|x; \mu)=\delta(s-s(x))$ as said before and $p(x|s;\mu)$ is independent of $\mu$ by hypothesis}
 
 In summary, sufficient statistics "compress" the data without losing any information on the parameter $\mu$. Once I have a sufficient statistic of the data I can make equally valid inferences on $\mu$ using only the statistic as I would with the whole dataset, and therefore have no reason to keep the whole set, if my goal is inferring $\mu$. The following principle sums it up quite nicely:
 

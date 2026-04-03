@@ -10,7 +10,7 @@
 %------------------------------------------------
 % MATHEMATICS
 %------------------------------------------------
-\usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools, cancel}
+\usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools, cancel, mathrsfs, mathpazo}
 %------------------------------------------------
 % GRAPHICS
 %------------------------------------------------
@@ -27,13 +27,13 @@
 \usepackage{titlesec}
 \usepackage{marginnote}
 \usepackage{ifoddpage}
-
+\usepackage{sidenotes}
 
 \renewcommand*{\marginfont}{\footnotesize}
 
-\newcounter{sidenote}
+\newcounter{mysidenote}
 
-\newcommand{\sidenote}[1]{%
+\newcommand{\mysidenote}[1]{%
 	\refstepcounter{sidenote}%
 	\textsuperscript{\thesidenote}%
 	\marginpar{\footnotesize\textbf{\thesidenote}\hspace{0.5em}#1}%
@@ -154,6 +154,8 @@
 \frontmatter
 
 \include{chapters/preface}
+\todo{How are we going to handle the exercise lectures? Should we insert them inside the main notes following a thematic logic or should we place all of them at the end in a different section?}
+\todo{Personally I'd go with the first option}
 
 \tableofcontents
 
