@@ -14,7 +14,7 @@ Our job during this chapter will be to explore the different kinds of point esti
 \section{Bayesian point estimator}
 Let's, as we have done before, discuss the Bayesian case first, where our parameter $\mu$ follows a \textit{pdf}. In this case, it's natural to start from the posterior as described in (\ref{def:posterior}), $p(\mu|x_0)$, and take its maximum as the estimator $\hat{\mu}$ for $\mu$. 
 
-This is a natural yet unsatisfying approach - I know everything I could ever hope to know about $mu$ through the full knowledge of the posterior and I waste the whole shape of the distribution only considering the maximum? We can definitely do better than that, and often when we are fortunate enough to find ourselves in this situation we can choose to abandon point estimates entirely in favor of other techniques that fully use the information contained in the posterior. 
+This is a natural yet unsatisfying approach - I know everything I could ever hope to know about $\mu$ through the full knowledge of the posterior and I waste the whole shape of the distribution only considering the maximum? We can definitely do better than that, and often when we are fortunate enough to find ourselves in this situation we can choose to abandon point estimates entirely in favor of other techniques that fully use the information contained in the posterior. 
 
 For example, usually we can talk about the problem in terms of minimizing some sort of risk function $r(\tilde{\mu},\mu)$, which for example can have the form $r = (\tilde{\mu}-\mu)^2$ (quadratic risk). We intend that
 	\[
@@ -38,7 +38,7 @@ The answer lies in the fact that, much like the measurements, the estimate can b
 \begin{definition}[Consistent estimator]
 	The estimator $s_N(\{x_i\})$ is a \textit{consistent} estimator of $\mu$ if
 	\[
-	\lim_{N\to\infty} P(|s_N(x)-\mu|>\varepsilon)=0
+	\forall \varepsilon > 0: \lim_{N\to\infty} P(|s_N(x)-\mu|>\varepsilon)=0
 	\]
 	which, we hope you remember, means that $s_N$ \textit{converges in probability to} $\mu$.
 \label{def:consistent_estimator}
@@ -58,7 +58,7 @@ we usually intend
 	\[
 	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\mu\right]}\bigg\rvert_{\mu=\hat{\mu}}	
 	\]
-where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
+where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{I do not understand why Var is function of $\mu$ instead of $\hat{\mu}$}\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
 
 In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \textit{bias}.
 \begin{definition}[Bias of an estimator]
