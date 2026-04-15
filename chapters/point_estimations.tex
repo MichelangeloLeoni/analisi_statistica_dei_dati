@@ -64,11 +64,13 @@ In general, estimators with lower variance are naturally considered to be "bette
 \begin{definition}[Bias of an estimator]
 	Given an estimator $\hat{\mu}(x)$ of $\mu$ we define the \textit{bias function} as:
 	\[
-	b_{\hat{\mu}}(\mu)=\E[\hat{\mu}]-\mu
+	b_\mu(\hat\mu)=\E[\hat{\mu}]-\mu
 	\]
 \end{definition}
-\todo{Be VERY careful about the mu's and mu hats. The professor uses them in a non clear way and I'd like to be very precise about this formalism}
-We note that the bias function is a function of $\mu$, though usually it will be written (somewhat improperly) as $b(\hat\mu)$. The most desirable case is when the bias is identically null for all $\mu$. In this case, we say that the estimator is \textit{unbiased}, and if this condition cannot be met for all $\mu$ it's at least favorable that the bias be much smaller than the variance. When we write
+\
+\todo{Be VERY careful about the mu's and mu hats. The professor uses them in a non clear way and I'd like to be very precise about this formalism. I integrated with Wikipedia}
+
+While we talk about the bias of an \textit{estimator} $\hat\mu$, it's important to remember the dependency on the \textit{parameter} $\mu$. An unbiased estimator is one that has identically null bias for \textit{all} values of $\mu$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\mu$ it's at least favorable that the bias be much smaller than the variance. When we write
 	\[
 	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat{\mu}\right]}
 	\] 
@@ -76,9 +78,9 @@ we silently intend that the aforementioned condition is met $\left(b(\hat{\mu})\
 
 When we can't make do with an unbiased estimator, we can at least try to find one that is asymptotically so:
 	\[
-	\forall \mu:\, \lim_{N\to\infty}b_N(\mu)=0
+	\forall \mu:\, \lim_{N\to\infty}b_N(\hat\mu)=0
 	\]
-\todo{More questions and counterexamples}
+\todo{More questions and counterexamples. Also the example of calculating the bias of the sample variance can be added here.}
 
 \subsection{Cramer-Rao}
 \label{subsubsec:CR}
@@ -176,21 +178,59 @@ It's not hard to imagine why we'd call these the \textit{sample moments}, and th
 	\E\left[m_i\right] = \mu_i^\prime
 	\]
 
-It's not guaranteed that these exist and are finite, but when they do they prove to be helpful statistics that we can readily calculate and update as we gather new data.\todo{More junk here that I happily skipped on my first few takes of this exam} If enough moments exist, this method allows us to easily build consistent estimators with known covariance\todo{if we talk of the cov then we have to include the "junk"} and (for the central limit theorem) asimptotically normal. They are not necessarily unbiased\todo{Said in Italian: potrei aver detto una minchiata.}.
+It's not guaranteed that these exist and are finite, but when they do they prove to be helpful statistics that we can readily calculate and update as we gather new data.\todo{More junk here that I happily skipped on my first few takes of this exam} If enough moments exist, this method allows us to easily build consistent estimators with known covariance\todo{if we talk of the cov then we have to include the "junk"} and (for the central limit theorem) asymptotically normal. They are not necessarily unbiased\todo{Said in Italian: potrei aver detto una minchiata.}.
 
 The cool thing about these moments is that they often exist finite and are easy to calculate, both in terms of computational power and weight. When you need to make some rapid decisions,\sidenote{Like, LHC GHz level of rapid} they can be pivotal to calculate "on the fly". 
 
-Of course, every good property must be met with an unfavorable one (in certain fields called the "no free lunch principle"), and this method does not grant us particularly efficient estimators, and to increase their efficiency we naturally must calculate more, or increase the complexity of the model, which is in direct juxtoposition with the whole reason we chose the moment method in the first place.\todo{Bleh. Let's re-write this sentence to flow better.}
+Of course, every good property must be met with an unfavorable one (in certain fields called the "no free lunch principle"), and this method does not grant us particularly efficient estimators, and to increase their efficiency we naturally must calculate more, or increase the complexity of the model, which is in direct contradiction with the whole reason we chose the moment method in the first place.\todo{Bleh. Let's re-write this sentence to flow better.}
 
 \subsection{Implicit estimators}
-Let's take a step back: we used the fact that we could estimate the expected value of $x$ through the sample mean, which, in essence, means that we found $\E[s(x)]  = f(\mu)$\todo{Aiuto mi sono perso tra mu, x, theta, ed s non si capisce nulla. Spero di essere stato bravo.}. In particular, we used $s_N(X)=\frac{1}{N}\sum_1^Ns(x)$ which allows us to build consistent estimators through the LLN. Now, by simply re-writing our expression
+Let's start with a basic fact: the expected value of a statistic will be, in general, at most a function of the parameters: $\E[\hat\mu(x)]  = f(\mu)$. By simply re-writing our expression
 
 	\[
-	\E[s(x)]  = f(\mu) \Rightarrow \E\left[s(x)-f(\mu)\right] = 0
+	\E[\hat\mu(x)]  = f(\mu) \Rightarrow \E\left[\hat\mu(x)-f(\mu)\right] = 0
 	\]
 
-we can decide to generalize this concept by considering a generic $f(x;\mu)$ for which $\E\left[f(x;\mu)\right]=0$. We can see that the above expression is a particular case of this new condition. 
+we can decide to generalize this concept by considering a generic $f(x;\mu)$ for which $\E\left[f(x;\mu)\right]=0$. We can see that the above expression is a particular case of this new condition. We note that this $f$ isn't a statistic, and at most can be seen as a family of statistics for each fixed $\mu$. 
 
-Well, let's note that this $f$ isn't a statistic, as for it to be we would need to fix the parameter $\mu$. Our condition is verified $\mu$ assumes the "real" value $\mu_0$ from which $x$ is extracted according to $p(x;\mu)$. We will therefore write $\E\left[f(x;\mu_0)\right]$.\todo{What in God's benevolent name are we talking about I am so confused.}
+The above condition is verified only when $\mu$ assumes the "real" value $\mu_0$ from which $x$ is extracted according to $p(x;\mu)$. We will therefore write $\E\left[f(x;\mu_0)\right] = 0$.\todo{What in God's benevolent name are we talking about I am so confused.} For a generic $\mu$, we suppose that there exists finite (at least in a neighborhood of $\mu_0$):
 
-\todo{I rage quit. Good luck. Unfortunately this is how you then prove the MLE (which is what we will always use) so it's probably not skippable. Godspeed soldier.}
+	\[
+	\E\left[f(x,\mu)\right]\equiv h(\mu)\quad \text{where}\quad h(\mu_0)=0
+	\]
+
+We now define $k_N(x,\mu) = \frac{1}{N}\sum_1^N f(x,\mu)$. We will have that
+
+	\[
+	\lim_{N\to\infty} k_N(x,\mu) = \E\left[f(x,\mu)\right] = h(\mu)
+	\]
+
+\begin{definition}[Implicit estimator]
+	Let's now introduce what we want to talk about in this section: the (family of) implicit estimators $\hat\mu_N$ and define them as the solution to the equation: 
+	
+	\[
+	k_N(x, \hat\mu) = 0
+	\]
+	
+ 	If in a neighborhood of $\mu_0$:
+ 	
+ 	\begin{itemize}
+ 		\item $k_N(x,\mu)\in\mathbb{C}^1$
+ 		\item $\exists\E\left[\frac{\partial k_n(x,\mu)}{\partial \mu}\right]$
+ 		\item $\E\left[\frac{\partial k_N(x,\mu)}{\partial\mu}\right]_{\mu=\mu_0}\neq 0$
+ 	\end{itemize}
+ 	then it can be shown that $\hat\mu_N$ is a consistent estimator for $\mu$.
+\end{definition}
+
+
+
+
+
+
+
+
+
+
+
+
+
