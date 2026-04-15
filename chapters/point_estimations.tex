@@ -279,7 +279,7 @@ We now define $k_N(\vec{x},\mu) = \frac{1}{N}\sum_{i=1}^N F(x_i,\mu)$. We will h
 	k_N(\vec{x},\mu) \xrightarrow[N \to \infty]{P} \E\left[F(x,\mu)\right] = h(\mu)
 	\]
 
-\begin{definition}[Implicit estimator]
+\begin{definition}\label{def:implicit_estimator}[Implicit estimator]
 	Let's now introduce what we want to talk about in this section: the (family of) implicit estimators $\hat\mu_N$ and define them as the solution to the equation: 
 	
 	\[
@@ -305,28 +305,32 @@ Finding the root of this function is not usually an easy task, and luckily we wo
 
 \subsection{Maximum Likelihood estimator}
 
-Let's study the particular case of using the Fisher Score (\ref{def:Fisher_S}) as $f(x,\mu) = S_F = \frac{\partial \ln L_x(\mu)}{\partial\mu}$. We have already seen that in non-particular cases the expected value of the Fisher score is null, and we define the function 
+Let's study the particular case of using the Fisher Score (\ref{def:Fisher_S}) as $F(x,\mu) = S_x(\mu) = \frac{\partial \ln L_x(\mu)}{\partial\mu}$. We have already seen that in non-particular cases the expected value of the Fisher score is null, and we define the function 
 
-	\[
-	k_N(x,\mu) = \frac{1}{N}\sum_1^N S(x,\mu) = \frac{1}{N}\sum_1^N \frac{\partial\ln_x(\mu)}{\partial\mu} = \frac{1}{N}\frac{\partial}{\partial\mu}\sum_1^N \ln L_x
-	\]
+	\begin{align*}
+		k_N(\vec{x},\mu) &= \frac{1}{N}\sum_{i=1}^N S_{x_i}(\mu) = \frac{1}{N}\sum_{i=1}^N \frac{\partial\ln L(x_i,\mu)}{\partial\mu} \\
+		&= \frac{1}{N}\frac{\partial}{\partial\mu}\sum_{i=1}^N \ln L(x_i,\mu)=\frac{1}{N}\frac{\partial}{\partial\mu}\ln \left(\prod_{i=1}^{N}L(x_i,\mu)\right) \\
+		&= \frac{1}{N}\frac{\partial}{\partial\mu}\ln L_{tot}(\vec{x},\mu)
+	\end{align*}
+
 
 We can see that
 	
 	\[
-	\E\left[\frac{\partial k_N(x,\mu)}{\partial\mu}\right]_{\mu=\mu_0} = \E\left[\frac{\partial^2\ln L_{tot}(\mu)}{\partial\mu^2}\right]_{\mu=\mu_0}= -I_F \neq 0
+	\E\left[\frac{\partial k_N(\vec{x},\mu)}{\partial\mu}\right]_{\mu=\mu_0} = \E\left[\frac{1}{N}\frac{\partial^2\ln L_{tot}(\vec{x},\mu)}{\partial\mu^2}\right]_{\mu=\mu_0}= \frac{-I_F}{N} \neq 0
 	\]
 
 \todo{I don't get why $I_F\neq 0$, did we write that somewhere, is it obvious? If you know the answer please leave me an explanation or ref <3.}
 
-From this we derive a very important expression:
+From this we see that the three conditions required in the definition of implicit estimator \ref{def:implicit_estimator} are satisfied. Thus we conclude that at least one of the solutions $\hat\mu$ of the Likelihood equation:
 \begin{equation}
-	\frac{\partial}{\partial\mu} \ln L_{tot}(\mu) = 0 
+	\frac{\partial}{\partial\mu} \ln L_{tot}(\vec{x},\hat{\mu}) = 0 
 	\tag{Likelihood equation}
 	\label{eq:likelihood}
 \end{equation}
+is a consistent estimator for $\mu$. 
 
-We conclude that at least one of the solutions $\hat\mu$ of the Likelihood equation is a consistent estimator for $\mu$. This estimator is the \textbf{Maximum Likelihood Estimator} (MLE).
+This estimator is the \textbf{Maximum Likelihood Estimator} (MLE).
 
 Let's go through some of it's nice properties:
 \begin{itemize}
