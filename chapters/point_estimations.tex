@@ -80,6 +80,50 @@ When we can't make do with an unbiased estimator, we can at least try to find on
 	\]
 \todo{More questions and counterexamples}
 
+\begin{example}
+	One could think that having a consistent estimator means that the variance must go to zero:
+	\[
+	\hat{\mu}_N \text{ consistent} \implies \lim_{N \to \infty} \text{Var}(\hat{\mu}_N) = 0
+	\]
+	However, it is easy to find a counterexample. Consider an estimator $\hat{\mu}_N$ for the parameter $\mu = 0$ defined by the following probability mass function:
+	\[
+	P(\hat{\mu}_N = x) = 
+	\begin{cases} 
+		\frac{1}{2N} & \text{if } x = N^2 \\
+		1 - \frac{1}{N} & \text{if } x = 0 \\
+		\frac{1}{2N} & \text{if } x = -N^2 \\
+		0 & \text{otherwise}
+	\end{cases}
+	\]
+	
+	\begin{figure}[H]
+		\centering
+		\input{images/consistency_counterexample.pgf}
+		\caption{Should we add a caption and a label to this image??}
+	\end{figure}
+	
+	An estimator is consistent if it converges in probability to the true parameter: 
+	\begin{align*}
+	\forall \varepsilon > 0: P(|\hat{\mu}_N - 0| > \varepsilon) &= P(\hat{\mu}_N = N^2) + P(\hat{\mu}_N = -N^2) \\
+	&= \frac{1}{2N} + \frac{1}{2N} = \frac{1}{N}
+	\end{align*}
+	Taking the limit:
+	\[
+	\lim_{N \to \infty} P(|\hat{\mu}_N| > \varepsilon) = \lim_{N \to \infty} \frac{1}{N} = 0
+	\]
+	This proves that $\hat{\mu}_N \xrightarrow{P} 0$, so the estimator is \textbf{consistent}.
+	
+	The expected value is:
+	\[
+	E[\hat{\mu}_N] = (-N^2)\frac{1}{2N} + (0)(1-\frac{1}{N}) + (N^2)\frac{1}{2N} = 0
+	\]
+	The variance is then:
+	\[
+	\text{Var}(\hat{\mu}_N) = E[\hat{\mu}_N^2] = (-N^2)^2 \frac{1}{2N} + 0 \left(1 - \frac{1}{N}\right) + (N^2)^2 \frac{1}{2N} = N^3
+	\]
+	As $N \to \infty$, the variance $\text{Var}(\hat{\mu}_N) \to \infty$, showing that consistency does not implies variance decay.
+\end{example}
+
 \subsection{Cramer-Rao}
 \label{subsubsec:CR}
 
