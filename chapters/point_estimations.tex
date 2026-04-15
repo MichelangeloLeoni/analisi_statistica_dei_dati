@@ -250,6 +250,7 @@ It's not hard to imagine why we'd call these the \textit{sample moments}, and th
 	\[
 	\E\left[m_i\right] = \mu_i^\prime
 	\]
+	\todo{We should rework this whole subsection}
 
 It's not guaranteed that these exist and are finite, but when they do they prove to be helpful statistics that we can readily calculate and update as we gather new data.\todo{More junk here that I happily skipped on my first few takes of this exam} If enough moments exist, this method allows us to easily build consistent estimators with known covariance\todo{if we talk of the cov then we have to include the "junk"} and (for the central limit theorem) asymptotically normal. They are not necessarily unbiased\todo{Said in Italian: potrei aver detto una minchiata.}.
 
@@ -258,44 +259,47 @@ The cool thing about these moments is that they often exist finite and are easy 
 Of course, every good property must be met with an unfavorable one (in certain fields called the "no free lunch principle"), and this method does not grant us particularly efficient estimators, and to increase their efficiency we naturally must calculate more, or increase the complexity of the model, which is in direct contradiction with the whole reason we chose the moment method in the first place.\todo{Bleh. Let's re-write this sentence to flow better.}
 
 \subsection{Implicit estimators}
-Let's start with a basic fact: the expected value of a statistic will be, in general, at most a function of the parameters: $\E[\hat\mu(x)]  = f(\mu)$. By simply re-writing our expression
+Let's start with a basic fact: the expected value of a statistic will be, in general, at most a function of the parameters: $\E[\hat\mu(x)]  = f(\mu_0)$. By simply re-writing our expression
 
 	\[
-	\E[\hat\mu(x)]  = f(\mu) \Rightarrow \E\left[\hat\mu(x)-f(\mu)\right] = 0
+	\E[\hat\mu(x)]  = f(\mu_0) \Rightarrow \E\left[\hat\mu(x)-f(\mu_0)\right] = 0
 	\]
 
-we can decide to generalize this concept by considering a generic $f(x;\mu)$ for which $\E\left[f(x;\mu)\right]=0$. We can see that the above expression is a particular case of this new condition. We note that this $f$ isn't a statistic, and at most can be seen as a family of statistics for each fixed $\mu$. 
+we can decide to generalize this concept by considering a generic $F(x;\mu)$ for which $\E\left[F(x;\mu=\mu_0)\right]=0$. In other words this condition is verified only when $\mu$ assumes the "real" value $\mu_0$ from which $x$ is extracted according to $p(x;\mu_0)$. We note that this $F$ isn't a statistic, and at most can be seen as a family of statistics for each fixed $\mu$. 
 
-The above condition is verified only when $\mu$ assumes the "real" value $\mu_0$ from which $x$ is extracted according to $p(x;\mu)$. We will therefore write $\E\left[f(x;\mu_0)\right] = 0$.\todo{What in God's benevolent name are we talking about I am so confused.} For a generic $\mu$, we suppose that there exists finite (at least in a neighborhood of $\mu_0$):
+For a generic $\mu$, we suppose that there exists finite (at least in a neighborhood of $\mu_0$):
 
 	\[
-	\E\left[f(x,\mu)\right]\equiv h(\mu)\quad \text{where}\quad h(\mu_0)=0
+	\E\left[F(x,\mu)\right]\equiv h(\mu)\quad \text{where}\quad h(\mu_0)=0
 	\]
 
-We now define $k_N(x,\mu) = \frac{1}{N}\sum_1^N f(x,\mu)$. We will have that
+We now define $k_N(\vec{x},\mu) = \frac{1}{N}\sum_{i=1}^N F(x_i,\mu)$. We will have that
 
 	\[
-	\lim_{N\to\infty} k_N(x,\mu) = \E\left[f(x,\mu)\right] = h(\mu)
+	k_N(\vec{x},\mu) \xrightarrow[N \to \infty]{P} \E\left[F(x,\mu)\right] = h(\mu)
 	\]
 
 \begin{definition}[Implicit estimator]
 	Let's now introduce what we want to talk about in this section: the (family of) implicit estimators $\hat\mu_N$ and define them as the solution to the equation: 
 	
 	\[
-	k_N(x, \hat\mu) = 0
+	k_N(\vec{x}, \hat\mu) = 0
 	\]
 	
  	If in a neighborhood of $\mu_0$:
  	
  	\begin{itemize}
- 		\item $k_N(x,\mu)\in\mathbb{C}^1$
- 		\item $\exists\E\left[\frac{\partial k_n(x,\mu)}{\partial \mu}\right]$
- 		\item $\E\left[\frac{\partial k_N(x,\mu)}{\partial\mu}\right]_{\mu=\mu_0}\neq 0$
+ 		\item $k_N(\vec{x},\mu)\in\mathbb{C}^1$
+ 		\item $\exists\E\left[\frac{\partial k_N(\vec{x},\mu)}{\partial \mu}\right]$
+ 		\item $\E\left[\frac{\partial k_N(\vec{x},\mu)}{\partial\mu}\right]_{\mu=\mu_0}\neq 0$
  	\end{itemize}
- 	then it can be shown that $\hat\mu_N$ is, for at least one of the solutions, a consistent estimator for $\mu$.
+ 	then it can be shown that $\hat\mu_N$ is, for at least one of the solutions, a consistent estimator for $\mu$:
+	 	\[
+	 	\hat\mu_N \xrightarrow[N \to \infty]{P} \mu_0
+	 	\]
 \end{definition}
 
-Let's take a step back and look at what we are dealing with. Before this section we talked about (without really giving them a name) \textit{explicit estimators}, where we have an expression of the type $\hat\mu = s(x)$, so by simply measuring some data and doing an operation on it (like taking the sample mean) we directly (explicitly) obtain a consistent estimator for the unknown parameter $\mu$. Great! Implicit estimators, instead, are slightly different: we have an expression of the type $k_N(x, \hat\mu_N) = 0$. Here, the estimator $\hat\mu_N$ is defined not by a direct formula, but as the root of an estimating function. If certain conditions are met then $\hat\mu_N$ is a consistent estimator for $\mu$.
+Let's take a step back and look at what we are dealing with. Before this section we talked about (without really giving them a name) \textit{explicit estimators}, where we have an expression of the type $\hat\mu = s(x)$, so by simply measuring some data and doing an operation on it (like taking the sample mean) we directly (explicitly) obtain a consistent estimator for the unknown parameter $\mu$. Great! Implicit estimators, instead, are slightly different: we have an expression of the type $k_N(\vec{x}, \hat\mu_N) = 0$. Here, the estimator $\hat\mu_N$ is defined not by a direct formula, but as the root of an estimating function. If certain conditions are met then $\hat\mu_N$ is a consistent estimator for $\mu$.
 
 Finding the root of this function is not usually an easy task, and luckily we won't have to explicitly, in many cases. However, this formalism is important to introduce for a very important implicit estimator that we will use over the course of this text.
 
