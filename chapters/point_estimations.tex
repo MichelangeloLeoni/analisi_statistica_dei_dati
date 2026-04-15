@@ -60,27 +60,6 @@ we usually intend
 	\]
 where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{I do not understand why Var is function of $\mu$ instead of $\hat{\mu}$}\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
 
-In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \textit{bias}.
-\begin{definition}[Bias of an estimator]
-	Given an estimator $\hat{\mu}(x)$ of $\mu$ we define the \textit{bias function} as:
-	\[
-	b_\mu(\hat\mu)=\E[\hat{\mu}]-\mu
-	\]
-\end{definition}
-\
-\todo{Be VERY careful about the mu's and mu hats. The professor uses them in a non clear way and I'd like to be very precise about this formalism. I integrated with Wikipedia}
-
-While we talk about the bias of an \textit{estimator} $\hat\mu$, it's important to remember the dependency on the \textit{parameter} $\mu$. An unbiased estimator is one that has identically null bias for \textit{all} values of $\mu$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\mu$ it's at least favorable that the bias be much smaller than the variance. When we write
-	\[
-	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat{\mu}\right]}
-	\] 
-we silently intend that the aforementioned condition is met $\left(b(\hat{\mu})\ll\sqrt{\Var[\hat{\mu}]}\right)$.
-
-When we can't make do with an unbiased estimator, we can at least try to find one that is asymptotically so:
-	\[
-	\forall \mu:\, \lim_{N\to\infty}b_N(\hat\mu)=0
-	\]
-\todo{More questions and counterexamples. Also the example of calculating the bias of the sample variance can be added here.}
 
 \begin{example}
 	One could think that having a consistent estimator means that the variance must go to zero:
@@ -106,8 +85,8 @@ When we can't make do with an unbiased estimator, we can at least try to find on
 	
 	An estimator is consistent if it converges in probability to the true parameter: 
 	\begin{align*}
-	\forall \varepsilon > 0: P(|\hat{\mu}_N - 0| > \varepsilon) &= P(\hat{\mu}_N = N^2) + P(\hat{\mu}_N = -N^2) \\
-	&= \frac{1}{2N} + \frac{1}{2N} = \frac{1}{N}
+		\forall \varepsilon > 0: P(|\hat{\mu}_N - 0| > \varepsilon) &= P(\hat{\mu}_N = N^2) + P(\hat{\mu}_N = -N^2) \\
+		&= \frac{1}{2N} + \frac{1}{2N} = \frac{1}{N}
 	\end{align*}
 	Taking the limit:
 	\[
@@ -125,6 +104,56 @@ When we can't make do with an unbiased estimator, we can at least try to find on
 	\]
 	As $N \to \infty$, the variance $\text{Var}(\hat{\mu}_N) \to \infty$, showing that consistency does not implies variance decay.
 \end{example}
+
+
+In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \textit{bias}.
+\begin{definition}[Bias of an estimator]
+	Given an estimator $\hat{\mu}(x)$ of $\mu$ we define the \textit{bias function} as:
+	\[
+	b_\mu\left(\hat\mu\right)=\E\left[\hat{\mu}\right]-\mu
+	\]
+\end{definition}
+\
+\todo{Be VERY careful about the mu's and mu hats. The professor uses them in a non clear way and I'd like to be very precise about this formalism. I integrated with Wikipedia}
+
+While we talk about the bias of an \textit{estimator} $\hat\mu$, it's important to remember the dependency on the \textit{parameter} $\mu$. An unbiased estimator is one that has identically null bias for \textit{all} values of $\mu$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\mu$ it's at least favorable that the bias be much smaller than the variance. When we write
+	\[
+	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat{\mu}\right]}
+	\] 
+	
+we silently intend that the aforementioned condition is met:
+	
+	\[
+	\left(b(\hat{\mu})\ll\sqrt{\Var[\hat{\mu}]}\right)
+	\]
+
+We can in general try to reduce the bias\todo{Note: this part comes after in the notes but I think it fits here. Mich when you see this delete the todo.} of an estimator "artificially": for example we can think to banally subtract it from the estimator itself to obtain a new one. In this case, we will have:
+
+	\[
+	\hat\mu^\prime = \hat\mu - b_\mu(\hat\mu)
+	\]
+
+We note that $\hat\mu^\prime$ is only a statistic if $\frac{\partial b}{\partial \mu} = 0$, as the bias of $\hat\mu$ can depend on $\mu$ itself (not constant bias)\sidenote{For example, the bias may be equal to a constant times the parameter $b_{\mu}(\hat\mu) = c\mu$}. Well, we can go one step deeper and find an \textit{estimator for the bias}, and newly define 
+
+	\[
+	\hat\mu^\prime = \hat\mu - \hat{b} \quad \hat{b} = b_{\hat\mu}(\hat\mu)
+	\]
+
+The new bias will be:
+
+	\[
+	b_\mu^\prime(\hat\mu^\prime) = \E\left[\hat\mu^\prime\right] - \mu = \E\left[\hat\mu\right] - \E\left[\hat{b}\right] - \mu = b(\hat\mu) - \E\left[\hat{b}\right]
+	\]
+
+Things are getting complicated quick, let's pretend that $b_{\mu}(\hat\mu) = c\mu$, that means that $\hat{b} = b_{\hat\mu}(\hat\mu) = c\hat\mu$, that's all there is to it. Usually this bias will be less than the original, paying the price with an increase of variance in the general case. \todo{NOT DONE I HAVE TO GO}
+
+
+
+When we can't make do with an unbiased estimator, we can at least try to find one that is asymptotically so:
+	\[
+	\forall \mu:\, \lim_{N\to\infty}b_N(\hat\mu)=0
+	\]
+\todo{More questions and counterexamples. Also the example of calculating the bias of the sample variance can be added here.}
 
 \subsection{Cramer-Rao}
 \label{subsubsec:CR}
@@ -263,18 +292,45 @@ We now define $k_N(x,\mu) = \frac{1}{N}\sum_1^N f(x,\mu)$. We will have that
  		\item $\exists\E\left[\frac{\partial k_n(x,\mu)}{\partial \mu}\right]$
  		\item $\E\left[\frac{\partial k_N(x,\mu)}{\partial\mu}\right]_{\mu=\mu_0}\neq 0$
  	\end{itemize}
- 	then it can be shown that $\hat\mu_N$ is a consistent estimator for $\mu$.
+ 	then it can be shown that $\hat\mu_N$ is, for at least one of the solutions, a consistent estimator for $\mu$.
 \end{definition}
 
+Let's take a step back and look at what we are dealing with. Before this section we talked about (without really giving them a name) \textit{explicit estimators}, where we have an expression of the type $\hat\mu = s(x)$, so by simply measuring some data and doing an operation on it (like taking the sample mean) we directly (explicitly) obtain a consistent estimator for the unknown parameter $\mu$. Great! Implicit estimators, instead, are slightly different: we have an expression of the type $k_N(x, \hat\mu_N) = 0$. Here, the estimator $\hat\mu_N$ is defined not by a direct formula, but as the root of an estimating function. If certain conditions are met then $\hat\mu_N$ is a consistent estimator for $\mu$.
 
+Finding the root of this function is not usually an easy task, and luckily we won't have to explicitly, in many cases. However, this formalism is important to introduce for a very important implicit estimator that we will use over the course of this text.
 
+\subsection{Maximum Likelihood estimator}
 
+Let's study the particular case of using the Fisher Score (\ref{def:Fisher_S}) as $f(x,\mu) = S_F = \frac{\partial \ln L_x(\mu)}{\partial\mu}$. We have already seen that in non-particular cases the expected value of the Fisher score is null, and we define the function 
 
+	\[
+	k_N(x,\mu) = \frac{1}{N}\sum_1^N S(x,\mu) = \frac{1}{N}\sum_1^N \frac{\partial\ln_x(\mu)}{\partial\mu} = \frac{1}{N}\frac{\partial}{\partial\mu}\sum_1^N \ln L_x
+	\]
 
+We can see that
+	
+	\[
+	\E\left[\frac{\partial k_N(x,\mu)}{\partial\mu}\right]_{\mu=\mu_0} = \E\left[\frac{\partial^2\ln L_{tot}(\mu)}{\partial\mu^2}\right]_{\mu=\mu_0}= -I_F \neq 0
+	\]
 
+\todo{I don't get why $I_F\neq 0$, did we write that somewhere, is it obvious? If you know the answer please leave me an explanation or ref <3.}
 
+From this we derive a very important expression:
+\begin{equation}
+	\frac{\partial}{\partial\mu} \ln L_{tot}(\mu) = 0 
+	\tag{Likelihood equation}
+	\label{eq:likelihood}
+\end{equation}
 
+We conclude that at least one of the solutions $\hat\mu$ of the Likelihood equation is a consistent estimator for $\mu$. This estimator is the \textbf{Maximum Likelihood Estimator} (MLE).
 
+Let's go through some of it's nice properties:
+\begin{itemize}
+	\item The Fisher Information is defined positive, and thus the MLE is, by definition, a maximum.
+	\item It respects the Likelihood Principle.
+	\item It is invariant for parameter variable change (just like the Likelihood).
+	\item Asymptotically, it is efficient and unbiased (goes like $\frac{1}{N}$), 
+	\item Asymptotically, it is also normal, with $p(\hat\mu-\mu_0;\mu_0) \rightarrow \N\left(0,\frac{1}{I_F}\right)$.
+\end{itemize}
 
-
-
+Since we know a thing or two about compromises, and because lunch is never free, we add that the MLE, being quite powerful, also requires minimization technique, as well as the entire dataset, to be calculated, making it much slower and computationally expensive to calculate than the moments. However, it is still a favorite option to use when possible. 
