@@ -550,7 +550,9 @@ While the first condition is intuitive, as even distributions must be symmetric 
 
 The moments are quite a powerful tool, as if I know them all I can actually univocally determine the starting distribution.\todo{The following theorem can be proven, or at least expanded upon further}
 \begin{theorem}
-	If $p_1(x)$ and $p_2(x)$ have the same moments and $\left(p_1(x)-p_2(x)\right)$ is expandable in a power series then 
+	If $p_1(x)$ and $p_2(x)$ have the same moments 
+	
+	and $\left(p_1(x)-p_2(x)\right)$ is expandable in a power series then 
 	\[
 	p_1(x) = p_2(x)
 	\]
@@ -558,6 +560,7 @@ The moments are quite a powerful tool, as if I know them all I can actually univ
 
 As we have seen, knowing the moments of a distribution is a powerful tool that has numerous implications, though actually calculating them can be non trivial. Luckily, we physicists love our good, old Taylor approximations and this is a good a time as any to put it into practice.
 
+\todo{are these mu's or thetas? BOH}
 \begin{align*}
 	f(\vec{x}) = f(\vec{\mu}) + &\frac{\partial f}{\partial x_i}(x_i-\mu_i)+\frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}(x_i-\mu_i)(x_j-\mu_j)+o\left(\left(\vec{x}-\vec{\mu}\right)^3\right) \\
 	\Rightarrow \E[f(\vec{x})] &\simeq \E[f(\vec{\mu})] + \frac{\partial f}{\partial x_i}\cancelto{0}{\E[x_i-\mu_i]} \quad + \frac{1}{2}\frac{\partial^2f}{\partial x_i \partial x_j}\E[(x_i-\mu_i)(x_j-\mu_j)] \\
