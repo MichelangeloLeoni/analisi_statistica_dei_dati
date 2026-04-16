@@ -161,6 +161,7 @@ When we can't make do with an unbiased estimator, we can at least try to find on
 Question: can we arbitrarily reduce the variance and bias of an estimator or is there a limit? Unfortunately, the answer is that there is, and we introduce an important theorem for this course:
 \begin{theorem}[Cramer-Rao]
 	Let's suppose that the Fisher score \ref{def:Fisher_S} exists $\forall x$ and that $\frac{\partial}{\partial\mu}$ commutes with $\E$. Considering $\hat\mu$, an estimator for $\mu$, then there exists a lower limit to the variance of $\hat\mu$
+\label{def:cramer-rao}
 \end{theorem}
 \begin{example}[Proof of the C-R theorem]
 	We start from the following identity:
@@ -346,3 +347,37 @@ Let's go through some of its nice properties:
 \end{itemize}
 
 Since we know a thing or two about compromises, and because lunch is never free, we add that the MLE, being quite powerful, also requires minimization technique, as well as the entire dataset, to be calculated, making it much slower and computationally expensive to calculate than the moments. However, it is still a favorite option to use when possible. 
+
+
+\subsection{Variance of the MLE}
+
+Now that we understand the power of the MLE, we see why it is so widely used in real-world problems. In more complex cases, especially with large datasets, the maximum of the total likelihood $L_{\text{tot}}$ is typically found numerically using optimization algorithms (\textit{fitting}). The question is: how can we evaluate the variance of the MLE in these cases?\todo{Is it clear that we are going to take an estimate of the Var because in this cases it is too difficult/impossible to find it analytically?}
+
+In the asymptotic limit, we can use of the Cramer-Rao theorem \ref{def:cramer-rao} to state that, if $I$ is linear:
+\[
+	\Var(\hat{\mu})\simeq\frac{1}{NI_1}
+\]
+where $I_1$ is the Fisher information of a single observation. 
+In the complex cases mentioned above, it is difficult to compute $I_1$ directly. However, we can write:
+\[
+	N I_1= -N\E\left[\frac{\partial^2\ln L(\mu)}{\partial^2 \mu}\right]=-N\frac{\partial^2}{\partial^2\mu}\E\left[\ln L(\mu)\right]
+\]
+If the expected value exists, it can be consistently estimated from the data using our loyal LLN:
+\begin{align*}
+	N I_1=-N\frac{\partial^2}{\partial^2\mu}\E\left[\ln L(\mu)\right]	&\simeq -N \frac{\partial^2}{\partial^2\mu} \frac{1}{N}\sum_{i=1}^N\ln L_i(\mu) \\
+	&= \frac{\partial^2\ln L_{tot}(\mu)}{\partial^2\mu}
+\end{align*}
+Using the fact that $\hat{\mu}$ is a consistent estimator, we finally obtain:
+\[
+	 \Var(\hat{\mu})\simeq\left(\frac{\partial^2\ln L_{tot}(\hat{\mu})}{\partial^2\mu}\right)^{-1}
+\]
+In other words: \textit{the asymptotic variance of the MLE can be evaluated using the second derivative of the total likelihood $L_{tot}$}. 
+One advantage of this formula is that the total likelihood has already been computed and maximized numerically, so evaluating its second derivative is computationally inexpensive.
+
+Generalizing to $n$ dimensions:
+\[
+	\Cov\left(\hat{\mu}_i,\hat{\mu}_j\right)=-\left(\frac{\partial^2\ln L_{tot}(\hat{\mu})}{\partial\mu_i\partial\mu_j}\right)^{-1}
+\]
+This result is widely used in fitting software (you've probably used a million times) to evaluate the errors on fitted parameters!
+It is important to stress that this is an asymptotic result and we invite the reader to take another look at all the approximations made throughout the derivation.
+\todo{I'll happily skip the hyper-goofy 2D graph present on the slides since we skipped it in the lectures too}
