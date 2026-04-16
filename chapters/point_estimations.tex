@@ -133,19 +133,66 @@ We can in general try to reduce the bias\todo{Note: this part comes after in the
 	\hat\mu^\prime = \hat\mu - b_\mu(\hat\mu)
 	\]
 
-We note that $\hat\mu^\prime$ is only a statistic if $\frac{\partial b}{\partial \mu} = 0$, as the bias of $\hat\mu$ can depend on $\mu$ itself (not constant bias)\sidenote{For example, the bias may be equal to a constant times the parameter $b_{\mu}(\hat\mu) = c\mu$}. Well, we can go one step deeper and find an \textit{estimator for the bias}, and newly define 
+We note that $\hat\mu^\prime$ is only a statistic if $\frac{\partial b}{\partial \mu} = 0$, as the bias of $\hat\mu$ can depend on $\mu$ itself (not constant bias). Well, we can go one step deeper and find an \textit{estimator for the bias}, and newly define:
 
 	\[
-	\hat\mu^\prime = \hat\mu - \hat{b} \quad \hat{b} = b_{\hat\mu}(\hat\mu)
+	\hat\mu^\prime = \hat\mu - \hat{b} 
 	\]
 
+What exactly is $\hat{b}$? We can, like we usually do for estimators, build it \textit{ad hoc} using experience to find a good estimator, but two possible candidates are $\hat{b}_{\hat\mu}(\hat\mu)$ or even $\hat{b}_{\hat\mu^\prime}(\hat\mu)$, where essentially we get rid of the problem of having $\mu$ by explicitly estimating it with different types of estimators (the example that follows should make this clearer).
 The new bias will be:
 
 	\[
-	b_\mu^\prime(\hat\mu^\prime) = \E\left[\hat\mu^\prime\right] - \mu = \E\left[\hat\mu\right] - \E\left[\hat{b}\right] - \mu = b(\hat\mu) - \E\left[\hat{b}\right]
+	b_\mu^\prime(\hat\mu^\prime) = \E\left[\hat\mu^\prime\right] - \mu = \E\left[\hat\mu\right] - \E\left[\hat{b}\right] - \mu = b_\mu(\hat\mu) - \E\left[\hat{b}\right]
 	\]
 
-Things are getting complicated quick, let's pretend that $b_{\mu}(\hat\mu) = c\mu$, that means that $\hat{b} = b_{\hat\mu}(\hat\mu) = c\hat\mu$, that's all there is to it. Usually this bias will be less than the original, paying the price with an increase of variance in the general case. \todo{NOT DONE I HAVE TO GO}
+Usually this bias will be less than the original, and in certain cases even null, though we pay the price with an increase of variance in the general case.
+
+\begin{example}
+	To try to keep things as clear as possible, let's formulate a quick example: we have built an estimator $\hat\mu$ for $\mu$ and found that its bias is
+	
+	\[
+	b_\mu(\hat\mu) = \E\left[\hat\mu\right] - \mu = c \cdot \mu
+	\]
+	
+	where $c$ is a real-valued nonzero constant. Inverting we also find that $\E\left[\hat\mu\right] = (c+1)\mu$ which will be useful later.
+	The estimator is obviously not unbiased so we try to correct this by building a new estimator $\hat\mu^\prime = \hat\mu - c\mu$. Well, we don't know what $\mu$ is, that's what we are trying to estimate in the first place, and so the best we can do is to replace it with $\hat\mu$. Therefore, I can build my new estimator to be:
+	
+	\[
+	\hat\mu^\prime = \hat\mu - c\hat\mu
+	\]
+	We recognize the second term to be what we previously called the estimator for the bias $\hat{b} = b_{\hat\mu}(\hat\mu)$. 
+	
+	Let's try to calculate the new bias of this estimator $\hat\mu^\prime$:
+	
+	\begin{align*}
+	b_\mu(\hat\mu^\prime) &= \E\left[\hat\mu^\prime\right] - \mu = \E\left[\hat\mu\right] - \E\left[c\hat\mu\right] - \mu \\
+	&= b_\mu(\hat\mu) - c\E\left[\hat\mu\right] = c\mu - c(1+c)\mu = -c^2\mu
+	\end{align*}
+	
+	That's not very promising. Let's try the other suggested case, where we build the estimator as:
+	
+	\[
+	\hat\mu^\prime = \hat\mu - c\hat\mu^\prime
+	\]
+	
+	We solve this implicit function to get
+	
+	\[
+	\hat\mu^\prime = \frac{\hat\mu}{c+1}
+	\]
+	
+	and calculating the bias once again:
+	
+	\begin{align*}
+	b_\mu(\hat\mu^\prime) &= \E\left[\hat\mu^\prime\right] - \mu = \frac{\E\left[\hat\mu\right]}{c+1} - \mu \\
+	&= \frac{c+1}{c+1}\mu - \mu = 0
+	\end{align*}
+	
+	\qed
+\end{example}
+
+ \todo{NOT DONE I HAVE TO GO!}
 
 
 
