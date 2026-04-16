@@ -1,74 +1,74 @@
 \chapter{Point Estimations}
-We have thus far talked about functional inferences, where we try to find a function that expresses some degree of "plausibility" for different values of $\mu$ starting from the observations of $x$ and its distribution $p(x;\mu)$. 
+We have thus far talked about functional inferences, where we try to find a function that expresses some degree of "plausibility" for different values of $\theta$ starting from the observations of $x$ and its distribution $p(x;\theta)$. 
 
-We now pivot to something entirely different, and our aim will be, starting from the measurements of $x$\sidenote{That is all we can do, after all, measure x! Remember, our job as data analysts is to infer something from the measured data.}, to extract a single value for the parameter $\mu$, attributing to that value some uncertainty. We have seen this many times in our lives, and usually write it in the synthetic form:
+We now pivot to something entirely different, and our aim will be, starting from the measurements of $x$\sidenote{That is all we can do, after all, measure x! Remember, our job as data analysts is to infer something from the measured data.}, to extract a single value for the parameter $\theta$, attributing to that value some uncertainty. We have seen this many times in our lives, and usually write it in the synthetic form:
 	\[
-	\mu = \hat{\mu} \pm e
+	\theta = \hat{\theta} \pm e
 	\]
-Where $\hat{\mu}$ is the \textit{point estimation} of the parameter $\mu$. The idea is that this point estimation gives us the "best estimate" for the parameter $\mu$, whatever that means. 
+Where $\hat{\theta}$ is the \textit{point estimation} of the parameter $\theta$. The idea is that this point estimation gives us the "best estimate" for the parameter $\theta$, whatever that means. 
 
 Remember, we can't measure parameters, so usually when we read that a parameter (let's say, the lifetime of the muon) was \textit{measured}, it really means that it was \textit{estimated through a point estimation} and the value of that estimation is provided, usually with an associated statistic uncertainty. 
 
 Our job during this chapter will be to explore the different kinds of point estimators and to understand their properties so that we can decide, in the course of our data analyst careers, which tool is right for which job. Unfortunately, there is no "best way" that fits all of the situations we might find ourselves in, and the expert analyst is the one that knows how to justify their choice in a convincing matter.\sidenote{Note: not the one who makes the \textit{best} choice, as often it's unclear which properties we can afford to abandon in favor of others.}
 
 \section{Bayesian point estimator}
-Let's, as we have done before, discuss the Bayesian case first, where our parameter $\mu$ follows a \textit{pdf}. In this case, it's natural to start from the posterior as described in (\ref{def:posterior}), $p(\mu|x_0)$, and take its maximum as the estimator $\hat{\mu}$ for $\mu$. 
+Let's, as we have done before, discuss the Bayesian case first, where our parameter $\theta$ follows a \textit{pdf}. In this case, it's natural to start from the posterior as described in (\ref{def:posterior}), $p(\theta|x_0)$, and take its maximum as the estimator $\hat{\theta}$ for $\theta$. 
 
-This is a natural yet unsatisfying approach - I know everything I could ever hope to know about $\mu$ through the full knowledge of the posterior and I waste the whole shape of the distribution only considering the maximum? We can definitely do better than that, and often when we are fortunate enough to find ourselves in this situation we can choose to abandon point estimates entirely in favor of other techniques that fully use the information contained in the posterior. 
+This is a natural yet unsatisfying approach - I know everything I could ever hope to know about $\theta$ through the full knowledge of the posterior and I waste the whole shape of the distribution only considering the maximum? We can definitely do better than that, and often when we are fortunate enough to find ourselves in this situation we can choose to abandon point estimates entirely in favor of other techniques that fully use the information contained in the posterior. 
 
-For example, usually we can talk about the problem in terms of minimizing some sort of risk function $r(\tilde{\mu},\mu)$, which for example can have the form $r = (\tilde{\mu}-\mu)^2$ (quadratic risk). We intend that
+For example, usually we can talk about the problem in terms of minimizing some sort of risk function $r(\tilde{\theta},\theta)$, which for example can have the form $r = (\tilde{\theta}-\theta)^2$ (quadratic risk). We intend that
 	\[
-	\tilde{\mu} = \E_\mu[\mu] = \int\mu\cdot p(\mu|x_0)\dd \mu
+	\tilde{\theta} = \E_\theta[\theta] = \int\theta\cdot p(\theta|x_0)\dd \theta
 	\]
 
-From this we can see that taking the maximum of the posterior is equivalent to using the risk function $r(\tilde{\mu},\mu)=P(\tilde{\mu}\neq\mu)$, which makes sense to use if $\mu$ is discrete. 
+From this we can see that taking the maximum of the posterior is equivalent to using the risk function $r(\tilde{\theta},\theta)=P(\tilde{\theta}\neq\theta)$, which makes sense to use if $\theta$ is discrete. 
 \todo{example of quadratic and maximum risk?}
 
 To be honest, this formalism will not be looked further upon, and is rarer to find with respect to the "classic" frequentist approach, which is the one that is blindly intended when not specified, and on which we will spend the rest of the chapter.
 
 \section{The classic point estimator}
 
-What is an "estimate of $\mu$"? Well, really any statistic $s(x)$ can be an estimate of $\mu$, we will baptize it \textit{estimator} and denote it with the symbol $\hat{\mu}$. What we will try to answer in this section is how \textit{good} a certain estimator $\hat{\mu}$ is.
+What is an "estimate of $\theta$"? Well, really any statistic $s(x)$ can be an estimate of $\theta$, we will baptize it \textit{estimator} and denote it with the symbol $\hat{\theta}$. What we will try to answer in this section is how \textit{good} a certain estimator $\hat{\theta}$ is.
 
-For example, I can choose $\hat{\mu}=42$\sidenote{It is the answer to the life, the universe, and everything after all!}. We can imagine that this estimator will not be particularly good nor interesting, and it's not unreasonable to request that the estimator for $\mu$ have something to do with $\mu$ itself.
+For example, I can choose $\hat{\theta}=42$\sidenote{It is the answer to the life, the universe, and everything after all!}. We can imagine that this estimator will not be particularly good nor interesting, and it's not unreasonable to request that the estimator for $\theta$ have something to do with $\theta$ itself.
 
-Let's take a look at the situation we find ourselves in. Differently from the Bayesian case, we want to estimate a parameter that is not governed by a probability function, much less defined on a metric, and try to build a formalism that quantitatively tells us how "close" we are to estimating the parameter itself.\sidenote{Naturally, we can't talk about the "probability of guessing" $\mu$, as the phrase itself is not well defined, and we can't attribute a "real" value to the parameter any better than we can estimate it.} So how do we approach this daunting task?
+Let's take a look at the situation we find ourselves in. Differently from the Bayesian case, we want to estimate a parameter that is not governed by a probability function, much less defined on a metric, and try to build a formalism that quantitatively tells us how "close" we are to estimating the parameter itself.\sidenote{Naturally, we can't talk about the "probability of guessing" $\theta$, as the phrase itself is not well defined, and we can't attribute a "real" value to the parameter any better than we can estimate it.} So how do we approach this daunting task?
 
 The answer lies in the fact that, much like the measurements, the estimate can be repeated an infinite number of times. Therefore, there exists the \textit{pdf} of $s(x)$ (and the estimator of $N$ measurements can be generally written as $s_N(\{x_i\})$). 
 \begin{definition}[Consistent estimator]
-	The estimator $s_N(\{x_i\})$ is a \textit{consistent} estimator of $\mu$ if
+	The estimator $s_N(\{x_i\})$ is a \textit{consistent} estimator of $\theta$ if
 	\[
-	\forall \varepsilon > 0: \lim_{N\to\infty} P(|s_N(x)-\mu|>\varepsilon)=0
+	\forall \varepsilon > 0: \lim_{N\to\infty} P(|s_N(x)-\theta|>\varepsilon)=0
 	\]
-	which, we hope you remember, means that $s_N$ \textit{converges in probability to} $\mu$.
+	which, we hope you remember, means that $s_N$ \textit{converges in probability to} $\theta$.
 \label{def:consistent_estimator}
 \end{definition}
 
-Generally, we believe it's more clear to denote the estimator for $\mu$ as $\hat{\mu}$, and so from now on we'll use this notation, remembering that $\hat{\mu}$ is a statistic (and so is a function of the data) that admits \textit{pdf}.
+Generally, we believe it's more clear to denote the estimator for $\theta$ as $\hat{\theta}$, and so from now on we'll use this notation, remembering that $\hat{\theta}$ is a statistic (and so is a function of the data) that admits \textit{pdf}.
 
-This property is so important that if $\hat{\mu}$ is not at least consistent for $\mu$ then  it is not even considered an estimator to begin with; frankly, it's non-negotiable that an estimator be at least consistent. For this reason, if we ever talk about any sort of estimator, this property is silently assumed. 
+This property is so important that if $\hat{\theta}$ is not at least consistent for $\theta$ then  it is not even considered an estimator to begin with; frankly, it's non-negotiable that an estimator be at least consistent. For this reason, if we ever talk about any sort of estimator, this property is silently assumed. 
 
 With this property we can re-state the LLN \ref{subsec:LLN} as "the arithmetic mean is a consistent estimator of the mean $\E[x]$ of the distribution." We have already stated this, but it's helpful to remember if things get confusing; when we need a concrete example of an estimator let's think of the sample mean as a (consistent) estimator for the mean of a distribution.
 
-At this point, it becomes interesting to consider the variance of the estimator\sidenote{Remember, $\hat{\mu}$ admits a \textit{pdf}, so talking about the variance makes sense}, and since we know that it converges to the parameter at high statistics, we want to quantify "how precisely" it does so. In fact, when we write 
+At this point, it becomes interesting to consider the variance of the estimator\sidenote{Remember, $\hat{\theta}$ admits a \textit{pdf}, so talking about the variance makes sense}, and since we know that it converges to the parameter at high statistics, we want to quantify "how precisely" it does so. In fact, when we write 
 	\[
-	\mu = \hat{\mu} \pm e
+	\theta = \hat{\theta} \pm e
 	\]
 we usually intend 
 	\[
-	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat\mu\right]}\bigg\rvert_{\mu=\hat{\mu}}	
+	\theta = \hat{\theta}(x_0) \pm \sqrt{\Var\left[\hat\theta\right]}\bigg\rvert_{\theta=\hat{\theta}}	
 	\]
-where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\hat\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
+where we explicitly write that $\hat{\theta}$ depends on the observations $x_0$ and that $\Var\left[\hat\theta\right]$ is a function of $\theta$ evaluated at $\hat{\theta}$.\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
 
 
 \begin{example}
 	One could think that having a consistent estimator means that the variance must go to zero:
 	\[
-	\hat{\mu}_N \text{ consistent} \implies \lim_{N \to \infty} \text{Var}(\hat{\mu}_N) = 0
+	\hat{\theta}_N \text{ consistent} \implies \lim_{N \to \infty} \text{Var}\left[\hat{\theta}_N\right] = 0
 	\]
-	However, it is easy to find a counterexample. Consider an estimator $\hat{\mu}_N$ for the parameter $\mu = 0$ defined by the following probability mass function:
+	However, it is easy to find a counterexample. Consider an estimator $\hat{\theta}_N$ for the parameter $\theta = 0$ defined by the following probability mass function:
 	\[
-	P(\hat{\mu}_N = x) = 
+	P(\hat{\theta}_N = x) = 
 	\begin{cases} 
 		\frac{1}{2N} & \text{if } x = N^2 \\
 		1 - \frac{1}{N} & \text{if } x = 0 \\
@@ -85,171 +85,178 @@ where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and
 	
 	An estimator is consistent if it converges in probability to the true parameter: 
 	\begin{align*}
-		\forall \varepsilon > 0: P(|\hat{\mu}_N - 0| > \varepsilon) &= P(\hat{\mu}_N = N^2) + P(\hat{\mu}_N = -N^2) \\
+		\forall \varepsilon > 0: P(|\hat{\theta}_N - 0| > \varepsilon) &= P(\hat{\theta}_N = N^2) + P(\hat{\theta}_N = -N^2) \\
 		&= \frac{1}{2N} + \frac{1}{2N} = \frac{1}{N}
 	\end{align*}
 	Taking the limit:
 	\[
-	\lim_{N \to \infty} P(|\hat{\mu}_N| > \varepsilon) = \lim_{N \to \infty} \frac{1}{N} = 0
+	\lim_{N \to \infty} P(|\hat{\theta}_N| > \varepsilon) = \lim_{N \to \infty} \frac{1}{N} = 0
 	\]
-	This proves that $\hat{\mu}_N \xrightarrow{P} 0$, so the estimator is \textbf{consistent}.
+	This proves that $\hat{\theta}_N \xrightarrow{P} 0$, so the estimator is \textbf{consistent}.
 	
 	The expected value is:
 	\[
-	E[\hat{\mu}_N] = (-N^2)\frac{1}{2N} + (0)(1-\frac{1}{N}) + (N^2)\frac{1}{2N} = 0
+	E[\hat{\theta}_N] = (-N^2)\frac{1}{2N} + (0)(1-\frac{1}{N}) + (N^2)\frac{1}{2N} = 0
 	\]
 	The variance is then:
 	\[
-	\text{Var}(\hat{\mu}_N) = E[\hat{\mu}_N^2] = (-N^2)^2 \frac{1}{2N} + 0 \left(1 - \frac{1}{N}\right) + (N^2)^2 \frac{1}{2N} = N^3
+	\text{Var}(\hat{\theta}_N) = E[\hat{\theta}_N^2] = (-N^2)^2 \frac{1}{2N} + 0 \left(1 - \frac{1}{N}\right) + (N^2)^2 \frac{1}{2N} = N^3
 	\]
-	As $N \to \infty$, the variance $\text{Var}(\hat{\mu}_N) \to \infty$, showing that consistency does not implies variance decay.
+	As $N \to \infty$, the variance $\text{Var}(\hat{\theta}_N) \to \infty$, showing that consistency does not implies variance decay.
 \end{example}
 
 
 In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \textit{bias}.
 \begin{definition}[Bias of an estimator]
-	Given an estimator $\hat{\mu}(x)$ of $\mu$ we define the \textit{bias function} as:
+	Given an estimator $\hat{\theta}(x)$ of $\theta$ we define the \textit{bias function} as:
 	\[
-	b_\mu\left(\hat\mu\right)=\E\left[\hat{\mu}\right]-\mu
+	b_\theta\left[\hat\theta\right]=\E\left[\hat{\theta}\right]-\theta
 	\]
 \end{definition}
-\
-\todo{Be VERY careful about the mu's and mu hats. The professor uses them in a non clear way and I'd like to be very precise about this formalism. I integrated with Wikipedia}
 
-While we talk about the bias of an \textit{estimator} $\hat\mu$, it's important to remember the dependency on the \textit{parameter} $\mu$. An unbiased estimator is one that has identically null bias for \textit{all} values of $\mu$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\mu$ it's at least favorable that the bias be much smaller than the variance. When we write
+While we talk about the bias of an \textit{estimator} $\hat\theta$, it's important to remember the dependency on the \textit{parameter} $\theta$. An unbiased estimator is one that has identically null bias for \textit{all} values of $\theta$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\theta$ it's at least favorable that the bias be much smaller than the variance. When we write
 	\[
-	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat{\mu}\right]}
+	\theta = \hat{\theta}(x_0) \pm \sqrt{\Var\left[\hat{\theta}\right]}
 	\] 
 	
 we silently intend that the aforementioned condition is met:
 	
 	\[
-	\left(b(\hat{\mu})\ll\sqrt{\Var[\hat{\mu}]}\right)
+	\left(b\left[\hat{\theta}\right]\ll\sqrt{\Var[\hat{\theta}]}\right)
 	\]
 
-We can in general try to reduce the bias\todo{Note: this part comes after in the notes but I think it fits here. Mich when you see this delete the todo.} of an estimator "artificially": for example we can think to banally subtract it from the estimator itself to obtain a new one. In this case, we will have:
+We can in general try to reduce the bias of an estimator "artificially": for example we can think to banally subtract it from the estimator itself to obtain a new one. In this case, we will have:
 
 	\[
-	\hat\mu^\prime = \hat\mu - b_\mu(\hat\mu)
+	\hat\theta^\prime = \hat\theta - b_\theta\left[\hat\theta\right]
 	\]
 
-We note that $\hat\mu^\prime$ is only a statistic if $\frac{\partial b}{\partial \mu} = 0$, as the bias of $\hat\mu$ can depend on $\mu$ itself (not constant bias). Well, we can go one step deeper and find an \textit{estimator for the bias}, and newly define:
+We note that $\hat\theta^\prime$ is only a statistic if $\frac{\partial b}{\partial \theta} = 0$, as the bias of $\hat\theta$ can depend on $\theta$ itself (not constant bias). Well, we can go one step deeper and find an \textit{estimator for the bias}, and newly define:
 
 	\[
-	\hat\mu^\prime = \hat\mu - \hat{b} 
+	\hat\theta^\prime = \hat\theta - \hat{b} 
 	\]
 
-What exactly is $\hat{b}$? We can, like we usually do for estimators, build it \textit{ad hoc} using experience to find a good estimator, but two possible candidates are $\hat{b}_{\hat\mu}(\hat\mu)$ or even $\hat{b}_{\hat\mu^\prime}(\hat\mu)$, where essentially we get rid of the problem of having $\mu$ by explicitly estimating it with different types of estimators (the example that follows should make this clearer).
+What exactly is $\hat{b}$? We can, like we usually do for estimators, build it \textit{ad hoc} using experience to find a good estimator, but two possible candidates are $\hat{b}_\theta\left[\hat\theta\right]_{\theta=\hat{\theta}}$ or even $\hat{b}_\theta\left[\hat\theta\right]_{\theta=\hat{\theta}^\prime}$, where essentially we get rid of the problem of having $\theta$ by explicitly estimating it with different types of estimators (the example that follows should make this clearer).
 The new bias will be:
 
 	\[
-	b_\mu^\prime(\hat\mu^\prime) = \E\left[\hat\mu^\prime\right] - \mu = \E\left[\hat\mu\right] - \E\left[\hat{b}\right] - \mu = b_\mu(\hat\mu) - \E\left[\hat{b}\right]
+	b_\theta^\prime\left[\hat\theta^\prime\right] = \E\left[\hat\theta^\prime\right] - \theta = \E\left[\hat\theta\right] - \E\left[\hat{b}\right] - \theta = b_\theta(\hat\theta) - \E\left[\hat{b}\right]
 	\]
 
-Usually this bias will be less than the original, and in certain cases even null, though we pay the price with an increase of variance in the general case.
+The new estimator is unbiased when the last difference is equal to zero:
+	
+	\[
+	\E\left[\hat{b}\right] - b_\theta\left[\hat\theta\right] = 0 
+	\]
+
+If you squint hard enough at this expression you can convince yourself that it means nothing more than \textit{the estimator for the bias is unbiased itself}.
+
+Unfortunately, as things often are, reducing the bias of an estimator in this way is often matched with increasing its variance (the explanation for this will be clearer in the next section).
 
 \begin{example}
-	To try to keep things as clear as possible, let's formulate a quick example: we have built an estimator $\hat\mu$ for $\mu$ and found that its bias is
+	To try to keep things as clear as possible, let's formulate a quick example: we have built an estimator $\hat\theta$ for $\theta$ and found that its bias is
 	
 	\[
-	b_\mu(\hat\mu) = \E\left[\hat\mu\right] - \mu = c \cdot \mu
+	b_\theta \left[ \hat\theta \right] = \E\left[\hat\theta\right] - \theta = c \cdot \theta
 	\]
 	
-	where $c$ is a real-valued nonzero constant. Inverting we also find that $\E\left[\hat\mu\right] = (c+1)\mu$ which will be useful later.
-	The estimator is obviously not unbiased so we try to correct this by building a new estimator $\hat\mu^\prime = \hat\mu - c\mu$. Well, we don't know what $\mu$ is, that's what we are trying to estimate in the first place, and so the best we can do is to replace it with $\hat\mu$. Therefore, I can build my new estimator to be:
+	where $c$ is a real-valued nonzero constant. Inverting we also find that $\E\left[\hat\theta\right] = (c+1)\theta$ which will be useful later.
+	The estimator is obviously not unbiased so we try to correct this by building a new estimator $\hat\theta^\prime = \hat\theta - c\theta$. Well, we don't know what $\theta$ is, that's what we are trying to estimate in the first place, and so the best we can do is to replace it with $\hat\theta$. Therefore, I can build my new estimator to be:
 	
 	\[
-	\hat\mu^\prime = \hat\mu - c\hat\mu
+	\hat\theta^\prime = \hat\theta - c\hat\theta
 	\]
-	We recognize the second term to be what we previously called the estimator for the bias $\hat{b} = b_{\hat\mu}(\hat\mu)$. 
 	
-	Let's try to calculate the new bias of this estimator $\hat\mu^\prime$:
+	We recognize the second term to be what we previously called the estimator for the bias $\hat{b} = b_\theta\left[\hat\theta\right]_{\theta=\hat\theta}$. 
+	
+	Let's try to calculate the new bias of this estimator $\hat\theta^\prime$:
 	
 	\begin{align*}
-	b_\mu(\hat\mu^\prime) &= \E\left[\hat\mu^\prime\right] - \mu = \E\left[\hat\mu\right] - \E\left[c\hat\mu\right] - \mu \\
-	&= b_\mu(\hat\mu) - c\E\left[\hat\mu\right] = c\mu - c(1+c)\mu = -c^2\mu
+	b_\theta\left[\hat\theta^\prime\right] &= \E\left[\hat\theta^\prime\right] - \theta = \E\left[\hat\theta\right] - \E\left[c\hat\theta\right] - \theta \\
+	&= b_\theta\left[\hat\theta\right] - c\E\left[\hat\theta\right] = c\theta - c(1+c)\theta = -c^2\theta
 	\end{align*}
 	
 	That's not very promising. Let's try the other suggested case, where we build the estimator as:
 	
 	\[
-	\hat\mu^\prime = \hat\mu - c\hat\mu^\prime
+	\hat\theta^\prime = \hat\theta - c\hat\theta^\prime
 	\]
 	
-	We solve this implicit function to get
+	Where we are instead using $\hat{b} = b_\theta\left[\hat\theta\right]_{\theta=\hat\theta^\prime}$ as an estimator for the bias. We solve this implicit function to get
 	
 	\[
-	\hat\mu^\prime = \frac{\hat\mu}{c+1}
+	\hat\theta^\prime = \frac{\hat\theta}{c+1}
 	\]
 	
 	and calculating the bias once again:
 	
 	\begin{align*}
-	b_\mu(\hat\mu^\prime) &= \E\left[\hat\mu^\prime\right] - \mu = \frac{\E\left[\hat\mu\right]}{c+1} - \mu \\
-	&= \frac{c+1}{c+1}\mu - \mu = 0
+	b_\theta\left[\hat\theta^\prime\right] &= \E\left[\hat\theta^\prime\right] - \theta = \frac{\E\left[\hat\theta\right]}{c+1} - \theta \\
+	&= \frac{c+1}{c+1}\theta - \theta = 0
 	\end{align*}
 	
-	\qed
+	Which, as we have verified, is unbiased.
 \end{example}
-
- \todo{NOT DONE I HAVE TO GO!}
-
-
+\todo{Do we wanna find the variances of these estimators too?}
 
 When we can't make do with an unbiased estimator, we can at least try to find one that is asymptotically so:
 	\[
-	\forall \mu:\, \lim_{N\to\infty}b_N(\hat\mu)=0
+	\forall \theta:\, \lim_{N\to\infty}b_N\left[\hat\theta\right]=0
 	\]
-\todo{More questions and counterexamples. Also the example of calculating the bias of the sample variance can be added here.}
+\todo{More questions and counterexamples.}
 
 \subsection{Cramer-Rao}
 \label{subsubsec:CR}
 
 Question: can we arbitrarily reduce the variance and bias of an estimator or is there a limit? Unfortunately, the answer is that there is, and we introduce an important theorem for this course:
 \begin{theorem}[Cramer-Rao]
-	Let's suppose that the Fisher score \ref{def:Fisher_S} exists $\forall x$ and that $\frac{\partial}{\partial\mu}$ commutes with $\E$. Considering $\hat\mu$, an estimator for $\mu$, then there exists a lower limit to the variance of $\hat\mu$
+	Let's suppose that the Fisher score \ref{def:Fisher_S} exists $\forall x$ and that $\frac{\partial}{\partial\theta}$ commutes with $\E$. Considering $\hat\theta$, an estimator for $\theta$, then there exists a lower limit to the variance of $\hat\theta$:
+	\[
+	\Var\left[\hat\theta\right]\geq \left(1+\frac{\partial b}{\partial\theta}\right)^2 I_{\hat\theta}^{-1} \geq \left(1+\frac{\partial b}{\partial\theta}\right)^2 I_{x}^{-1}
+	\]
 \label{def:cramer-rao}
 \end{theorem}
 \begin{example}[Proof of the C-R theorem]
 	We start from the following identity:
 	\[
-	\Var\left[\hat\mu\right]\cdot I_{\hat\mu} = \E\left[\left(\hat\mu-\E\left[\hat\mu\right]\right)^2\right]\cdot\E\left[\left(\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right)^2\right]
+	\Var\left[\hat\theta\right]\cdot I_{\hat\theta} = \E\left[\left(\hat\theta-\E\left[\hat\theta\right]\right)^2\right]\cdot\E\left[\left(\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta}\right)^2\right]
 	\]
-	Where $I_{\hat\mu}$ is the Fisher Information contained in the estimator $\hat\mu$ (which we remember to be, \textit{in primis}, a statistic).
+	Where $I_{\hat\theta}$ is the Fisher Information contained in the estimator $\hat\theta$ (which we remember to be, \textit{in primis}, a statistic).
 	
 	From the Schwartz inequality: 
 	\[
-	\Var\left[\hat\mu\right]\cdot I_{\hat\mu}\geq \E\left[\left(\hat\mu-\E\left[\hat\mu\right]\right)\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right]^2
+	\Var\left[\hat\theta\right]\cdot I_{\hat\theta}\geq \E\left[\left(\hat\theta-\E\left[\hat\theta\right]\right)\cdot\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta}\right]^2
 	\]
 	
-	We'll split $\E\left[\left(\hat\mu-\E\left[\hat\mu\right]\right)\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right]$ into two parts:
+	We'll split $\E\left[\left(\hat\theta-\E\left[\hat\theta\right]\right)\cdot\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta}\right]$ into two parts:
 	\begin{align*}
-		1.) \quad \E\left[\hat\mu\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right] &= \int \hat\mu\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu} p(\hat\mu;\mu)\dd \hat\mu \\
-		&= \int \hat\mu\cdot\frac{\partial p(\hat\mu;\mu)}{\partial\mu}\dd \hat\mu = \frac{\partial}{\partial\mu}\int \hat\mu\cdot p(\hat\mu;\mu)\dd \hat\mu \\
-		&=\frac{\partial}{\partial\mu}\E\left[\hat\mu\right] = \frac{\partial}{\partial\mu}\left[\mu+b(\hat\mu)\right]\\
-		&= 1 + \frac{\partial b}{\partial\mu}
+		1.) \quad \E\left[\hat\theta\cdot\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta}\right] &= \int \hat\theta\cdot\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta} p(\hat\theta;\theta)\dd \hat\theta \\
+		&= \int \hat\theta\cdot\frac{\partial p(\hat\theta;\theta)}{\partial\theta}\dd \hat\theta = \frac{\partial}{\partial\theta}\int \hat\theta\cdot p(\hat\theta;\theta)\dd \hat\theta \\
+		&=\frac{\partial}{\partial\theta}\E\left[\hat\theta\right] = \frac{\partial}{\partial\theta}\left[\theta+b_\theta\left[\hat\theta\right]\right]\\
+		&= 1 + \frac{\partial b}{\partial\theta}
 	\end{align*}
 	\begin{align*}
-		2.) \quad \E\left[-\E\left[\hat\mu\right]\cdot\frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu}\right] &= -\E\left[\hat\mu\right]\int \frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu} p(\hat\mu;\mu)\dd \hat\mu \\
-		&= -\E\left[\hat\mu\right]\int\frac{\partial p(\hat\mu;\mu)}{\partial\mu}\dd \hat\mu \\
-		&= -\E\left[\hat\mu\right]\frac{\partial}{\partial\mu}\int p(\hat\mu;\mu)\dd \hat\mu \\
-		&=-\E\left[\hat\mu\right]\frac{\partial}{\partial\mu}1 = 0
+		2.) \quad \E\left[-\E\left[\hat\theta\right]\cdot\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta}\right] &= -\E\left[\hat\theta\right]\int \frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta} p(\hat\theta;\theta)\dd \hat\theta \\
+		&= -\E\left[\hat\theta\right]\int\frac{\partial p(\hat\theta;\theta)}{\partial\theta}\dd \hat\theta \\
+		&= -\E\left[\hat\theta\right]\frac{\partial}{\partial\theta}\int p(\hat\theta;\theta)\dd \hat\theta \\
+		&=-\E\left[\hat\theta\right]\frac{\partial}{\partial\theta}1 = 0
 	\end{align*}
 	
 	Putting everything together we get the Cramer-Rao inequality:
 	\[
-	\Var\left[\hat\mu\right]\geq \left(1+\frac{\partial b}{\partial\mu}\right)^2 I_{\hat\mu}^{-1} \geq \left(1+\frac{\partial b}{\partial\mu}\right)^2 I_{x}^{-1}
+	\Var\left[\hat\theta\right]\geq \left(1+\frac{\partial b}{\partial\theta}\right)^2 I_{\hat\theta}^{-1} \geq \left(1+\frac{\partial b}{\partial\theta}\right)^2 I_{x}^{-1}
 	\]
 	\qed
 	
 	The first equality is verified when the estimator has the minimum variance out of all the possible ones we can build from the same statistic. This is verified when we have the equality in the Schwartz inequality (when the "vectors" are "parallel"), which means when
 	\begin{align*}
-	\left(\hat\mu - \E\left[\hat\mu\right]\right)\, &||\, \frac{\partial\ln p (\hat\mu;\mu)}{\partial\mu} \Rightarrow \frac{\partial\ln p(\hat\mu;\mu)}{\partial\mu} = f(\mu) \cdot (\hat\mu-\mu-b(\mu))\\
-	&\Rightarrow \ln p(\hat\mu) = \hat\mu\int f(\mu)\dd \mu - \int \left(\mu+b(\mu)\right)\cdot f(\mu)\dd \mu +c\\
-	&\Rightarrow p(\hat\mu;\mu) = \exp\left[\alpha(\mu)\hat\mu+\beta(\mu)+c(\hat\mu)\right]
+	\left(\hat\theta - \E\left[\hat\theta\right]\right)\, &||\, \frac{\partial\ln p (\hat\theta;\theta)}{\partial\theta} \Rightarrow \frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta} = f(\theta) \cdot (\hat\theta-\theta-b(\theta))\\
+	&\Rightarrow \ln p(\hat\theta) = \hat\theta\int f(\theta)\dd \theta - \int \left(\theta+b(\theta)\right)\cdot f(\theta)\dd \theta +c\\
+	&\Rightarrow p(\hat\theta;\theta) = \exp\left[\alpha(\theta)\hat\theta+\beta(\theta)+c(\hat\theta)\right]
 	\end{align*}
 	
-	Which means that to satisfy the first inequality we must be able to express the \textit{pdf} in the exponential form written above which means that statistics that satisfy Darmois \ref{th:darmois} have minimum variance. We also note that this statistic is unbiased in $\E\left[\hat\mu\right] = \mu + b_{\hat\mu}(\mu)$, and not unbiased in $\mu$. Unfortunately, to remove the bias in $\mu$ we will have to sacrifice the minimum variance. 
+	Which means that to satisfy the first inequality we must be able to express the \textit{pdf} in the exponential form written above which means that statistics that satisfy Darmois \ref{th:darmois} have minimum variance. We also note that this statistic is unbiased for $\E\left[\hat\theta\right]$, and not necessarily unbiased for $\theta$. Unfortunately, to remove the bias in $\theta$ we will have to sacrifice the minimum variance. 
 	
 	The other inequality is satisfied for sufficient statistics. 
 \label{def:CR}
@@ -260,7 +267,7 @@ This is awesome, we have an elegant expression that ties together so many concep
 
  We can quantitatively define the efficiency of an estimator as
 	\[
-	\varepsilon_{\hat\mu}(\mu) = \left(1+\frac{\partial b}{\partial \mu}\right)^2 I_x^{-1}\Var^{-1}\left[\hat\mu\right]
+	\varepsilon_{\hat\theta}(\theta) = \left(1+\frac{\partial b}{\partial \theta}\right)^2 I_x^{-1}\Var^{-1}\left[\hat\theta\right]
 	\]
 
 which is defined between zero and one, and when maximal allows us to say that the estimator is \textit{efficient}.
@@ -268,7 +275,7 @@ which is defined between zero and one, and when maximal allows us to say that th
 \begin{corollary}
 	If the Fisher Information is linear in $N$, then
 	\[
-	\Var\left[\hat\mu(x)\right] \geq \frac{k}{N}
+	\Var\left[\hat\theta(x)\right] \geq \frac{k}{N}
 	\]
 	
 	As the measurements increase in number, the variance decreases as $\frac{1}{N}$, though it only holds if the Likelihood satisfies some basic regularity conditions.
@@ -276,7 +283,7 @@ which is defined between zero and one, and when maximal allows us to say that th
 
 Generalizing the Cramer-Rao inequality to multiple statistics and parameters:
 	\[
-	\Cov\left[\hat\mu\right]_{ij}\geq\left(1+\frac{\partial b_i}{\partial \mu_k}\right)I^{-1}_{kl}\left(1+\frac{\partial b_l}{\partial \mu_j}\right)
+	\Cov\left[\hat\theta\right]_{ij}\geq\left(1+\frac{\partial b_i}{\partial \theta_k}\right)I^{-1}_{kl}\left(1+\frac{\partial b_l}{\partial \theta_j}\right)
 	\]
 Where by "$\geq$" we intend that the difference between the left and right hand sides returns a positively-defined matrix.
 
@@ -307,6 +314,7 @@ The cool thing about these moments is that they often exist finite and are easy 
 Of course, every good property must be met with an unfavorable one (in certain fields called the "no free lunch principle"), and this method does not grant us particularly efficient estimators, and to increase their efficiency we naturally must calculate more, or increase the complexity of the model, which is in direct contradiction with the whole reason we chose the moment method in the first place.\todo{Bleh. Let's re-write this sentence to flow better.}
 
 \subsection{Implicit estimators}
+\label{subsec:Implicits}
 Let's start with a basic fact: the expected value of a statistic will be, in general, at most a function of the parameters: $\E[\hat\mu(x)]  = f(\mu_0)$. By simply re-writing our expression
 
 	\[
@@ -372,8 +380,6 @@ We can see that
 	\E\left[\frac{\partial k_N(\vec{x},\mu)}{\partial\mu}\right]_{\mu=\mu_0} = \E\left[\frac{1}{N}\frac{\partial^2\ln L_{tot}(\vec{x},\mu)}{\partial\mu^2}\right]_{\mu=\mu_0}= \frac{-I_F}{N} \neq 0
 	\]
 
-\todo{I don't get why $I_F\neq 0$, did we write that somewhere, is it obvious? If you know the answer please leave me an explanation or ref <3.}
-
 From this we see that the three conditions required in the definition of implicit estimator \ref{def:implicit_estimator} are satisfied. Thus we conclude that at least one of the solutions $\hat\mu$ of the Likelihood equation:
 \begin{equation}
 	\frac{\partial}{\partial\mu} \ln L_{tot}(\vec{x},\hat{\mu}) = 0 
@@ -431,3 +437,4 @@ It is important to stress that this is an asymptotic result and we invite the re
 \section{Histogram fitting}
 
 \section{Least Squares method}
+\textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x;\theta)\right] = 
