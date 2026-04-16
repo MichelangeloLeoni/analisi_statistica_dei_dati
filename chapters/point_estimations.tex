@@ -342,7 +342,7 @@ Let's go through some of its nice properties:
 	\item It respects the Likelihood Principle.
 	\item It is invariant for parameter variable change (just like the Likelihood).
 	\item Asymptotically, it is efficient and unbiased (goes like $\frac{1}{N}$), 
-	\item Asymptotically, it is also normal, with $p(\hat\mu-\mu_0;\mu_0) \rightarrow \N\left(0,\frac{1}{I_F}\right)$.
+	\item Asymptotically, it is also normal, with: \[p(\hat\mu;\mu_0) \rightarrow \N\left(\hat{\mu}; m=\mu_0,\sigma^2=\frac{1}{I_F}\right)\].
 \end{itemize}
 
 Since we know a thing or two about compromises, and because lunch is never free, we add that the MLE, being quite powerful, also requires minimization technique, as well as the entire dataset, to be calculated, making it much slower and computationally expensive to calculate than the moments. However, it is still a favorite option to use when possible. 
