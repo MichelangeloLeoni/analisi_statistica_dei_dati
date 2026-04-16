@@ -56,9 +56,9 @@ At this point, it becomes interesting to consider the variance of the estimator\
 	\]
 we usually intend 
 	\[
-	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\mu\right]}\bigg\rvert_{\mu=\hat{\mu}}	
+	\mu = \hat{\mu}(x_0) \pm \sqrt{\Var\left[\hat\mu\right]}\bigg\rvert_{\mu=\hat{\mu}}	
 	\]
-where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{I do not understand why Var is function of $\mu$ instead of $\hat{\mu}$}\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
+where we explicitly write that $\hat{\mu}$ depends on the observations $x_0$ and that $\Var\left[\hat\mu\right]$ is a function of $\mu$ evaluated at $\hat{\mu}$.\todo{There are some questions left as exercises here if we want to include them, it's Saturday and I don't feel like thinking about them right now...}
 
 
 \begin{example}
@@ -355,7 +355,7 @@ Let's take a step back and look at what we are dealing with. Before this section
 
 Finding the root of this function is not usually an easy task, and luckily we won't have to explicitly, in many cases. However, this formalism is important to introduce for a very important implicit estimator that we will use over the course of this text.
 
-\subsection{Maximum Likelihood estimator}
+\section{Maximum Likelihood estimator}
 
 Let's study the particular case of using the Fisher Score (\ref{def:Fisher_S}) as $F(x,\mu) = S_x(\mu) = \frac{\partial \ln L_x(\mu)}{\partial\mu}$. We have already seen that in non-particular cases the expected value of the Fisher score is null, and we define the function 
 
@@ -402,21 +402,21 @@ Now that we understand the power of the MLE, we see why it is so widely used in 
 
 In the asymptotic limit, we can use of the Cramer-Rao theorem \ref{def:cramer-rao} to state that, if $I$ is linear:
 \[
-	\Var(\hat{\mu})\simeq\frac{1}{NI_1}
+	\Var[\hat{\mu}]\simeq\frac{1}{NI_1}
 \]
 where $I_1$ is the Fisher information of a single observation. 
 In the complex cases mentioned above, it is difficult to compute $I_1$ directly. However, we can write:
 \[
-	N I_1= -N\E\left[\frac{\partial^2\ln L(\mu)}{\partial^2 \mu}\right]=-N\frac{\partial^2}{\partial^2\mu}\E\left[\ln L(\mu)\right]
+	N I_1= -N\E\left[\frac{\partial^2\ln L(\mu)}{\partial\mu^2}\right]=-N\frac{\partial^2}{\partial\mu^2}\E\left[\ln L(\mu)\right]
 \]
 If the expected value exists, it can be consistently estimated from the data using our loyal LLN:
 \begin{align*}
-	N I_1=-N\frac{\partial^2}{\partial^2\mu}\E\left[\ln L(\mu)\right]	&\simeq -N \frac{\partial^2}{\partial^2\mu} \frac{1}{N}\sum_{i=1}^N\ln L_i(\mu) \\
-	&= \frac{\partial^2\ln L_{tot}(\mu)}{\partial^2\mu}
+	N I_1=-N\frac{\partial^2}{\partial\mu^2}\E\left[\ln L(\mu)\right]	&\simeq -N \frac{\partial^2}{\partial\mu^2} \frac{1}{N}\sum_{i=1}^N\ln L_i(\mu) \\
+	&= \frac{\partial^2\ln L_{tot}(\mu)}{\partial\mu^2}
 \end{align*}
 Using the fact that $\hat{\mu}$ is a consistent estimator, we finally obtain:
 \[
-	 \Var(\hat{\mu})\simeq\left(\frac{\partial^2\ln L_{tot}(\hat{\mu})}{\partial^2\mu}\right)^{-1}
+	 \Var(\hat{\mu})\simeq\left(\frac{\partial^2\ln L_{tot}(\hat{\mu})}{\partial\mu^2}\right)^{-1}
 \]
 In other words: \textit{the asymptotic variance of the MLE can be evaluated using the second derivative of the total likelihood $L_{tot}$}. 
 One advantage of this formula is that the total likelihood has already been computed and maximized numerically, so evaluating its second derivative is computationally inexpensive.
