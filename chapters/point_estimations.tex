@@ -404,7 +404,7 @@ Since we know a thing or two about compromises, and because lunch is never free,
 
 \subsection{Variance of the MLE}
 
-Now that we understand the power of the MLE, we see why it is so widely used in real-world problems. In more complex cases, especially with large datasets, the maximum of the total likelihood $L_{\text{tot}}$ is typically found numerically using optimization algorithms (\textit{fitting}). The question is: how can we evaluate the variance of the MLE in these cases?\todo{Is it clear that we are going to take an estimate of the Var because in this cases it is too difficult/impossible to find it analytically?}
+Now that we understand the power of the MLE, we see why it is so widely used in real-world problems. In more complex cases, especially with large datasets, the maximum of the total likelihood $L_{\text{tot}}$ is typically found numerically using optimization algorithms (\textit{fitting})\todo{From here we start talking about \textit{fitting} but we never defined what a fit is in the first place}. The question is: how can we evaluate the variance of the MLE in these cases?\todo{Is it clear that we are going to take an estimate of the Var because in this cases it is too difficult/impossible to find it analytically?}
 
 In the asymptotic limit, we can use of the Cramer-Rao theorem \ref{def:cramer-rao} to state that, if $I$ is linear:
 \[
@@ -435,6 +435,55 @@ This result is widely used in fitting software (that you've probably used thousa
 It is important to stress that this is an asymptotic result and we invite the reader to take another look at all the approximations made throughout the derivation.
 
 \section{Histogram fitting}
+
+In the quite common case where no sufficient statistic is available, a compact representation of the data can be obtained using histograms. One should always keep in mind that the information content is reduced: $I_{\text{hist}} \leq I_x$.
+
+Let $k_i$ be the number of events $\{x_j\}$ falling into the bin $i \in [1,n]$. Each bin is defined by a subset of the event space $S_i \subset X$. The bins can be constructed in several ways (equal width, equal probability, etc.), but this choice is not relevant for what follows.
+
+A histogram is therefore a statistic defined by the vector of counts $\{k_i\}$, which are functions of the $N$ observed events $\{x_j\}$. To each bin we associate a probability:
+\[
+	\mathfrak{p}_i(\theta)\equiv P(\vec{x}\in S_i)=\int_{S_i}p(\vec{x};\theta)dx
+\]
+
+We now distinguish two scenarios, depending on whether $N$ is fixed or not.
+
+\subsection{N-fixed histograms}
+
+If $N$ is fixed \textit{a priori}, the counts $\{k_i\}$ follow a multinomial distribution\todo{Insert here the ref to the appendix with all the distribution defined}:
+\[
+	P(\{k_i\};\mathfrak{p}_i(\theta),N)=\frac{N!}{\prod_i{k_i!}}\prod_i \mathfrak{p}_i^{k_i}(\theta)
+\]
+the log-likelihood is then:
+\[
+	\ln L(\theta)=\sum_{i}k_i \ln \mathfrak{p}_i(\theta)-\sum_i\ln k_i! + \ln N!
+\]
+Thus the Likelihood equation:
+\[
+	\frac{\partial\ln L(\theta)}{\partial\theta}\bigg\rvert_{\theta=\hat\theta}=\sum_i \frac{k_i}{\mathfrak{p}_i(\theta)}\frac{\partial\mathfrak{p}_i(\theta)}{\partial\theta}\bigg\rvert_{\theta=\hat\theta}=0
+\]
+We now want to compare the inference obtained from the binned data with that obtained from the unbinned (raw) data.
+
+In the limit of "small" bins:
+\[
+	\mathfrak{p}_i(\theta)\simeq V_i\cdot p(x_i;\theta)
+\]
+where $V_i=\int_{S_i}d\vec{x}$ is the "volume" of the $i$-th bin and $x_i$ is the value of $x$ in the center of the $i$-th bin. The reader is warned that this approximation is sometimes swept under the rug. 
+
+We can than write:
+\begin{align*}
+	\ln L (\theta) &\simeq Const + \sum_i k_i \ln (V_i p(x_i;\theta)) \\
+	&= Const' + \sum_i k_i \ln p(x_i;\theta)
+\end{align*}
+
+In the limit of infinitely fine binning ($n \to \infty$), each bin contains at most one event, so that $k_i \in \{0,1\}$ and:
+\begin{align*}
+	\ln L(\theta) &= Const + \sum_{i=1}^{N}\ln p(x_i;\theta)\\
+	&= Const + \ln L_{unbinned}(\theta) 
+\end{align*}
+
+\textit{Therefore, in the limit of infinitesimally small bins, the binned and unbinned likelihoods coincide up to an additive constant. This implies that both approaches lead to the same inference asymptotically.}
+
+\subsection{Variable N histograms}
 
 \section{Least Squares method}
 \textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x;\theta)\right] = 
