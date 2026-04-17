@@ -632,13 +632,13 @@ And multiply by an arbitrary vector:
 	F\left(k_i,\theta\right) = \sum_{i,j} \frac{\partial \mu_j(\theta)}{\partial\theta}V_{ij}\left(k_i - \mu_i(\theta)\right)
 	\]
 
-Let's verify the conditions for the existence of at least one consistent estimator through the solution of the above equation. We need to check that the expected value of its derivative exists not null, as described in definition (\ref{def:implicit_estimator}).\todo{This came out of my brain hole it's not written anywhere but I believe it's right. Delete this if you agree.}
+Let's verify the conditions for the existence of at least one consistent estimator through the solution of the above equation. We need to check that the expected value of its derivative exists not null, as described in definition (\ref{def:implicit_estimator}).
 \begin{align*}
 	\frac{\partial F\left(k,\theta\right)}{\partial\theta} &= -\sum_{i,j}\frac{\partial \mu_i(\theta)}{\partial\theta}V_{ij}\frac{\partial \mu_j(\theta)}{\partial\theta} + \cancelto{0}{\sum_{i,j}\left(k_j - \mu_j(\theta)\right)V_{ij}\frac{\partial^2 \mu_j(\theta)}{\partial\theta^2}}\\
 	&\rightarrow -\sum_{i,j}\frac{\partial \mu_i(\theta)}{\partial\theta}V_{ij}\frac{\partial \mu_j(\theta)}{\partial\theta}
 \end{align*}
 
-This expression is different from zero if $V$ is positively-defined, in which case at least one consistent estimator for $\theta$ exists. \todo{We never checked the expected value but ok...}
+This expression is different from zero if $V$ is positively-defined, in which case at least one consistent estimator for $\theta$ exists. \todo{We never checked the expected value but ok...}\todo{I guess that, since we are taking the expected value in the space of events observed per bin, this thingy is a constant to the E operator. Remember that: $\E[k_i]=\mu_i$, so I think that $E[\mu_i]=\mu_i$ more or less.}
 
 Looking back at the equation we want to solve: 
 
@@ -653,7 +653,7 @@ Which corresponds to minimizing a quadratic form. In the case of $V_{ij}$ equal 
 
 Whose roots we recognize as the estimators that \textit{minimize the sum of squares}. This \textbf{Least Squares Method} (LSM) allows us to find consistent estimators for the parameters $\theta$. 
 
-Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \textit{pdf}, and it is a general property, as long as $\exists \mu_i(\theta)\equiv \E\left[k_i\right]$. This is especially useful when we don't know the distribution that the data follows, where we wouldn't be able to use other techniques such as the MLE.
+Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \textit{pdf}, and it is a general property, as long as $\exists\; \mu_i(\theta)\equiv \E\left[k_i\right]$. This is especially useful when we don't know the distribution that the data follows, where we wouldn't be able to use other techniques such as the MLE.
 
 \begin{example}
 	Let's look at one specific, yet didactic, case: where the expected values are linear functions of the parameters $\mu_i = A_{ij}\theta_j$.
