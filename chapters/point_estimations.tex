@@ -339,7 +339,7 @@ Let's start with a basic fact: the expected value of a statistic will be, in gen
 	\E[\hat\theta(x)]  = f(\theta_0) \Rightarrow \E\left[\hat\theta(x)-f(\theta_0)\right] = 0
 	\]
 
-we can decide to generalize this concept by considering a generic $F(x;\theta)$ for which $\E\left[F(x;\theta=\theta_0)\right]=0$. In other words this condition is verified only when $\theta$ assumes the "real" value $\theta_0$ from which $x$ is extracted according to $p(x;\theta_0)$. We note that this $F$ isn't a statistic, and at most can be seen as a family of statistics for each fixed $\theta$. 
+we can decide to generalize this concept by considering a generic $F(x,\theta)$ for which $\E\left[F(x,\theta=\theta_0)\right]=0$. In other words this condition is verified only when $\theta$ assumes the "real" value $\theta_0$ from which $x$ is extracted according to $p(x;\theta_0)$. We note that this $F$ isn't a statistic, and at most can be seen as a family of statistics for each fixed $\theta$. 
 
 For a generic $\theta$, we suppose that there exists finite (at least in a neighborhood of $\theta_0$):
 
@@ -620,4 +620,53 @@ A further simplification is sometimes introduced:
 This expression is asymptotically equivalent, and has the advantage of being quadratic in $\theta$ if $\mu_i(\theta)$ is linear in $\theta$. However, it has significantly worse convergence properties, and the resulting estimator can be biased, sometimes with a bias larger than its statistical uncertainty.
 
 \section{Least Squares method}
-\textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x;\theta)\right] = 1$
+\textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property. 
+
+We apply a generic linear transformation:
+	\[
+	F_j\left(k_i,\theta\right) = \sum_i V_{ij}\left(k_i - \mu_i(\theta)\right)
+	\]
+
+And multiply by an arbitrary vector:
+	\[
+	F\left(k_i,\theta\right) = \sum_{i,j} \frac{\partial \mu_j(\theta)}{\partial\theta}V_{ij}\left(k_i - \mu_i(\theta)\right)
+	\]
+
+Let's verify the conditions for the existence of at least one consistent estimator through the solution of the above equation. We need to check that the expected value of its derivative exists not null, as described in definition (\ref{def:implicit_estimator}).\todo{This came out of my brain hole it's not written anywhere but I believe it's right. Delete this if you agree.}
+\begin{align*}
+	\frac{\partial F\left(k,\theta\right)}{\partial\theta} &= -\sum_{i,j}\frac{\partial \mu_i(\theta)}{\partial\theta}V_{ij}\frac{\partial \mu_j(\theta)}{\partial\theta} + \cancelto{0}{\sum_{i,j}\left(k_j - \mu_j(\theta)\right)V_{ij}\frac{\partial^2 \mu_j(\theta)}{\partial\theta^2}}\\
+	&\rightarrow -\sum_{i,j}\frac{\partial \mu_i(\theta)}{\partial\theta}V_{ij}\frac{\partial \mu_j(\theta)}{\partial\theta}
+\end{align*}
+
+This expression is different from zero if $V$ is positively-defined, in which case at least one consistent estimator for $\theta$ exists. \todo{We never checked the expected value but ok...}
+
+Looking back at the equation we want to solve: 
+
+	\[
+	\sum_{i,j} \frac{\partial \mu_j(\theta)}{\partial\theta}V_{ij}\left(k_i - \mu_i(\theta)\right) = -\frac{1}{2}\frac{\partial}{\partial\theta}\sum_{i,j} \left(k_j - \mu_j(\theta)\right)V_{ij}\left(k_i - \mu_i(\theta)\right) = 0
+	\]
+
+Which corresponds to minimizing a quadratic form. In the case of $V_{ij}$ equal to the identity\sidenote{We could also easily define it as diagonal with positive elements and obtain a weighted average.}, we have
+	\[
+	F(k_i,\theta) = - \frac{1}{2}\frac{\partial}{\partial\theta}\left(k_i-\mu_i(\theta)\right)^2
+	\]
+
+Whose roots we recognize as the estimators that \textit{minimize the sum of squares}. This \textbf{Least Squares Method} (LSM) allows us to find consistent estimators for the parameters $\theta$. 
+
+Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \textit{pdf}, and it is a general property, as long as $\exists \mu_i(\theta)\equiv \E\left[k_i\right]$. This is especially useful when we don't know the distribution that the data follows, where we wouldn't be able to use other techniques such as the MLE.
+
+\begin{example}
+	Let's look at one specific, yet didactic, case: where the expected values are linear functions of the parameters $\mu_i = A_{ij}\theta_j$.
+	
+	We minimize the squares:
+	
+	\begin{align*}
+		0 &= \sum_{i,j} \frac{\partial \mu_j(\theta)}{\partial\theta}V_{ij}\left(k_i - \mu_i(\theta)\right) = \sum_{i,j} A_{jk} V_{ij}\left(k_i - A_{il}\theta_l\right) \\
+		&\Rightarrow \sum_{i,j} A_{jk} V_{ij}k_i = \sum_{i,j} A_{jk} V_{ij}A_{il}\theta_l \\
+		&\Rightarrow A^T V\cdot \vec{k} = A^T VA\cdot\vec{\theta}\Rightarrow \hat{\vec{\theta}} = \left(A^T VA\right)^{-1}\left(A^TV\right)\cdot\vec{k}
+	\end{align*}
+	
+\end{example}
+	
+	
+\todo{NOTDONE}
