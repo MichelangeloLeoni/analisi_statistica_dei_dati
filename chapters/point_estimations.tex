@@ -620,7 +620,7 @@ A further simplification is sometimes introduced:
 This expression is asymptotically equivalent, and has the advantage of being quadratic in $\theta$ if $\mu_i(\theta)$ is linear in $\theta$. However, it has significantly worse convergence properties, and the resulting estimator can be biased, sometimes with a bias larger than its statistical uncertainty.
 
 \section{Least Squares method}
-\textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property. 
+\textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property.\todo{We should make clear here that what comes is not limited to histograms but it can be used every time there's a set of observation depending on a parameter.}
 
 We apply a generic linear transformation:
 	\[
@@ -670,3 +670,12 @@ Coming from the implicit estimator formalism, it follows that the consistency do
 	
 	
 \todo{NOTDONE}
+
+\begin{example}
+	Super cool historical example (Eddington vs Fisher)
+	\begin{figure}[H]
+		\centering
+		\input{images/historical_example.pgf}
+		\caption{Should we add a caption and a label to this image??}
+	\end{figure}
+\end{example}
