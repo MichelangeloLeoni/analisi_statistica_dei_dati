@@ -527,7 +527,97 @@ In the limit of infinitely fine binning ($n \to \infty$), each bin contains at m
 
 \textit{Therefore, in the limit of infinitesimally small bins, the binned and unbinned likelihoods coincide up to an additive constant. This implies that both approaches lead to the same inference asymptotically.}
 
-\subsection{Variable N histograms}
+\subsection{Variable-$N$ histograms}
+
+When $N$ is not fixed (for instance, when observations are collected over a fixed time interval), it becomes itself a random variable, following a Poisson distribution:\todo{Insert here the ref to the appendix with all the distribution defined}
+\[
+	N \sim \mathcal{P}(N; \mu(\theta))
+\]
+where $\mu$ is the expected number of events:
+\[
+	\mu(\theta)\equiv\E\left[N(\theta)\right]=\E\left[\sum_i k_i(\theta)\right]
+\]
+
+In this case, the bin counts $\{k_i\}$ are independent and each follows a Poisson distribution:
+\begin{align*}
+	P(\{k_i\};\theta)&=\prod_i\mathcal{P}(k_i;\mu_i(\theta))\\
+	&=\prod_i \frac{\mu_i(\theta)^{k_i}e^{-\mu_i(\theta)}}{k_i!}
+\end{align*}
+where $\mu_i(\theta)$ is the expected number of events in the $i$-th bin.
+
+If $\mathfrak{p}_i(\theta)$ denotes the probability for an event to fall into the $i$-th bin, then
+\[
+	\mu_i (\theta) \equiv \E [ k_i (\theta) ] = \E [\mathfrak{p}_i(\theta)N(\theta)] = \mu(\theta)\mathfrak{p}_i(\theta)
+\]
+This relation follows from the fact that, conditionally on $N$, the counts $\{k_i\}$ follow a multinomial distribution with probabilities $\{\mathfrak{p}_i\}$, and taking the expectation over the Poisson-distributed $N$ yields independent Poisson variables with means $\mu\,\mathfrak{p}_i$.
+
+The log-likelihood is therefore:
+\begin{align*}
+	\ln L(\theta)&=\sum_i k_i \ln \mu_i(\theta)-\sum_i \mu_i(\theta)-\sum_i \ln k_i!\\
+	&=\sum_ik_i\ln (\mu (\theta) \mathfrak{p}_i(\theta))-\mu(\theta) + Const\\
+	&=\sum_i k_i \ln \mathfrak{p}_i(\theta) + \sum_i k_i \ln \mu (\theta) -\mu(\theta) + Const
+\end{align*}
+
+Using the same "small bins" approximation as before ($\mathfrak{p}_i(\theta)\simeq V_i\,p(x_i;\theta)$), we obtain:
+\begin{align*}
+	\ln L(\theta)&=\sum_i k_i \ln (V_i p(x_i;\theta)) + N \ln \mu(\theta) - \mu(\theta) + Const \\
+	&=\sum_i k_i \ln p(x_i;\theta)+ N \ln \mu(\theta) - \mu(\theta) + Const'
+\end{align*}
+
+We notice that this log-likelihood differs from the multinomial case only by the additional term $N \ln \mu(\theta) - \mu(\theta)$ (up to irrelevant constants).
+
+We must now distinguish between two scenarios, depending on whether $\mu$ depends on $\theta$ or not:
+
+\begin{itemize}
+    \item If $\frac{\partial \mu}{\partial \theta} = 0$, then $\mu$ is an independent parameter and the likelihood equations include an additional condition:
+    \[
+		\frac{\partial \ln L}{\partial \mu} = 0 
+		\;\Rightarrow\; \frac{N}{\mu} - 1 = 0 
+		\;\Rightarrow\; \hat{\mu} = N
+	\]
+	as expected. The remaining equations coincide with those of the multinomial case.
+
+    \item If $\frac{\partial \mu}{\partial \theta} \neq 0$, then $\mu$ carries information about the system, and the observable $N$ contributes non-trivially to the inference of $\theta$. In this case, even in the infinitesimal binning limit, the likelihood differs from the multinomial case:
+	\begin{equation}
+		\ln L(\theta)=\sum_i^{N}\ln p(x_i; \theta) + N \ln \mu(\theta) - \mu(\theta) + Const
+		\label{eq:extended_likelihood}
+	\end{equation}
+	which is known as the \textbf{extended likelihood}. It is easy to verify that, given $N$ observed events, the extended likelihood can be written as the product of the usual likelihood and a Poisson term in $N$:
+	\[
+		L_{ext}(\theta)=\mathcal{P}(N;\mu(\theta))L_{tot}(\theta)=\frac{\mu(\theta)^Ne^{-\mu(\theta)}}{N!}L_{tot}(\theta)
+	\]
+\end{itemize}
+
+\subsection{High-statistics histograms}
+
+One of the most common situations in real-life applications is the case of high statistics in every bin:
+\[
+	\forall i: \mu_i(\theta)=\E[k_i] \gg 1
+\]
+In this regime, the distribution of counts in each bin can be approximated by a normal distribution (see \ref{th:central_limit}). Therefore, the likelihood can be written as
+\[
+L(\theta) = \prod_i \exp\left(-\frac{(k_i - \mu_i(\theta))^2}{2\,\sigma_i^2(\theta)}\right) \cdot Const
+\]
+Taking the logarithm and dropping irrelevant constants:
+\begin{align*}
+	\ln L(\theta)
+	&= -\frac{1}{2}\sum_i \frac{(k_i - \mu_i(\theta))^2}{\sigma_i^2(\theta)} \\
+	&= -\frac{1}{2}\sum_i \frac{(k_i - \mu_i(\theta))^2}{\mu_i(\theta)}
+	\;\equiv\; -\frac{1}{2}\chi^2
+\end{align*}
+where in the last step we used $\sigma_i^2(\theta) = \mu_i(\theta)$, as appropriate for Poisson statistics.
+
+Thus, the log-likelihood reduces to the \textbf{Pearson chi-squared} statistic. In the high-statistics limit, minimizing $\chi^2$ is equivalent to maximizing the likelihood.
+
+A further simplification is sometimes introduced:
+\begin{equation*}
+	\chi^2 = \sum_i \frac{(k_i - \mu_i(\theta))^2}{\mu_i(\theta)}
+	\;\simeq\;
+	\sum_i \frac{(k_i - \mu_i(\theta))^2}{k_i}
+	\tag{Modified $\chi^2$}
+	\label{eq:modified_chi2}
+\end{equation*}
+This expression is asymptotically equivalent, and has the advantage of being quadratic in $\theta$ if $\mu_i(\theta)$ is linear in $\theta$. However, it has significantly worse convergence properties, and the resulting estimator can be biased, sometimes with a bias larger than its statistical uncertainty.
 
 \section{Least Squares method}
 \textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x;\theta)\right] = 1$
