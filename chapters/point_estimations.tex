@@ -623,13 +623,53 @@ This expression is asymptotically equivalent, and has the advantage of being qua
 \todo{Intro for the concept of robustness and tie it to the example for why it is important and not banal}
 
 \begin{example}
-	Super cool historical example (Eddington vs Fisher)
+	A good estimator for the variance of a Gaussian distributed random variable is the \textit{root-mean-square} (RMS), which, being the MLE, is asymptotically efficient:
+	\[
+	\hat\sigma \equiv s_N = \sqrt{\frac{1}{N}\sum_i (x_i - \bar{x})^2}
+	\]
+	where $\bar{x}$ is the sample mean.
+	
+	This is not the only possible estimator for the variance. We could use, for example, the \textit{mean-absolute-deviation} (MAD):
+	\[
+	d_N = \frac{1}{N}\sum_i |x_i - \bar{x}| \quad \rightarrow \quad \hat\sigma' \equiv \sqrt{\frac{\pi}{2}}\, d_N
+	\]
+	where the multiplicative factor makes the estimator asymptotically unbiased for a Gaussian distribution.
+	
+	We may ask which estimator performs better. Using the concept of efficiency, one finds:
+	\[
+	r \equiv \lim_{N \to \infty} \frac{\varepsilon(\hat\sigma')}{\varepsilon(\hat\sigma)} = 0.876
+	\]
+	This means that the efficiency of $d_N$ is significantly worse than that of $s_N$. One might conclude that this settles the question. However, the story does not end here.
+	
+	Consider the case where we are not completely certain about the underlying \textit{pdf}. For example, suppose the data are contaminated by a small fraction $f$ of observations with a larger variance $\sigma_2$.
+	We model the total \textit{pdf} as a mixture of two Gaussians with the same mean $\mu$ but different variances (take $\sigma_2 = 3\sigma_1$):
+	\[
+	p(x; \mu, \sigma_1, f) = (1-f)\mathcal{N}(x;\mu,\sigma_1) + f\mathcal{N}(x;\mu, 3\sigma_1)
+	\]
 	\begin{figure}[H]
 		\centering
 		\input{images/historical_example.pgf}
 		\caption{Should we add a caption and a label to this image??}
 	\end{figure}
-\end{example}
+	We consider small values of $f$ (e.g.\ $f=0.05$), so most of the data follow the distribution with variance $\sigma_1$. This does not seem like an extreme situation, only a mild contamination. Let us now look at the efficiency ratio $r$ for different values of $f$:
+	\begin{center}
+	\begin{tabular}{||c|c||}
+		\hline
+		$f$ & $r$ \\
+		\hline
+		0 & 0.876 \\
+		\hline
+		0.001 & 0.950\\
+		\hline
+		0.002 & 1.02\\
+		\hline
+		0.050 & \textbf{2.04}\\
+		\hline
+	\end{tabular}
+	\end{center}
+	The result is remarkable: with a contamination of $f=0.05$, $d_N$ becomes about twice as efficient as $s_N$! The theory we have built so far fragile.
+	This simple example, with historical relevance, highlights the importance of robustness as a desirable property of an estimator.
+\end{example}\todo{I won't talk about the history of the topic and the Eddington-Fisher debate without proper sources. We could add the historical side of things later.}
 
 
 \subsection{Least Squares method}
