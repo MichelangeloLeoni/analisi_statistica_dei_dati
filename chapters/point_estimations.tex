@@ -619,7 +619,20 @@ A further simplification is sometimes introduced:
 \end{equation*}
 This expression is asymptotically equivalent, and has the advantage of being quadratic in $\theta$ if $\mu_i(\theta)$ is linear in $\theta$. However, it has significantly worse convergence properties, and the resulting estimator can be biased, sometimes with a bias larger than its statistical uncertainty.
 
-\section{Least Squares method}
+\section{Robustness of a statistic}
+\todo{Intro for the concept of robustness and tie it to the example for why it is important and not banal}
+
+\begin{example}
+	Super cool historical example (Eddington vs Fisher)
+	\begin{figure}[H]
+		\centering
+		\input{images/historical_example.pgf}
+		\caption{Should we add a caption and a label to this image??}
+	\end{figure}
+\end{example}
+
+
+\subsection{Least Squares method}
 \textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property.\todo{We should make clear here that what comes is not limited to histograms but it can be used every time there's a set of observation depending on a parameter.}
 
 We apply a generic linear transformation:
@@ -666,24 +679,29 @@ Coming from the implicit estimator formalism, it follows that the consistency do
 		&\Rightarrow A^T V\cdot \vec{k} = A^T VA\cdot\vec{\theta}\Rightarrow \hat{\vec{\theta}} = \left(A^T VA\right)^{-1}\left(A^TV\right)\cdot\vec{k}
 	\end{align*}
 	
-\end{example}
+	This estimator is not only consistent but also unbiased:
 	
+	\begin{align*}
+		b_{\vec\theta}\left[\hat{\vec{\theta}}\right] &= \E\left[\hat{\vec{\theta}}\right] - \vec\theta = \E\left[A^{-1}V^{-1}\left(A^T\right)^{-1}A^TV\cdot \vec{k}\right] - \vec\theta \\
+		&= A^{-1}\E\left[\vec{k}\right] - \vec\theta =  A^{-1}\vec{\mu}(\theta) - \vec\theta &\\
+		&=A^{-1}A\vec{\theta} - \vec\theta = 0 
+	\end{align*}
 	
-\todo{NOTDONE}
-
-\section{Robustness of a statistic}
-
-\begin{example}
-	Super cool historical example (Eddington vs Fisher)
-	\begin{figure}[H]
-		\centering
-		\input{images/historical_example.pgf}
-		\caption{Should we add a caption and a label to this image??}
-	\end{figure}
+	We add one last property to this, and in the case where $V_{ij}^{-1} = \text{cov}\left[k_i,k_j\right]$ then the estimator above is the one with minimum variance among all unbiased estimators that are linear functions of the data. We call this the \textbf{B.L.U.E} (the \textit{Best Linear Unbiased Estimator}). If the \textit{pdf} of $k_i$ is a Normal distribution, then this estimator is also the MVB. 
+	
+	This is the Gauss-Markov theorem, which we won't prove nor go into further detail upon. 
 \end{example}
+
+\subsubsection{Generalized least squares}
+generalized lsm
+
+\subsection{A robust estimator: the median}
 
 \begin{figure}[H]
 	\centering
 	\input{images/median_invariance.pgf}
 	\caption{Should we add a caption and a label to this image??}
 \end{figure}
+
+\section{Systematic uncertainty}
+this until the end
