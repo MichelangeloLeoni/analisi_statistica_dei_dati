@@ -620,7 +620,13 @@ A further simplification is sometimes introduced:
 This expression is asymptotically equivalent, and has the advantage of being quadratic in $\theta$ if $\mu_i(\theta)$ is linear in $\theta$. However, it has significantly worse convergence properties, and the resulting estimator can be biased, sometimes with a bias larger than its statistical uncertainty.
 
 \section{Robustness of a statistic}
-\todo{Intro for the concept of robustness and tie it to the example for why it is important and not banal}
+We have seen thus far the basic principles of classic point estimators, where in most cases the \textit{pdf} of the observable is known almost to perfection. However, this is not always the case, and it's important to talk about one final concept: the \textit{robustness} of a statistic. 
+
+\begin{definition}[Robustness of a statistic]
+	The \textit{robustness} measures how well a statistic maintains its properties even if the underlying distributional assumptions are incorrect. 
+\end{definition}
+
+In a sense, a robust statistic is more trustworthy, as it is less volatile to outliers, model inconsistencies, or noise. The last thing we want as experimental scientists is to use methods that break down for tiny variations of the initial hypotheses, and for this reason robustness is a sought out property.
 
 \begin{example}
 	Super cool historical example (Eddington vs Fisher)
@@ -631,9 +637,10 @@ This expression is asymptotically equivalent, and has the advantage of being qua
 	\end{figure}
 \end{example}
 
+As we can see, the theory discussed up until now is rather fragile, and we'd like to find some robust estimators that we can trust even when we don't have full knowledge of the distribution of the data. 
 
 \subsection{Least Squares method}
-\textit{Intro sentence that connects to what we ended with in the previous section.} Let's remember what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property.\todo{We should make clear here that what comes is not limited to histograms but it can be used every time there's a set of observation depending on a parameter.}
+Let's talk about a robust estimator that is consistent even when the underlying \textit{pdf} is not known. We begin by remembering what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property.\todo{Is it clear here that what comes is not limited to histograms but it can be used every time there's a set of observation depending on a parameter? I think it is -J}
 
 We apply a generic linear transformation:
 	\[
@@ -651,7 +658,7 @@ Let's verify the conditions for the existence of at least one consistent estimat
 	&\rightarrow -\sum_{i,j}\frac{\partial \mu_i(\theta)}{\partial\theta}V_{ij}\frac{\partial \mu_j(\theta)}{\partial\theta}
 \end{align*}
 
-This expression is different from zero if $V$ is positively-defined, in which case at least one consistent estimator for $\theta$ exists. \todo{We never checked the expected value but ok...}\todo{I guess that, since we are taking the expected value in the space of events observed per bin, this thingy is a constant to the E operator. Remember that: $\E[k_i]=\mu_i$, so I think that $E[\mu_i]=\mu_i$ more or less.}
+This expression is different from zero if $V$ is positively-defined (as does its expected value), in which case at least one consistent estimator for $\theta$ exists. 
 
 Looking back at the equation we want to solve: 
 
@@ -666,7 +673,7 @@ Which corresponds to minimizing a quadratic form. In the case of $V_{ij}$ equal 
 
 Whose roots we recognize as the estimators that \textit{minimize the sum of squares}. This \textbf{Least Squares Method} (LSM) allows us to find consistent estimators for the parameters $\theta$. 
 
-Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \textit{pdf}, and it is a general property, as long as $\exists\; \mu_i(\theta)\equiv \E\left[k_i\right]$. This is especially useful when we don't know the distribution that the data follows, where we wouldn't be able to use other techniques such as the MLE.
+Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \textit{pdf}, making it a way to find robust estimators. However it is necessary that $\exists\; \mu_i(\theta)\equiv \E\left[k_i\right]$, which could be seen as a potential weakness for distributions where this is not the case, for example ones with heavy tails or many outliers.
 
 \begin{example}
 	Let's look at one specific, yet didactic, case: where the expected values are linear functions of the parameters $\mu_i = A_{ij}\theta_j$.
@@ -692,16 +699,123 @@ Coming from the implicit estimator formalism, it follows that the consistency do
 	This is the Gauss-Markov theorem, which we won't prove nor go into further detail upon. 
 \end{example}
 
-\subsubsection{Generalized least squares}
-generalized lsm
+Let's study a more generalized version of the least squares method:
+\begin{definition}[Norm minimization]
+Given a set of N observations $\{x_i\}$ of a real observable $X$, we consider the quantity (depending on parameter $p$)
+	
+	\[
+	L_p(m) = \sum_i^N \left|x_i - m\right|^p
+	\]
+	
+We build an estimator $\hat{m}_p=\arg\min_m L_p(m)$ that estimates a certain "location parameter" $m$ consistently and without bias. Changing $p$ changes what meaning we attribute to the parameter $m$ that we are estimating.
+\end{definition}
+
+We note that $\hat{m}$ is a consistent estimator for the mean $\mu$, and in the case of a symmetric distribution it is also unbiased.
+
+As we stated, for different values of $p$ we are estimating different quantities:
+\begin{itemize}
+	\item When $p\rightarrowtail-\infty$ $m$ represents the \textit{mode}, which signifies the single value that appears most frequently. We are minimizing the amount of values that do not equal $m$
+	\item When $p=1$ $m$ represents the \textit{median}\sidenote{We will familiarize ourselves with the median in the next section.}, which is the value where half the data lies above and below it. We are minimizing the sum of absolute differences.
+	\item When $p=2$ $m=\mu$, and we are estimating the mean as in the standard least squares method. 
+	\item When $p\rightarrow\infty$ $m$ represents the mid-range, which is the value exactly halfway between the maximum and minimum value in the dataset.
+\end{itemize}
+
+Depending on the type of data we have, and our interests, we can choose $p$ and use this method to find a consistent estimator for the location parameter we have chosen.
 
 \subsection{A robust estimator: the median}
+\begin{definition}[Median]
+	The \textit{median} $m_1$ is the value for which there is an equal probability of being greater or less than: $P(x > m_1) = P(x<m_1) = 0.5$. In other words, it is the value for which the cumulative density function is one half. 
+\end{definition}
+
+The sample median 
+	\[
+	\hat{m}_1 = \arg\min_m\left[\sum_i^N\left|x_i-m\right|\right]
+	\]
+provides a consistent estimate for the median, as we have seen in the previous section.
+
+We note that the median always\sidenote{except for pathological cases involving Dirac deltas...} exists, even when $\E[x]$ does not, which makes it a robust estimate for the expected value. Also, it is invariant for monotonous transformations of the observable, and basically as long as order is conserved so is the median. 
+
 
 \begin{figure}[H]
 	\centering
 	\input{images/median_invariance.pgf}
-	\caption{Should we add a caption and a label to this image??}
+	\caption{Invariance of the median for the monotonous transformation $\exp(x)$. Since order is conserved, the fourth point remains the median of the transformed data.}
 \end{figure}
 
+
+\begin{theorem}
+	If $p(x)$ is symmetric, and $\mu = E[x]$ exists, then the median is equal to the mean $m_1 = \mu$
+	
+	If $p(x)$ is not symmetric but $\Var[x]$ exists finite, then 
+	\[
+	\left|m_1-\mu\right| \leq \sigma
+	\]
+	which, put into words, means that the median is less than $1\sigma$ away from the mean. 
+\end{theorem}
+\todo{We could split these into two and prove them individually or not prove, idrk}
+
+The sample median is such an important robust estimator that we also wish to see how it is distributed, since this will be independent of the \textit{pdf} from which the data was extracted.
+
+Let's assume that $p(x)$ is a \textit{pdf} with a singular median, and let's extract $2k+1$ points from it. We can write the the \textit{pdf} of the sample median $\hat{m}_1$ as a multinomial\todo{ref with all the bla bla} where $k$ points are below $\hat{m}_1$ (probability $F\left(\hat{m}_1\right)$), $k$ points are above $\hat{m}_1$ (probability $1-F\left(\hat{m}_1\right)$), and one is exactly $\hat{m}_1$. This expression can be easily written as:
+\begin{equation}
+	p_1(\hat{m}_1;m_1) = (2k+1)\binom{2k}{k}p(\hat{m}_1)F^k\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)^k
+\label{eq:median_pdf}
+\end{equation}
+
+Let's study the asymptotic case of high statistics:
+	\[
+	\ln p_1\left(\hat{m}_1;m_1\right) = \ln\left(\left(2k+1\right)!\right) - 2\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] + \ln p\left(\hat{m}_1\right)
+	\]
+
+Approximating with Stirling and keeping only the leading terms:
+
+\begin{align*}
+	\ln p_1\left(\hat{m}_1;m_1\right) &\sim \left(2k+1\right)\ln\left(2k+1\right) - 2k\ln k + k\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] \\
+	&= 2k\ln\left[\frac{2k+1}{k}\right]+\ln\left(2k+1\right) + k\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] \\
+	&\rightarrow k\ln 4 + \ln\left(2k+1\right) + k\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] \\
+	&= k\ln\left[4F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] + \ln\left(2k+1\right) \\
+	&\Rightarrow p_1\left(\hat{m}_1;m_1\right) \simeq \left(2k+1\right)\exp\left(k\ln\left[4F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right]\right)
+\end{align*}
+
+We see that the argument of the logarithm is always less than 1 except for the case in which $\hat{m}_1 = m_1$, and so:
+
+	\[
+	\lim_{k \to \infty}  p_1\left(\hat{m}_1;m_1\right) = 0 \forall \hat{m}_1 \neq m_1
+	\]
+	
+And thus the \textit{pdf} of $\hat{m}_1$ converges punctually to $m_1$.
+
+If we go back a few steps to the asymptotic expression of the \textit{pdf}:
+
+	\[
+	 p_1\left(\hat{m}_1;m_1\right) \simeq\left(2k+1\right)\exp\left(k\ln\left[4F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right]\right)
+	\]
+
+Expanding the cumulative of $x$ in $\hat{m}_1=m_1+\varepsilon$ we arrive to:
+
+	\[
+	F\left(\hat{m}_1\right) \simeq F\left(m_1\right) + p(m_1)\varepsilon = 0.5 + p(m_1)\varepsilon
+	\]
+	
+From which, through substitution:
+
+\begin{align*}
+	p_1\left(\hat{m}_1;m_1\right) &\propto \exp\left(k\ln\left[4\left(0.5 + p(m_1)\varepsilon\right)\left(\left(0.5 - p(m_1)\varepsilon\right)\right)\right]\right)\\
+	&\simeq \exp\left(k\ln\left(1-4p^2(m_1)\varepsilon^2\right)\right)\simeq \exp\left(-4kp^2(m_1)\varepsilon^2\right)
+\end{align*}
+
+Which we can recognize to be asymptotically Normal with variance:
+
+	\[
+	\Var\left[\hat{m}_1\right] = \frac{1}{4Np^2(m_1)}
+	\]
+
+What this all means is that $\hat{m}_1$ is a consistent estimator for $m_1$ with an asymptotic efficiency greater than 0.
+
+We enjoy all of these properties independently of the fact that the variance of the observable exists finite or not (and therefore, the sample median is used in cases like the Cauchy distribution). With this we hope to have convinced the readers of just how robust the sample median is as an estimator for the median.
+
+\todo{Hodges-Lehmann? I am feeling lazy but if it ever pops up we could end up including it...}
+
+\todo{Other considerations that I feel like can be skipped or added later, mode and midrange I already touched upon, and truncated means are meh...}
 \section{Systematic uncertainty}
-this until the end
+this until the end, we are almost done with this chapter!
