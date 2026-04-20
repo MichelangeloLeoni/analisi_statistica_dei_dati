@@ -138,17 +138,19 @@ In general, we have a promising way to write a functional inference, where the s
 As we can tell, there are strong opinions on the matter and the argument was controversial, with the debate not yet resolved to this day. As far as we are concerned, we will take a much more neutral approach to the matter, integrating the concept of Likelihood with other techniques, adopting its helpful properties but violating the \textit{Likelihood principle}.
 
 \subsection{Inferential use of the Bayes theorem}
+\label{subsec:Inf_Bayes}
+
 Let's assume, to start, that $\theta$ admits a probability distribution in $M$, namely $P(\theta)$, on which we hope to make some inferences. We write then, in this case,
 	\[
 	L_{x_0}(\theta)=p(x_0|\theta)
 	\]
 and using Bayes' theorem (\ref{th:Bayes}) we can write:
 	\begin{equation}
-	p(\theta|x_0) = \frac{\overbrace{p(x_0|\theta)}^{L_{x_0}(\theta)}p(\theta)}{p(x_0)}
+	p(\theta|x_0) = \frac{\overbrace{p(x_0|\theta)}^{L_{x_0}(\theta)}p(\theta)}{\underbrace{p(x_0)}_{\int p(x_0|\theta)p(\theta)\dd\theta}}
 	\label{def:posterior}
 	\end{equation}
  
- In words: the \textbf{posterior} probability $p(\theta|x_0)$ is the product of the Likelihood times the \textbf{prior} probability $p(\theta)$ (times a multiplicative normalization factor $p(x_0$)). When it exists, it is naturally a better tool than the likelihood function for functional inferences as it builds upon it by adding the information tied to the distribution of $\theta$ itself. 
+ In words: the \textbf{posterior} probability $p(\theta|x_0)$ is the product of the Likelihood times the \textbf{prior} probability $p(\theta)$ (times a multiplicative normalization factor $p(x_0$), which is the marginal probability of observing $x$ under our whole prior model). When it exists, it is naturally a better tool than the likelihood function for functional inferences as it builds upon it by adding the information tied to the distribution of $\theta$ itself. 
  
  While the Likelihood function is not necessarily integrable, the product $p(\theta)\cdot L_{x_0}(\theta)$ must be, as the posterior must be normalized. 
  
@@ -173,9 +175,10 @@ and using Bayes' theorem (\ref{th:Bayes}) we can write:
 \subsubsection{Subjectivist Bayesian Inference}
 
 Let's now talk about the more realistic scenario where $\theta$ does not admit a probability function (or it does, but we don't know it). The Bayesian (subjectivist) approach proceeds by \textit{assigning} a prior distribution to $\theta$, based on the \textit{degree of belief} $\pi(\theta)$. Then, the calculations proceed as before, and by treating the degree of belief as a probability we arrive to the posterior degree of belief:
-	\[
+\begin{equation}
 	\pi_{x_0}(\theta) = \frac{L_{x_0}(\theta)\pi(\theta)}{\underbrace{\pi(x_0)}_{\sum_i p(x;\theta_i)\pi(\theta_i)}}
-	\]
+\label{eq:posterior_dob}
+\end{equation}
 In this expression, we now talk about the "credibility" of a certain $\theta$, remembering that the degree of belief is not a probability. Often times, it can be difficult to choose the right prior, and not always will it even be integrable (when it is not we call it an "improper prior"), though its product with the likelihood must by all means be integrable. 
 
 

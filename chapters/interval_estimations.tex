@@ -1,2 +1,173 @@
 \chapter{Interval Estimations}
-Interval estimations start here
+\label{chap:intervals}
+
+\vspace*{2cm}
+
+\begin{center}
+	\itshape
+	“Misinterpretation and abuse of statistical
+	tests, confidence intervals, and statistical
+	power have been decried for decades, yet
+	remain rampant. A key problem is that there
+	are no interpretations of these concepts
+	that are at once simple, intuitive, correct"
+	
+	\vspace{0.5em}
+	The ASA's Statement on p-Values: Context, Process, and Purpose
+	Wasserstein, R. L. and Lazar, N. A., The American Statistician
+	70, 129 (2016)\todo{Add ref}
+\end{center}
+
+\vspace{2cm}
+
+In our eternal fight to try to infer something about the unknown parameters that govern the observables we measure, we introduce a new type of inference: the interval estimation. 
+
+We are looking for a way to express, up to a certain degree of \textit{confidence}\sidenote{We'll define what confidence really is in a moment, so just bear with us} what interval the parameter that we are trying to estimate falls within. We take a second to note that while it may seem that we have already achieved something similar, this request is fundamentally different than anything our point estimate theory can provide. A naïve reader may say:
+
+	\[
+	\hat\theta = a \pm \sigma_a \Rightarrow \hat\theta \in \left[a-\sigma_a, a+\sigma_a\right]
+	\]
+
+Though you, as an attentive reader and excellent statistician will immediately identify the crucial flaw in this statement: $\sigma_a$ indicates the \textit{variability} of the estimate in the ensemble of repeated experiments, and does not represent the same "hard" upper/lower bound that we are trying to achieve through interval estimations. Really, the values $a-\sigma_a, a+\sigma_a$ have no more significance than any others in the point estimate formulation.
+
+
+\begin{example}
+	If we take a second, we can even find some edge case examples where the point estimate method breaks down, considering a Poisson \textit{pdf}. We know that the MLE is $\hat\mu=k$ with null bias and $\Var\left[\hat\mu\right] = \mu$. Therefore if I measure one count $k=1$ then I obtain the point estimate for $\mu = 1\pm1$. Only armed with this we would be tempted to say that we can't exclude $\mu\leq0$, even though we know that the counts can, by definition, only be positive.
+	
+	Even more pathologically, if we measure no counts, we arrive to $\mu=0\pm0$, which, taken at face value, means that we have an infinitely precise estimate of the mean and that it is null. 
+	
+	Of course, this example shows a breaking point for our theory up until this point, and it invites us to explore new methods particularly useful for cases such as this one.
+\end{example}
+\todo{Low-n Poisson histogram graph? CBTM (could be the move)}
+
+When we talked about point estimations, we never came to talk about intervals in which the parameter was confined - going to an arbitrarily low probability basically any value was permitted. Now, we want to formulate a theory that limits, up to a certain degree of confidence, what values the parameter can adopt. 
+
+\begin{definition}[Interval estimator]
+	Given a \textit{pdf} $p(x;\theta)$ dependent on an unknown parameter $\theta\in A$, an \textit{interval estimator} is a statistic $f(x): X\rightarrowtail \mathcal{P}(A)$ which outputs a subset of the parameter space.
+\end{definition}
+
+While a point estimate provides a single "best guess," an interval estimate offers something far more valuable: a measure of uncertainty. At first glance, reporting a range might seem less precise than inferring a specific value, but in practice, they serve distinct and vital roles. Interval estimates are not merely a contingency for when point estimates become unstable, such as in low-count Poisson regimes, but are essential tools for experimental design. They allow us to determine the required duration for data collection to achieve a desired precision. Furthermore, they are often the only rigorous way to report results in "null" observations, such as setting an upper limit on the probability of a rare event that has yet to be measured.
+
+As we have mentioned many times during this course, it is the job of the expert data analyst to know what tools to apply to a certain data set in the specific situation they might find themselves in. 
+
+\section{Bayesian interval estimation}
+We always take a moment to talk about the "fortunate" case where the unknown parameter assumes (or we can attribute) a probability density function, allowing us to write a functional inference starting from the Bayes theorem, as done in section \ref{subsec:Inf_Bayes}. Starting from eq (\ref{eq:posterior_dob})
+	
+	\[
+	\pi_x(\theta) = \pi(\theta)\frac{L_x(\theta)}{p(x)}
+	\]
+
+we can determine a function $f(x)$ that is the solution to the integral:
+
+\begin{equation}
+	\int_{f(x)}\pi_x(\theta)\dd \theta = c
+\label{eq:Bayes_int_eq}
+\end{equation}
+
+Where $0<c<1$ is a constant named \textit{credibility} which represents the degree of belief that $\theta\in f(\theta)$, so how "sure" we are that the inference corresponds to reality. Naturally, we want high credibility, and it must be chosen beforehand, usually values between $90-99\%$ are used. 
+
+
+
+As usual, the Bayesian formulation brings many nice properties such as respecting the Likelihood principle, obtaining clear, specific, and intuitive results. However, it depends on how we choose the prior, which can greatly influence the type of result we obtain. Also, we need $\theta$ to be able to admit a \textit{pdf} in the first place. \todo{Here we can talk about Jeffrey's prior, if it ever comes up, or reference priors.}
+
+Integral (\ref{eq:Bayes_int_eq}) admits infinite solutions, so we must introduce a criteria to be able to select the specific solution we want. The most agreed upon way to proceed is by selecting an \textit{ordering function} $o(\theta)$ that assigns a priority hierarchy to the values of the parameter to include. 
+
+In this case, the equation becomes:
+	
+	\[
+	\int_{o(\theta)\geq q_c} \pi_x(\theta)\dd \theta = c
+	\]
+
+Where $q(c)$ is a constant that depends on the credibility $c$ in a way such as to satisfy the equation. Usually, this allows us to find one unique solution, given $c$ and the ordering function.
+
+The most common and simple choice is to use \textit{posterior ordering} $o(\theta) =\pi_x(\theta)$, which outputs credible region with the smallest measure in $\dd\theta$. This is desirable, as it intuitively restricts the credible values of the parameters more than any other ordering function. We note that this is not invariant for variable changes in the parameter space. 
+
+
+\begin{example}
+	Let's formulate an example: let's imagine to measure an observable that is distributed following a Poisson \textit{pdf} depending on a parameter $\mu$: $p(k;\mu) = \frac{e^{-\mu}\mu^k}{k!}$. However, let's assume that for some reason we know that $\mu$ admits a \textit{pdf} and that it is uniformly distributed between $0$ and $10$. 
+	
+	I can therefore write my posterior:
+	
+	\[
+	p_k(\mu) = \frac{1}{10}\frac{e^{-\mu}\mu^k}{k!\cdot p(k)}
+	\]
+	
+	As far as $p(k)$ is concerned, it is the value that normalizes the posterior. In other words, it is the marginal probability of observing k under our whole prior model:
+	
+	\[
+	p(k) = \int_0^{10} \frac{e^{-\mu}\mu^k}{k!}\cdot\left(\frac{1}{10}\right)\dd\mu
+	\]
+	
+	At the end of the day, this complex expression is no more than a multiplicative factor that makes it so that the posterior $p_k(\mu)$ is correctly normalized, so we will just leave it written as $p(k)$ knowing this.
+	
+	The following figure shows the posterior for different values of $k$, and as we expect we see it peaked around the observed value.
+	
+	\begin{figure}[H]
+		\centering
+		\input{images/bayes_posterior.pgf}
+		\caption{Posterior for different values of $k$ in the $\mu$ space}
+		\label{fig:bayes_posterior}
+	\end{figure}
+	
+	We want to find, given a measurement $k$, an interval for $\mu$ with a credibility of $90\%$. We know this to mean that we want to find an interval in $\mu$ of the type $\mu\in[a,b]$ such that $\int_a^bp(\mu)\dd \mu= 0.9$. We can imagine there to be an infinite number of such intervals, and so we define different \textit{ordering functions} that change the type of interval we get.
+	
+	For example, if we choose to integrate over the zone where $p(\mu)\geq q_c$, we define two bounds (the two solutions $a,b$ of $p(\mu)\geq q_c$) such that $\int_{p(\mu)\geq q_c}p(\mu)\dd \mu = 0.9$. This is called "posterior ordering" and is the most natural choice, as it includes the maximum value of the posterior by definition, meaning that it also results in the minimal interval length in $\mu$.
+	
+	We can also integrate by starting from the maximum or minimum value of $\mu$, obtaining lower or upper estimates of the parameter. 
+	
+	These different orderings are shown in the following image.
+	
+	\begin{figure}[H]
+		\centering
+		\input{images/bayes_interval.pgf}
+		\caption{Different ordering intervals for $k=5$.}
+		\label{fig:bayes_interval}
+	\end{figure}
+	
+	\input{tables/bayes_interval.tex}
+	
+	As we can see, the posterior ordering results in the smallest interval. One may be tempted to combine the lower and upper bounds into a smaller interval than even the posterior ordering, but doing so would break the definition of credibility (not only in the mathematical term, but also your credibility as a data analyst), as we would be artificially shortening an interval and therefore lowering the credibility. 
+	
+	One may also be tempted to swap between lower and upper limits depending on the measured value of $k$. However, this temptation must be resisted, and in the future we will go into detail as to why this habit is to be avoided (\textit{flip-flopping} between ordering functions).
+\end{example}
+
+\todo{Add to the example the variable change stuff?} 
+
+\section{The standard interval estimator}
+
+We once again move away from the Bayesian outlook, which remains intuitive and extremely descriptive, though limited by the assumption of a \textit{prior} $\pi(\theta)$.
+
+However, we adopt  many of the properties studied in that section, and we begin by defining the non-subjectivist version of credibility\sidenote{Well, more precisely, \textit{coverage}}:
+
+\begin{definition}[Confidence level]
+	Given a \textit{pdf} $p(x;\theta)$ dependent on an unknown parameter $\theta\in A$, and an interval estimator $f(x): X\rightarrowtail \mathcal{P}(A)$, we define the \textit{confidence level} (\textit{CL}) of $f(x)$:
+	
+	\[
+	CL(f) \equiv \inf_{\theta} P(f(x)\ni\theta) = \inf_\theta\int_{x:f(x)\ni\theta} p(x;\theta)\dd x
+	\]
+\end{definition} 
+
+Basically, we are saying that $f(x)$ has a confidence level \textit{CL} if it outputs an interval that contains the real value of $\theta$ with probability at least \textit{CL} - independently from the real value of $\theta$.
+
+We take a second to note that the above statement is on the probability of $f(x)\ni\theta$, not $\theta\in f(x)$.\todo{And this changes what exactly?}
+
+Differently from the Bayesian case, the confidence level is a property of the algorithm that we use to estimate $f(x)$ itself, not limited nor based on a single result $f(x_0)$. This definition violates the Likelihood principle.
+
+Alternatively, we could write:
+
+	\[
+	CL(f) \equiv \inf_\theta \mathcal{C}(\theta)
+	\]
+	\[
+	\mathcal{C}(\theta) = \int_{x:f(x)\ni\theta} p(x;\theta)\dd x
+	\]
+
+We call $\mathcal{C}$ the \textit{coverage} of the algorithm $f(x)$ in $\theta$. Oftentimes, it is useful to graph $\mathcal{C}(\theta)$. We have \textit{overcoverage} when $\mathcal{C}(\theta)> CL$, and when the coverage does not reach the required \textit{CL} then we have \textit{undercoverage}. The most desirable condition is the one where $\mathcal{C}(\theta) = CL\quad \forall\theta$, the existence of which is not guaranteed, especially in the discrete observable case. \todo{Graph the different cases.}
+\todo{"Relazione tra confidence e credibility" slide maybe can go here}
+\todo{Neyman construction graph - this one must be beautiful because it's a really cool thing!!!!}
+
+\subsection{Ordering algorithms}
+
+\section{Pivotal quantities}
+
+\subsection{Likelihood ratio theorem}
