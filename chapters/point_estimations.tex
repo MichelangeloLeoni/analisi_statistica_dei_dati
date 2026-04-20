@@ -886,9 +886,70 @@ We enjoy all of these properties independently of the fact that the variance of 
 
 Because an unknown \textit{pdf} compromises our statistical certainty, we must adopt robust principles to minimize information loss. This specific form of ambiguity, which stems from a partial understanding of the \textit{pdf}, is what we term \textbf{systematic uncertainty}. Under this definition, we can see robustness as the property of not being sensible to systematic uncertainties. 
 
+Let's assume we are measuring something that has independent counts, and so we assume a Poisson distribution, where the best estimator\sidenote{The calculation for the MLE for the $N$ Poisson extractions is found in \textcolor{orange}{REF}} for $\mu$ is $\hat\mu = \frac{\sum_i k_i}{N}$ 
+
+Now, let's assume that each measurement is affected by some background $b$, of we don't know the distribution. It's simple to see that $\hat\mu$ now becomes is $\hat\mu = \frac{\sum_i k_i}{N}-b$, which we don't fully know. We can't hope to estimate $b$ without any external information (remember, for a point estimate we need some data to build a statistic), and our original $k_i$ measurements have $b$ and $\mu$ paired together, so we can't simultaneously estimate them independently. In a certain sense, we don't even care about how $b$ is distributed, as it is just an annoying background that is not the main physics we wish to study (appropriately called "nuisance parameter"). This means that $\mu$ is afflicted by systematic uncertainty. 
+
+Usually, I'll have some information on $b$, like restricting it within a range:
+
+	\[
+	b_0 -  \leq \b \leq b_0 + \frac{\delta}{2}
+	\]
+
+This type of information can come from physical limitations, previous predictions, experimental data (like a "dark" measurement), and interval estimations (which we will talk about in the next chapter). 
+
+In any case, we say \textit{something} about $b$, and, for example, we can expand $\hat\mu$ to include this:
+
+	\[
+	\hat\mu = \left(\frac{\sum_i k_i}{N}-b_0\right)\pm \sqrt{\frac{\sum_i k_i}{N}}\text{(stat)} + \frac{\delta}{2}\text{(syst)} 
+	\]
+
+Which is a specific case of the more general:
+
+	\[
+	\hat\mu(b_0)\pm \sqrt{\Var\left[\hat\mu(b_0)\right]}\pm\frac{\max \hat\mu\left(b_1\leq b \leq b_2\right)-\min\hat\mu\left(b_1\leq b \leq b_2\right)}{2}
+	\]
+
+There isn't a convention that is universally accepted, though usually both the systematic and statistic uncertainties get written separately, and each combine with their own counterparts (though systematic uncertainties are also often summed in quadrature like statistic ones). 
+
 \begin{example}
-	We are measuring something that has independent counts, and so we assume a Poisson distribution, where the best estimator\sidenotemark for $\mu$ is $\hat\mu = \frac{\sum_i k_i}{N}$ 
+	Let's look at an interesting case: along with my observable $k$, distributed like a Poisson $Pois(k,\mu+b)$, we have an observable $q$ that has a \textit{pdf} $p(q;b)$. This means that there is \textit{some} observable that gives me information on my background parameter $b$ (from which I was able to determine that $b$ fell within a certain range, for example). 
+	
+	Well, I can now express my experiment as a combination measurement of two observables
+	
+	\[
+	p(k,q;\mu,b) = Pois(k;\mu+b)\cdot p(q;b)
+	\]
+	
+	from which I can find estimates of the two parameters through techniques like the MLE. 
+	
+	In this case, the systematic uncertainty gets absorbed in the statistic, though now we have paired $q$ directly to $k$ and we won't be able to use them independently. 
 \end{example}
-\sidenotetext{The calculation for the MLE for the $N$ Poisson extractions is found in \textcolor{orange}{REF}}
+
+\begin{example}
+	Another interesting case is where $b$ has a \textit{pdf} (or \textit{dob} in the Bayesian case) and we can eliminate it by marginalizing:
+	
+	\begin{align*}
+	p_q(k;\mu) &= \int p(k,b|q;\mu)\dd b = \int \pi(b)\frac{p(k,1|b;\mu)}{p(q)}\dd b\\
+	&= \frac{1}{p(q)}\int \pi(b) Pois(k;\mu+b)p(q;b)db
+	\end{align*}
+	
+	Also in this case the systematic uncertainty gets absorbed in the statistic. In the Bayesian case, in which we are free to assign a degree of belief to any parameter, the systematic uncertainty is always treatable like the statistic one. However, it's fundamental that $b$ follows a probability distribution (and thus mus be assigned a \textit{prior}), which is what it means when "the nuisance parameters were integrated" is written.
+\end{example}
 
 
+Of course, we are lucky enough to have Likelihood-like information on $b$ then we can naturally estimate it, using the usual techniques. 
+
+We also take a moment to talk about non-systematic "uncertainties" that might plague our data. Sometimes, we find ourselves in the situation where our data depends on unknown or ambiguous parameters that are not uncertainties, and therefore must not be treated as such. For example:
+\begin{itemize}
+	\item Histogram binning and range
+	\item Number of observables to consider
+	\item Choice of subsamples to include
+	\item Choice of data cuts and limits
+\end{itemize}
+
+Of course, the result of our measurements will depend on these (and so will the \textit{pdf} of the data), though they are not uncertainties. 
+
+The important thing is to remain transparent at all times on these arbitrary choices, and to show in your treatment of the data that the results are not very sensitive to the different choices one may make (for example, by changing the binning and proving that the results do not vary significantly).
+
+In general, systematic uncertainties are a sensitive and fragile topic, and thus solutions that are less dependent on systematic errors or arbitrary experimental decisions are preferred over ones that are heavily affected by it.
