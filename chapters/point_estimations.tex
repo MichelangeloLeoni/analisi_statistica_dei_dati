@@ -914,7 +914,13 @@ We enjoy all of these properties independently of the fact that the variance of 
 
 \todo{Other considerations that I feel like can be skipped or added later, mode and midrange I already touched upon, and truncated means are meh...}
 
-\subsection{Truncated means?}
+\subsection{Truncated means}
+
+If we wish to retain the familiar sample mean while improving its robustness, we can introduce truncation. Given N observations, we discard n values from each tail, leaving a central fraction of the data. The retained fraction is:
+\[
+	r= \frac{N-2n}{2N}
+\]
+This procedure significantly reduces sensitivity to heavy tails, making it useful for distributions such as the Cauchy or Landau. Note that for $r=1/2$ ($n=0$) we recover the standard arithmetic mean, while in the maximal trimming case $r=0$ ($n=N/2$) we recognize the median. Choosing the optimal trimming fraction typically boils down to solving a min/max problem. On one hand, removing extreme observations can improve efficiency by focusing on higher-quality (less noisy) data. On the other hand, efficiency decreases as the effective sample size is reduced. The goal is therefore to find the sweet spot between robustness and statistical efficiency, depending on the specific application.
 
 \section{Systematic uncertainty}
 
