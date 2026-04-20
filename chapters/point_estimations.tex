@@ -673,7 +673,7 @@ In a sense, a robust statistic is more trustworthy, as it is less volatile to ou
 		\hline
 	\end{tabular}
 	\end{center}
-	The result is remarkable: with a contamination of $f=0.05$, $d_N$ becomes about twice as efficient as $s_N$! The theory we have built so far fragile.
+	The result is remarkable: with a contamination of $f=0.05$, $d_N$ becomes about twice as efficient as $s_N$! The theory we have built so far is fragile.
 	This simple example, with historical relevance, highlights the importance of robustness as a desirable property of an estimator.
 \end{example}\todo{I won't talk about the history of the topic and the Eddington-Fisher debate without proper sources. We could add the historical side of things later.}
 
@@ -754,7 +754,7 @@ We note that $\hat{m}$ is a consistent estimator for the mean $\mu$, and in the 
 
 As we stated, for different values of $p$ we are estimating different quantities:
 \begin{itemize}
-	\item When $p\rightarrowtail-\infty$ $m$ represents the \textit{mode}, which signifies the single value that appears most frequently. We are minimizing the amount of values that do not equal $m$
+	\item When $p\rightarrow-\infty$ $m$ represents the \textit{mode}, which signifies the single value that appears most frequently. We are minimizing the amount of values that do not equal $m$
 	\item When $p=1$ $m$ represents the \textit{median}\sidenote{We will familiarize ourselves with the median in the next section.}, which is the value where half the data lies above and below it. We are minimizing the sum of absolute differences.
 	\item When $p=2$ $m=\mu$, and we are estimating the mean as in the standard least squares method. 
 	\item When $p\rightarrow\infty$ $m$ represents the mid-range, which is the value exactly halfway between the maximum and minimum value in the dataset.
@@ -764,7 +764,7 @@ Depending on the type of data we have, and our interests, we can choose $p$ and 
 
 \subsection{A robust estimator: the median}
 \begin{definition}[Median]
-	The \textit{median} $m_1$ is the value for which there is an equal probability of being greater or less than: $P(x > m_1) = P(x<m_1) = 0.5$. In other words, it is the value for which the cumulative density function is one half. 
+	The \textit{median} $m_1$ is the value for which there is an equal probability of being greater or less than: $P(x > m_1) = P(x<m_1) = \frac{1}{2}$. In other words, it is the value for which the cumulative density function is one half. 
 \end{definition}
 
 The sample median 
@@ -796,15 +796,15 @@ We note that the median always\sidenote{except for pathological cases involving 
 
 The sample median is such an important robust estimator that we also wish to see how it is distributed, since this will be independent of the \textit{pdf} from which the data was extracted.
 
-Let's assume that $p(x)$ is a \textit{pdf} with a singular median, and let's extract $2k+1$ points from it. We can write the the \textit{pdf} of the sample median $\hat{m}_1$ as a multinomial\todo{ref with all the bla bla} where $k$ points are below $\hat{m}_1$ (probability $F\left(\hat{m}_1\right)$), $k$ points are above $\hat{m}_1$ (probability $1-F\left(\hat{m}_1\right)$), and one is exactly $\hat{m}_1$. This expression can be easily written as:
+Let's assume that $p(x)$ is a \textit{pdf} with a singular median, and let's extract $2k+1$ points from it. We can write the \textit{pdf} of the sample median $\hat{m}_1$ as a multinomial\todo{ref with all the bla bla} where $k$ points are below $\hat{m}_1$ (probability $F\left(\hat{m}_1\right)$), $k$ points are above $\hat{m}_1$ (probability $1-F\left(\hat{m}_1\right)$), and one is exactly $\hat{m}_1$. This expression can be easily written as:
 \begin{equation}
 	p_1(\hat{m}_1;m_1) = (2k+1)\binom{2k}{k}p(\hat{m}_1)F^k\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)^k
 \label{eq:median_pdf}
 \end{equation}
 
-Let's study the asymptotic case of high statistics:
+Let's study the asymptotic case of high statistics\sidenote{We are using that: $(2k+1)\binom{2k}{k}=(2k+1)\frac{(2k)!}{k!(2k-k)!}=\frac{(2k+1)!}{(k!)^2}$}:
 	\[
-	\ln p_1\left(\hat{m}_1;m_1\right) = \ln\left(\left(2k+1\right)!\right) - 2\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] + \ln p\left(\hat{m}_1\right)
+	\ln p_1\left(\hat{m}_1;m_1\right) = \ln\left(\left(2k+1\right)!\right) -2\ln (k!) +k\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] + \ln p\left(\hat{m}_1\right)
 	\]
 
 Approximating with Stirling and keeping only the leading terms:
@@ -817,40 +817,65 @@ Approximating with Stirling and keeping only the leading terms:
 	&\Rightarrow p_1\left(\hat{m}_1;m_1\right) \simeq \left(2k+1\right)\exp\left(k\ln\left[4F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right]\right)
 \end{align*}
 
-We see that the argument of the logarithm is always less than 1 except for the case in which $\hat{m}_1 = m_1$, and so:
+We observe that the argument of the logarithm is always smaller than 1, except when $\hat{m}_1 = m_1$. Therefore:
+\[
+\lim_{k \to \infty} p_1(\hat{m}_1; m_1) = 0 \quad \forall \hat{m}_1 \neq m_1
+\]
 
-	\[
-	\lim_{k \to \infty}  p_1\left(\hat{m}_1;m_1\right) = 0 \forall \hat{m}_1 \neq m_1
-	\]
-	
-And thus the \textit{pdf} of $\hat{m}_1$ converges punctually to $m_1$.
+This implies that the distribution of $\hat{m}_1$ converges (in the distributional sense) to a Dirac delta centered at $m_1$:
+\[
+p_1(\hat{m}_1; m_1) \;\longrightarrow\; \delta(\hat{m}_1 - m_1)
+\]
 
-If we go back a few steps to the asymptotic expression of the \textit{pdf}:
+and thus $\hat{m}_1$ is a consistent estimator of $m_1$.
 
-	\[
-	 p_1\left(\hat{m}_1;m_1\right) \simeq\left(2k+1\right)\exp\left(k\ln\left[4F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right]\right)
-	\]
+\medskip
 
-Expanding the cumulative of $x$ in $\hat{m}_1=m_1+\varepsilon$ we arrive to:
+If we now go back to the asymptotic expression of the pdf:
+\[
+p_1(\hat{m}_1; m_1) \simeq (2k+1)\exp\left(k \ln\left[4F(\hat{m}_1)\left(1 - F(\hat{m}_1)\right)\right]\right)
+\]
 
-	\[
-	F\left(\hat{m}_1\right) \simeq F\left(m_1\right) + p(m_1)\varepsilon = 0.5 + p(m_1)\varepsilon
-	\]
-	
-From which, through substitution:
+we can expand the cumulative distribution around $\hat{m}_1 = m_1 + \varepsilon$:
+\[
+F(\hat{m}_1) \simeq F(m_1) + p(m_1)\varepsilon = \frac{1}{2} + p(m_1)\varepsilon
+\]
 
+Substituting into the previous expression:
 \begin{align*}
-	p_1\left(\hat{m}_1;m_1\right) &\propto \exp\left(k\ln\left[4\left(0.5 + p(m_1)\varepsilon\right)\left(\left(0.5 - p(m_1)\varepsilon\right)\right)\right]\right)\\
-	&\simeq \exp\left(k\ln\left(1-4p^2(m_1)\varepsilon^2\right)\right)\simeq \exp\left(-4kp^2(m_1)\varepsilon^2\right)
+	p_1(\hat{m}_1; m_1)
+	&\propto \exp\left(k \ln\left[4\left(\frac{1}{2} + p(m_1)\varepsilon\right)\left(\frac{1}{2} - p(m_1)\varepsilon\right)\right]\right) \\
+	&= \exp\left(k \ln\left(1 - 4p^2(m_1)\varepsilon^2\right)\right) \\
+	&\simeq \exp\left(-4k p^2(m_1)\varepsilon^2\right)
 \end{align*}
 
-Which we can recognize to be asymptotically Normal with variance:
+we remember that $\varepsilon = \hat m_1 - m_1$, thus:
+\[
+p_1(\hat{m}_1; m_1)\simeq \exp\left(-4k p^2(m_1)(\hat m_1 - m_1)^2\right)
+\]
 
+which can be rewritten as:
+\[
+p_1(\hat{m}_1; m_1)\simeq \exp\left(-\frac{(\hat m_1 - m_1)^2}{2\sigma^2}\right)
+\]
+
+where\sidenote{we used $N = 2k+1 \simeq 2k$}: 
+\[
+\sigma^2 = \frac{1}{8k\,p^2(m_1)} \simeq \frac{1}{4N\,p^2(m_1)}
+\]
+showing that the distribution is asymptotically Gaussian in a neighborhood of $m_1$.
+
+Therefore, the sample median $\hat{m}_1$ is:
+\begin{itemize}
+	\item consistent
+	\item asymptotically normal
+	\item with variance:
 	\[
-	\Var\left[\hat{m}_1\right] = \frac{1}{4Np^2(m_1)}
+	\Var[\hat{m}_1] = \frac{1}{4N\,p^2(m_1)}
 	\]
+\end{itemize}
 
-What this all means is that $\hat{m}_1$ is a consistent estimator for $m_1$ with an asymptotic efficiency greater than 0.
+This shows that $\hat{m}_1$ has a finite, non-zero asymptotic efficiency.
 
 We enjoy all of these properties independently of the fact that the variance of the observable exists finite or not (and therefore, the sample median is used in cases like the Cauchy distribution). With this we hope to have convinced the readers of just how robust the sample median is as an estimator for the median.
 
