@@ -1,2 +1,85 @@
 \chapter{Important Distributions}
-Important distributions start here
+In this appendix we will highlight the main probability density and mass functions that we will encounter most often during this course, as well as deriving and listing their useful properties. 
+
+For now, here is a framework helped by AI to organize (as you can tell by the titles):
+
+Each distribution we will write, plot, derive (some not all), moments, MLE, support, Moment generating function/characteristic function (some not all), cumulative (some not all), some special stuff for some (exponential period-frequency transformation, for example)
+
+\section{Discrete distributions}
+\subsubsection{Bernoulli: the foundation} %Sub sub sections give a nice bold but don't appear in the TOC... Win-win I'd say
+
+\subsubsection{Binomial: For fixed trials}
+Support: $k \in \{0, 1, \dots, n\}$ and $p \in [0, 1]$.
+
+The probability of having exactly $k$ successes in $n$ independent Bernoulli trials is:
+
+\begin{equation}
+	\mathcal{B}_n(k;p) = \binom{n}{k}p^k\left(1-p\right)^{n-k}
+\tag{Binomial pmf}
+\label{pmf:binom}
+\end{equation}
+
+The Moment Generating Function (MGF) is the most efficient way to derive the raw moments:
+
+	\[
+	M_X(t) = \mathbb{E}[e^{tX}] = (1 - p + pe^t)^n
+	\]
+\todo{Not surem, and not sure how it brings us the moments...}
+Which brings us to the mean and variance of $k$:
+
+	\[
+	\E\left[k\right] = np \quad \Var\left[k\right] = np(1-p)
+	\]
+
+The log-Likelihood for a sample of size $m$ (where each observation $k_i$ is the number of successes in $n$ trials) is:
+
+	\[
+	\ln L(p) = \sum_{i=1}^m \left[ \ln\binom{n}{k_i} + k_i\ln p + (n-k_i)\ln(1-p) \right]
+	\]
+
+which brings the MLE for $p$:
+
+	\[
+	\hat{p}_{MLE} = \frac{1}{mn} \sum_{i=1}^m k_i = \frac{\bar{k}}{n}
+	\]
+
+Which is an unbiased estimator with variance:
+
+	\[
+	\Var\left[\hat{p}_{MLE}\right] = \frac{1}{n^2}\Var[k] = \frac{np(1-p)}{n^2} = \frac{p(1-p)}{n}
+	\]
+
+
+Fisher Information: This measure tells us how much "information" $k$ carries about the unknown parameter $p$. For a single observation:
+
+	\[
+	\mathcal{I}(p) = -\E\left[ \frac{\partial^2 \ell}{\partial p^2} \right] = \frac{n}{p(1-p)}
+	\] 
+
+This shows us at a glance that $\hat{p}_{MLE}$ is the minimum variance estimator.
+
+\subsubsection{Multinomial: The multivariate version of Binomial}
+Add the example of the k-median here (distribution of the k-biggest value, it's an important exercise we did in class you'll see)
+\subsubsection{Poisson: For occurrences over time/space}
+
+%Negative Binomial / Geometric: For trials until success. Add if we ever use
+
+\section{Continuos distributions}
+\subsubsection{Uniform: The baseline for probability}
+
+\subsubsection{Normal (Gaussian): The king of statistics}
+
+\subsubsection{Exponential: For time/space between events}
+
+%Gamma: The generalized version of Exponential.  Add if we ever use
+
+%Beta: For probabilities and proportions.  Add if we ever use
+
+%Cauchy: The "pathological" example (useful to show when moments like mean/variance don't exist!).  Add if we ever use
+
+\section{Sampling distributions}
+%Student’s t: For small sample sizes.  Add if we ever use
+
+\subsubsection{Chi-squared: For variances and goodness-of-fit}
+
+%F-distribution: For comparing variances (ANOVA).  Add if we ever use
