@@ -829,17 +829,16 @@ p_1(\hat{m}_1; m_1) \;\longrightarrow\; \delta(\hat{m}_1 - m_1)
 
 and thus $\hat{m}_1$ is a consistent estimator of $m_1$.
 
-\medskip
-
 If we now go back to the asymptotic expression of the pdf:
 \[
 p_1(\hat{m}_1; m_1) \simeq (2k+1)\exp\left(k \ln\left[4F(\hat{m}_1)\left(1 - F(\hat{m}_1)\right)\right]\right)
 \]
 
-we can expand the cumulative distribution around $\hat{m}_1 = m_1 + \varepsilon$:
+we can perform a Taylor expansion of the cumulative distribution around $\hat{m}_1 = m_1 + \varepsilon$:
 \[
 F(\hat{m}_1) \simeq F(m_1) + p(m_1)\varepsilon = \frac{1}{2} + p(m_1)\varepsilon
 \]
+where we used: $\frac{\partial F(m_1)}{\partial m_1}=p(m_1)$.
 
 Substituting into the previous expression:
 \begin{align*}
