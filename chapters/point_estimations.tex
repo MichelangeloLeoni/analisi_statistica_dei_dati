@@ -858,4 +858,12 @@ We enjoy all of these properties independently of the fact that the variance of 
 
 \todo{Other considerations that I feel like can be skipped or added later, mode and midrange I already touched upon, and truncated means are meh...}
 \section{Systematic uncertainty}
-this until the end, we are almost done with this chapter!
+
+Because an unknown \textit{pdf} compromises our statistical certainty, we must adopt robust principles to minimize information loss. This specific form of ambiguity, which stems from a partial understanding of the \textit{pdf}, is what we term \textbf{systematic uncertainty}. Under this definition, we can see robustness as the property of not being sensible to systematic uncertainties. 
+
+\begin{example}
+	We are measuring something that has independent counts, and so we assume a Poisson distribution, where the best estimator\sidenotemark for $\mu$ is $\hat\mu = \frac{\sum_i k_i}{N}$ 
+\end{example}
+\sidenotetext{The calculation for the MLE for the $N$ Poisson extractions is found in \textcolor{orange}{REF}}
+
+
