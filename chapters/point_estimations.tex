@@ -796,13 +796,45 @@ We note that the median always\sidenote{except for pathological cases involving 
 
 The sample median is such an important robust estimator that we also wish to see how it is distributed, since this will be independent of the \textit{pdf} from which the data was extracted.
 
-Let's assume that $p(x)$ is a \textit{pdf} with a singular median, and let's extract $2k+1$ points from it. We can write the \textit{pdf} of the sample median $\hat{m}_1$ as a multinomial\todo{ref with all the bla bla} where $k$ points are below $\hat{m}_1$ (probability $F\left(\hat{m}_1\right)$), $k$ points are above $\hat{m}_1$ (probability $1-F\left(\hat{m}_1\right)$), and one is exactly $\hat{m}_1$. This expression can be easily written as:
+Assume that $p(x)$ is a continuous pdf with a unique median $m$. Let us draw an i.i.d. sample of size $2k+1$ and consider the central order statistic, i.e. the sample median $\hat m_1$.
+
+To derive its distribution, fix a generic value $x$ and classify the observations into three bins:
+\[
+\begin{cases}
+	x_i < x, \\
+	x_i \in [x, x+dx], \\
+	x_i > x.
+\end{cases}
+\]
+
+The corresponding probabilities are:
+\[
+\begin{cases}
+	P(x_i < x) = F(x), \\
+	P(x_i \in [x,x+dx]) = p(x)\,dx, \\
+	P(x_i > x) = 1 - F(x).
+\end{cases}
+\]
+
+For $x$ to coincide with the sample median, exactly $k$ observations must fall below $x$, $k$ above $x$, and one in the infinitesimal interval $[x,x+dx]$.
+
+This leads to a multinomial term:
+\[
+P =
+\frac{(2k+1)!}{k!1!k!}\,[F(x)]^k [1-F(x)]^k \, p(x)\,dx.
+\]
+
+Dividing by $dx$, we obtain the probability density function of the sample median:
 \begin{equation}
-	p_1(\hat{m}_1;m_1) = (2k+1)\binom{2k}{k}p(\hat{m}_1)F^k\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)^k
-\label{eq:median_pdf}
+	p_1(\hat m_1, m_1)
+	=
+	\frac{(2k+1)!}{(k!)^2}
+	\, p(\hat m_1)\,
+	[F(\hat m_1)]^k\,[1-F(\hat m_1)]^k.
+	\label{eq:median_pdf}
 \end{equation}
 
-Let's study the asymptotic case of high statistics\sidenote{We are using that: $(2k+1)\binom{2k}{k}=(2k+1)\frac{(2k)!}{k!(2k-k)!}=\frac{(2k+1)!}{(k!)^2}$}:
+Let's study the asymptotic case of high statistics:
 	\[
 	\ln p_1\left(\hat{m}_1;m_1\right) = \ln\left(\left(2k+1\right)!\right) -2\ln (k!) +k\ln\left[F\left(\hat{m}_1\right)\left(1-F\left(\hat{m}_1\right)\right)\right] + \ln p\left(\hat{m}_1\right)
 	\]
@@ -881,6 +913,9 @@ We enjoy all of these properties independently of the fact that the variance of 
 \todo{Hodges-Lehmann? I am feeling lazy but if it ever pops up we could end up including it...}
 
 \todo{Other considerations that I feel like can be skipped or added later, mode and midrange I already touched upon, and truncated means are meh...}
+
+\subsection{Truncated means?}
+
 \section{Systematic uncertainty}
 
 Because an unknown \textit{pdf} compromises our statistical certainty, we must adopt robust principles to minimize information loss. This specific form of ambiguity, which stems from a partial understanding of the \textit{pdf}, is what we term \textbf{systematic uncertainty}. Under this definition, we can see robustness as the property of not being sensible to systematic uncertainties. 
