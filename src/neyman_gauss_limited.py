@@ -3,13 +3,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
-# ==========================================================
-# Neyman belts for X ~ N(mu,1), with constraint mu >= 0
-# Compare:
-#   1) Probability ordering
-#   2) Likelihood-ratio ordering (Feldman-Cousins style)
-# ==========================================================
-
 matplotlib.use("pgf")
 matplotlib.rcParams.update({
     "pgf.texsystem": "pdflatex",

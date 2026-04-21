@@ -200,8 +200,30 @@ Another natural choice would be to use $o(x)=\pm x$, as to start from the lowest
 
 We could also think to take the central band, as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$
 
-\todo{For completeness, add LR ordering but say we explain it later}
+The final ordering algorithm we will explore for now is one based on the \textit{Likelihood Ratio} (some texts may call it "Feldman-Cousins ordering"). The idea is to use the Likelihood Ratio as the ordering function
+	\[
+	LR(x) = \frac{p(x|\theta)}{p(x|\hat{\theta}_{MLE})} = o(x)
+	\]
 
+which means to solve the following system of equations:
+	\[
+	\begin{cases}
+		\int_{x_1}^{x_2} p(x;\theta)\dd x = CL \\
+		LR(x_1) = LR(x_2)
+	\end{cases}
+	\]
+
+Let's take a look at what we have written: \todo{this part needs to still be finished.}. Also it contains by definition the MLE bla bla bla
+
+
+\begin{figure}[H]
+	\centering
+	\input{images/lr_ordering.pgf}
+	\caption{NOT DONE}
+	\label{fig:lr_ordering}
+\end{figure}
+
+We will see that the Likelihood Ratio ordering function will be used more than probability ordering, especially in example \ref{ex:LR_vs_p_ordering}. \todo{written badly still needs to be finished this section}
 \subsubsection{Neyman Construction}
 A way to visualize the effect of these different ordering algorithms is through the construction of a "belt" that associates, given the ordering algorithm, each measured value of the observable to an interval estimate. This plot is namely the \textit{Neyman Construction}, is built by solving eq (\ref{eq:int_def}) for all fixed values of $\theta$. 
 
@@ -218,6 +240,7 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 
 
 \begin{example}
+\label{ex:LR_vs_p_ordering}
 	Let's build the Neyman band for a Normally distributed $x$ with unknown parameter $\mu$ (let's say $\sigma=1$ for simplicity). We choose, for the sake of this example, to use probability-ordering. We can't integrate the Normal distribution analytically, so we'll have to fall back on the tables found in \textcolor{red}{REF, also work out the example that z is like 1.95 for 0.95 CL}
 	
 	\begin{figure}[H]
