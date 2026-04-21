@@ -57,8 +57,8 @@ def posterior_interval(m, post, alpha=0.10):
 
     return lower, upper
 
-# Lower limit 90% credible interval
-def lower_limit(m, post, alpha=0.10):
+# Lower bound 90% credible interval
+def lower_bound(m, post, alpha=0.10):
     dx = m[1] - m[0]
     cdf = np.cumsum(post) * dx
     cdf /= cdf[-1]
@@ -66,8 +66,8 @@ def lower_limit(m, post, alpha=0.10):
     return np.interp(alpha, cdf, m), m[-1]
 
 
-# Upper limit 90% credible interval
-def upper_limit(m, post, alpha=0.10):
+# Upper bound 90% credible interval
+def upper_bound(m, post, alpha=0.10):
     dx = m[1] - m[0]
     cdf = np.cumsum(post) * dx
     cdf /= cdf[-1]
@@ -111,7 +111,7 @@ plt.close()
 ### Different intervals:
 
 # Ordering methods for interval calculation
-ordering = ["Posterior", "Lower limit", "Upper limit"]
+ordering = ["Posterior", "Lower bound", "Upper bound"]
 
 k = 5  # fixed observed count
 
@@ -119,8 +119,8 @@ post = posterior(m, k)
 
 # Calculate the intervals
 lo_hpd, hi_hpd = posterior_interval(m, post, alpha=0.10)
-lo_low, hi_low = lower_limit(m, post, alpha=0.10)
-lo_high, hi_high = upper_limit(m, post, alpha=0.10)
+lo_low, hi_low = lower_bound(m, post, alpha=0.10)
+lo_high, hi_high = upper_bound(m, post, alpha=0.10)
 
 # LaTeX table
 def fmt(a, b):
@@ -151,9 +151,9 @@ for i, o in enumerate(ordering):
     # Select interval rule
     if o == "Posterior":
         lo, hi = lo_hpd, hi_hpd
-    elif o == "Lower limit":
+    elif o == "Lower bound":
         lo, hi = lo_low, hi_low
-    elif o == "Upper limit":
+    elif o == "Upper bound":
         lo, hi = lo_high, hi_high
 
     # Plot posterior curve

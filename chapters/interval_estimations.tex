@@ -51,7 +51,7 @@ While a point estimate provides a single "best guess," an interval estimate offe
 As we have mentioned many times during this course, it is the job of the expert data analyst to know what tools to apply to a certain data set in the specific situation they might find themselves in. 
 
 \section{Bayesian interval estimation}
-We always take a moment to talk about the "fortunate" case where the unknown parameter assumes (or we can attribute) a probability density function, allowing us to write a functional inference starting from the Bayes theorem, as done in section \ref{subsec:Inf_Bayes}. Starting from eq (\ref{eq:posterior_dob})
+We always take a moment to talk about the "fortunate" case where the unknown parameter assumes (or can be attributed) a probability density function, allowing us to write a functional inference starting from the Bayes theorem, as done in section \ref{subsec:Inf_Bayes}. Starting from eq (\ref{eq:posterior_dob})
 	
 	\[
 	\pi_x(\theta) = \pi(\theta)\frac{L_x(\theta)}{p(x)}
@@ -100,7 +100,7 @@ The most common and simple choice is to use \textit{posterior ordering} $o(\thet
 	
 	At the end of the day, this complex expression is no more than a multiplicative factor that makes it so that the posterior $p_k(\mu)$ is correctly normalized, so we will just leave it written as $p(k)$ knowing this.
 	
-	The following figure shows the posterior for different values of $k$, and as we expect we see it peaked around the observed value.
+	The following figure shows the posterior for different values of $k$, and as we expect we see that for each $k$ the function peaks around the observed value.
 	
 	\begin{figure}[H]
 		\centering
@@ -115,7 +115,7 @@ The most common and simple choice is to use \textit{posterior ordering} $o(\thet
 	
 	We can also integrate by starting from the maximum or minimum value of $\mu$, obtaining lower or upper estimates of the parameter. 
 	
-	These different orderings are shown in the following image.
+	These different orderings are shown in the following image, assuming to have observed $k=5$.
 	
 	\begin{figure}[H]
 		\centering
@@ -149,7 +149,7 @@ However, we adopt  many of the properties studied in that section, and we begin 
 
 Basically, we are saying that $f(x)$ has a confidence level \textit{CL} if it outputs an interval that contains the real value of $\theta$ with probability at least \textit{CL} - independently from the real value of $\theta$.
 
-We take a second to note that the above statement is on the probability of $f(x)\ni\theta$, not $\theta\in f(x)$.\todo{And this changes what exactly?}
+We take a second to note that the above statement is on the probability of $f(x)\ni\theta$, not $\theta\in f(x)$. This distinction is crucial: we are not assigning a probability distribution to the parameter $\theta$; rather, we are describing the stochastic behavior of the interval boundaries themselves across hypothetical repeated experiments, stating the probability that the interval itself will contain the parameter.
 
 Differently from the Bayesian case, the confidence level is a property of the algorithm that we use to estimate $f(x)$ itself, not limited nor based on a single result $f(x_0)$. This definition violates the Likelihood principle.
 
@@ -162,9 +162,46 @@ Alternatively, we could write:
 	\mathcal{C}(\theta) = \int_{x:f(x)\ni\theta} p(x;\theta)\dd x
 	\]
 
-We call $\mathcal{C}$ the \textit{coverage} of the algorithm $f(x)$ in $\theta$. Oftentimes, it is useful to graph $\mathcal{C}(\theta)$. We have \textit{overcoverage} when $\mathcal{C}(\theta)> CL$, and when the coverage does not reach the required \textit{CL} then we have \textit{undercoverage}. The most desirable condition is the one where $\mathcal{C}(\theta) = CL\quad \forall\theta$, the existence of which is not guaranteed, especially in the discrete observable case. \todo{Graph the different cases.}
-\todo{"Relazione tra confidence e credibility" slide maybe can go here}
-\todo{Neyman construction graph - this one must be beautiful because it's a really cool thing!!!!}
+We call $\mathcal{C}$ the \textit{coverage} probability of the interval estimation procedure $f(x)$, often a function of the parameter $\theta$. This is an interesting concept: a confidence interval method has $95\%$ coverage if, when repeated over many new samples generated under the same true parameter value, the interval contains the true value of $\theta$ $95\%$ of the time. We don't know what this true value is, but we would like for our method of creating the interval to attain the nominal confidence level (i.e, $95\%$) for all $\theta$. However, coverage is itself a function of the parameter, and certain methods may work better or worse depending on the true parameter value. Oftentimes, it is useful to graph $\mathcal{C}(\theta)$. We have \textit{overcoverage} when $\mathcal{C}(\theta)> CL$, and when the coverage does not reach the required \textit{CL} then we have \textit{undercoverage}. 
+
+The most desirable condition is the one where $\mathcal{C}(\theta) = CL\quad \forall\theta$, the existence of which is not guaranteed, especially in the discrete observable case.
+
+\begin{figure}[H]
+	\centering
+	\input{images/binomial_coverage.pgf}
+	\caption{3 different coverage algorithms for $20$ samples of a binomial distribution}
+	\label{fig:binomial_coverage}
+\end{figure}
+
+
+Figure \ref{fig:binomial_coverage} demonstrates the 'conservatism' inherent in discrete interval estimation. Because the number of successes in 20 trials must be an integer, the coverage probability $\mathcal{C}(p)$ cannot be a flat line at $0.95$; instead, it forms a 'sawtooth' pattern. Note that all three algorithms satisfy the definition of a $95\%$ confidence level because their global minimum ($\inf_p \mathcal{C}(p)$) is $\ge 0.95$. The Probability Ordering\sidenote{Well, for now at least, since it is the direct parent of the posterior ordering seen in the Bayesian case. Later, we'll explore the more general two-sided \textit{Likelihood ratio} ordering} is generally preferred for two-sided intervals as it minimizes over-coverage, staying closer to the nominal level. In contrast, the Lower and Upper orderings are essential when one is specifically interested in one-sided bounds, despite their extreme conservatism near $p=0$ and $p=1$.
+
+From this whole part we want to take away one very important concept: when we obtain an interval $[a,b]$ with confidence level \textit{CL}, that does not mean that the parameter lies within that interval with probability \textit{CL}. What it means, instead, is that the interval was generated by a procedure whose repeated use contains the true parameter with probability \textit{CL}.
+
+\subsection{Neyman Construction}
+As we have seen, the base idea of interval estimators is to build a range that has a certain probability of containing the parameter, given an observation of the observable. Due to the degeneracy of the problem, we have introduced different "ordering algorithms" to determine exactly which of the infinite intervals to pick. Therefore, given an observable distributed from a certain \textit{pdf} dependent on a parameter $p(x;\theta)$, a measurement of the observable, and an ordering function, we can univocally determine an interval estimate for $\theta$. 
+
+There is a plot that relates measures of the observable to intervals in the parameter space, namely the \textit{Neyman Construction}. It is built by solving 
+
+	\[
+	\int_{o(x)\geq q(CL)} p(x;\theta)\dd x \geq CL
+	\]
+	
+for all fixed values of $\theta$. 
+
+Given an observation of $x$, the interval in $\theta$ is found by intersecting the horizontal line $x=x_{obs}$ with the constructed belt, and taking the two points of intersection as the bounds for the parameter. The following image shows the three Neyman belts constructed from the previous example of 20 $20$ extractions of a binomial with unknown success parameter $p$, using three different orderings. 
+
+
+\begin{figure}[H]
+	\centering
+	\input{images/binomial_Neyman_belts.pgf}
+	\caption{Neyman belts built for three different ordering algorithms for $20$ samples of a binomial distribution}
+	\label{fig:binomial_Neyman_belts}
+\end{figure}
+
+For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of the belts in figure \ref{fig:binomial_Neyman_belts} and find our interval estimation for $p$. As we will touch upon later, it's important to resist the temptation of creating the belts first and then choosing the one with the smallest interval, and even more important to stick to one for all measured values rather than \textit{flip-flopping} between them. The choice of ordering should be determined by the goal of the analysis, like choosing p-ordering for its small interval or lower ordering for the upper bound.\sidenote{Careful, lower ordering gives upper bounds on the parameter, and vice versa, yes, it's confusing!}
+
+\todo{"Relazione tra confidence e credibility" slide maybe can go here. Also I had a cool 3D idea but maybe it's too much...}
 
 \subsection{Ordering algorithms}
 
