@@ -68,7 +68,7 @@ if mask[-1]:
 fig, ax1 = plt.subplots(figsize=(5.5,3.5))
 
 # PDF
-ax1.plot(x, pdf, lw=2, label=r"$p(x|\theta)$")
+ax1.plot(x, pdf, lw=2, label=r"$\mathcal{N}(x|\mu)$")
 ax1.fill_between(x, 0, pdf, where=mask, alpha=0.35)
 
 ax1.set_xlabel("x")
@@ -77,19 +77,19 @@ ax1.set_ylim(0, max(pdf)*1.2)
 
 # second axis for LR
 ax2 = ax1.twinx()
-trasl = 0.5
-ax2.plot(x, R+trasl, lw=2, ls="--", label=r"$LR(x;\hat{\theta}_{\text{MLE}})$")
-ax2.axhline(c+trasl, ls=":", lw=2, label="Threshold")
+trasl = 0.5 # shift LR up for better visibility
+ax2.plot(x, R+trasl, lw=2, ls="--", label=r"$LR(x)$")
+ax2.axhline(c+trasl, ls=":", color="black", lw=1.0, label="Threshold")
 
 # Vertical dotted lines at intersections
 for idx in starts + ends:
     x_inter = x[idx]
     ax2.vlines(x_inter, 0, c + trasl, ls=":", color="black", lw=1.0)
 
-ax2.set_ylabel("LR ratio + 0.5 for clarity")
+ax2.set_ylabel("LR ratio + 0.5")
 ax2.set_ylim(0, max(R+trasl)*1.1)
 # cosmetics
-ax1.set_title(r"Likelihood-ratio ordering for $\theta=0.5,\ \theta\ge0$")
+ax1.set_title(r"Likelihood-ratio ordering for $\mu=0.5$")
 ax1.grid(alpha=0.25)
 
 # combined legend
