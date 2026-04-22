@@ -161,7 +161,9 @@ Alternatively, we could write:
 	\mathcal{C}(\theta) = \int_{x:f(x)\ni\theta} p(x;\theta)\dd x
 	\]
 
-We call $\mathcal{C}$ the \textit{coverage} probability of the interval estimation procedure $f(x)$, often a function of the parameter $\theta$. This is an interesting concept: a confidence interval method has $95\%$ coverage if, when repeated over many new samples generated under the same true parameter value, the interval contains the true value of $\theta$ $95\%$ of the time. We don't know what this true value is, but we would like for our method of creating the interval to attain the nominal confidence level (i.e, $95\%$) for all $\theta$. However, coverage is itself a function of the parameter, and certain methods may work better or worse depending on the true parameter value. Oftentimes, it is useful to graph $\mathcal{C}(\theta)$. We have \textit{overcoverage} when $\mathcal{C}(\theta)> CL$, and when the coverage does not reach the required \textit{CL} then we have \textit{undercoverage}. 
+We call $\mathcal{C}$ the \textit{coverage} probability of the interval estimation procedure $f(x)$, often a function of the parameter $\theta$. This is an interesting concept: a confidence interval method has $95\%$ coverage if, when repeated over many new samples generated under the same true parameter value, the interval contains the true value of $\theta$ $95\%$ of the time. We don't know what this true value is, but we would like for our method of creating the interval to attain the nominal confidence level (i.e, $95\%$) for all $\theta$. However, coverage is itself a function of the parameter, and certain methods may work better or worse depending on the true parameter value. Oftentimes, it is useful to graph $\mathcal{C}(\theta)$. 
+
+We have \textit{overcoverage} when $\mathcal{C}(\theta)> CL$, and when the coverage does not reach the required \textit{CL} then we have \textit{undercoverage}. 
 
 The most desirable condition is the one where $\mathcal{C}(\theta) = CL\quad \forall\theta$, the existence of which is not guaranteed, especially in the discrete observable case.
 
@@ -191,7 +193,7 @@ The idea is to study the different options we have for $o(x)$ in the function:
 	\label{eq:int_def}
 \end{equation}
 
-With the goal of removing the ambiguity in the way we choose the interval that solves the equation. What the ordering function is really doing is, for each fixed $\theta$,  "ranking" (well, \textit{ordering}) each possible $x$. From this, we add $x$ values to the confidence region for that $\theta$ based on this ordering until the sum of probabilities reaches the \textit{CL} to create a an interval in $x$ for a fixed $\theta$. We then repeat this for all $\theta$, and obtain the confidence interval for an observed $x_0$ as the set of all $\theta$ values whose acceptance regions contain $x_0$.
+With the goal of removing the ambiguity in the way we choose the interval that solves the equation. What the ordering function is really doing is, for each fixed $\theta$,  "ranking" (well, \textit{ordering}) each possible $x$. From this, we add $x$ values to the confidence region for that $\theta$ based on this ordering until the sum of probabilities reaches the \textit{CL} to create an interval in $x$ for a fixed $\theta$. We then repeat this for all $\theta$, and obtain the confidence interval for an observed $x_0$ as the set of all $\theta$ values whose acceptance regions contain $x_0$.
 
 We could start with setting $o(x)=p(x;\theta)$ (\textbf{probability ordering}), which is a universal choice that brings the smallest interval in $x$ (which does not necessarily translate to the smallest interval in $\theta$). 
 
@@ -203,7 +205,6 @@ The final ordering algorithm we will explore for now is one based on the \textbf
 	\[
 	LR(x) = \frac{p(x|\theta)}{p(x|\hat{\theta}_{MLE})} = o(x)
 	\]
-
 which means to solve the following system of equations:
 	\[
 	\begin{cases}
@@ -211,9 +212,7 @@ which means to solve the following system of equations:
 		LR(x_1) = LR(x_2)
 	\end{cases}
 	\]
-
 This ordering function, for each fixed $\theta$, uses the ratio between the probability of $x$ under the current $\theta$ and the probability of $x$ assuming $\theta=\hat{\theta}_{MLE}$, essentially asking how much "worse" the current $\theta$ is than the best possible one. What this corresponds to is starting at the top of the $LR(x)$, and increasing the $x$ interval according to the $LR$\sidenote{It's kind of like probability ordering, where instead of ordering using $p(x)$ you order using $LR(x)$} until the interval defined through $LR$ corresponds to an integral of measure \textit{CL} in $p(x)$. This is where the above system comes from, we set a threshold on the Likelihood ratio such that the $x$ values of the intersection define the bounds of the confidence interval in $p$. This is favorable with respect to probability ordering, as the interval takes into consideration the information we have on $\theta$ (like its physical limits), and is guaranteed to contain the \textit{MLE}, as well as bring the smallest possible interval in $\theta$. We will expand on this case further in example \ref{ex:LR_vs_p_ordering}. 
-
 
 \begin{figure}[H]
 	\centering
@@ -221,6 +220,7 @@ This ordering function, for each fixed $\theta$, uses the ratio between the prob
 	\caption{Visual representation of the Likelihood Ratio ordering algorithm. $x$ is distributed following a Normal distribution with unitary variance and unknown $\mu\geq 0$, where the case $\mu=0.5$ has been shown. The \textit{LR} and threshold have been translated upwards by $0.5$ for clarity, and the $95\%$ confidence region for $p(x)$ is shown.}
 	\label{fig:lr_ordering}
 \end{figure}
+\todo{Wouldn't it be better if the left y-axis is represented un-shifted, so that the zero of the LR corresponds to the bottom of the dashed line, without the need to report '+0.5' in the axis label?}
 
 Figure \ref{fig:lr_ordering} gives a visual representation of this method and how to use it to find the bounds in $x$ for a specific value of $\mu$. Within it, the condition that $\mu$ must be greater than zero is considered, which brings the asymmetric tail towards negative $x$ which probability ordering would not have accounted for. Naturally, this process must be repeated for all $\mu$, and then selecting the interval of $\mu$ that contain our measured value, which is the topic of the next section.
 
@@ -265,6 +265,7 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 	
 	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
+\todo{Figure 4.7 is pure chocolate. Cudos.}
 
 Analytically, the goal would be to define a function, or set of functions, of the type $x_{max}(\theta)$, $x_{min}(\theta)$, or their inverses. Sometimes, based on the ordering algorithm, \textit{pdf}, and parameter we are trying to estimate, we are able to build the whole belt analytically and define an interval for $\theta$ for all observed values of $x$. 
 
