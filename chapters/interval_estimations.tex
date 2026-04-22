@@ -30,7 +30,6 @@ We are looking for a way to express, up to a certain degree of \textit{confidenc
 
 Though you, as an attentive reader and excellent statistician will immediately identify the crucial flaw in this statement: $\sigma_a$ indicates the \textit{variability} of the estimate in the ensemble of repeated experiments, and does not represent the same "hard" upper/lower bound that we are trying to achieve through interval estimations. Really, the values $a-\sigma_a, a+\sigma_a$ have no more significance than any others in the point estimate formulation.
 
-
 \begin{example}
 	If we take a second, we can even find some edge case examples where the point estimate method breaks down, considering a Poisson \textit{pdf}. We know that the MLE is $\hat\mu=k$ with null bias and $\Var\left[\hat\mu\right] = \mu$. Therefore if I measure one count $k=1$ then I obtain the point estimate for $\mu = 1\pm1$. Only armed with this we would be tempted to say that we can't exclude $\mu\leq0$, even though we know that the counts can, by definition, only be positive.
 	
@@ -51,22 +50,22 @@ While a point estimate provides a single "best guess," an interval estimate offe
 As we have mentioned many times during this course, it is the job of the expert data analyst to know what tools to apply to a certain data set in the specific situation they might find themselves in. 
 
 \section{Bayesian interval estimation}
-We always take a moment to talk about the "fortunate" case where the unknown parameter assumes (or can be attributed) a probability density function, allowing us to write a functional inference starting from the Bayes theorem, as done in section \ref{subsec:Inf_Bayes}. Starting from eq (\ref{eq:posterior_dob})
-	
-	\[
-	\pi_x(\theta) = \pi(\theta)\frac{L_x(\theta)}{p(x)}
-	\]
+We now consider the "fortunate" case in which the unknown parameter can be described by a probability density function, allowing us to perform inference using Bayes' theorem, as discussed in Section \ref{subsec:Inf_Bayes}. Starting from Eq.~(\ref{eq:posterior_dob}), we write the posterior distribution as
+\[
+\pi_x(\theta) = \pi(\theta)\frac{L_x(\theta)}{p(x)}
+\]
 
-we can determine a function $f(x)$ that is the solution to the integral:
-
+We then determine a subset $f(x)$ of the parameter space (typically an interval), depending on the observed data $x$, such that
 \begin{equation}
-	\int_{f(x)}\pi_x(\theta)\dd \theta = c
-\label{eq:Bayes_int_eq}
+	\int_{f(x)} \pi_x(\theta)\, d\theta = c
+	\label{eq:bayes_int_eq}
 \end{equation}
+where $0 < c < 1$ is a constant called the \textit{credibility}. The set $f(x)$ represents a \textit{credible region}, i.e. a set of plausible values for $\theta$ such that the posterior probability of $\theta$ lying within it is equal to $c$:
+\[
+P(\theta \in f(x)\mid x) = c
+\]
 
-Where $0<c<1$ is a constant named \textit{credibility} which represents the degree of belief that $\theta\in f(\theta)$, so how "sure" we are that the inference corresponds to reality. Naturally, we want high credibility, and it must be chosen beforehand, usually values between $90-95\%$ are used. 
-
-
+The credibility $c$ quantifies the degree of belief that the true value of the parameter lies within the region $f(x)$. In practice, $c$ is chosen in advance, typically taking values between $0.9$ and $0.95$.
 
 As usual, the Bayesian formulation brings many nice properties such as respecting the Likelihood principle, obtaining clear, specific, and intuitive results. However, it depends on how we choose the prior, which can greatly influence the type of result we obtain. Also, we need $\theta$ to be able to admit a \textit{pdf} in the first place. \todo{Here we can talk about Jeffrey's prior, if it ever comes up, or reference priors.}
 
