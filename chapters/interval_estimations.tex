@@ -261,12 +261,14 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 		\label{fig:neyman_gauss_limited}
 	\end{figure}
 	
-	Figure \ref{fig:neyman_gauss_limited} shows the breaking point of the probability ordering, where it fails to find an interval for $\mu$ for a negative $x$. On the right, the same belt is constructed with the sole difference of using a different ordering function: the Likelihood Ratio, on which we will touch upon in the following section. As we can see, this new ordering function once again allows us to correspond every measure of $x$ to an interval, and takes into consideration the limits on the parameter itself.
+	Figure \ref{fig:neyman_gauss_limited} shows the breaking point of the probability ordering, where it fails to find an interval for $\mu$ for a negative $x$. On the right, the same belt is constructed with the sole difference of using a different ordering function: the Likelihood Ratio, on which we will touch upon in the following section. As we can see, this new ordering function once again allows us to correspond every measure of $x$ to an interval, and takes into consideration the limits on the parameter itself. 
+	
+	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
 
 Analytically, the goal would be to define a function, or set of functions, of the type $x_{max}(\theta)$, $x_{min}(\theta)$, or their inverses. Sometimes, based on the ordering algorithm, \textit{pdf}, and parameter we are trying to estimate, we are able to build the whole belt analytically and define an interval for $\theta$ for all observed values of $x$. 
 
-\todo{Uniform distribution show that you can build the analytical belt of the upper limit estimate on $m$ "by hand".}
+\todo{Uniform distribution example could go here: show that you can build the analytical belt of the upper limit estimate on $m$ "by hand".}
 
 However, the belt is not always possible to express analytically, and so often we must use numerical techniques or searched tabular data to find the interval we desire. Naturally, not every possible parameter-\textit{pdf} combination will be expressed in tables, and for that reason we must find a way to transform our specific cases into general, standard problems that have already been solved before us. Luckily, in the next section we will introduce \textit{pivotal quantities} and how they can be used to standardize certain types of problems.
 
