@@ -265,11 +265,57 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 	
 	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
-\todo{Figure 4.7 is pure chocolate. Cudos.}
 
 Analytically, the goal would be to define a function, or set of functions, of the type $x_{max}(\theta)$, $x_{min}(\theta)$, or their inverses. Sometimes, based on the ordering algorithm, \textit{pdf}, and parameter we are trying to estimate, we are able to build the whole belt analytically and define an interval for $\theta$ for all observed values of $x$. 
 
-\todo{Uniform distribution example could go here: show that you can build the analytical belt of the upper limit estimate on $m$ "by hand".}
+
+\begin{example}
+	Let's build a Neyman belt analytically! We will study the common case of an observable $x$ distributed following a uniform \textit{pdf} $p(x;m) = \frac{1}{m}$ for $0\leq x \leq m$ and $0$ outside of that support. We observe one $x$ and wish to build an interval estimate for $m$ with a $90\%$ \textit{CL}. 
+	
+	Let's start by finding a lower limit for $m$, which means using "upper ordering":
+	
+	\[
+	\int_0^{x_{max}} \frac{1}{m}\dd x = CL
+	\]
+	
+	Remember, we integrate with a fixed $m$, and have set $x_{min}=0$ thanks to our ordering function. We can easily solve to find:
+	
+	\[
+	x_{min} = 0 \quad x_{max} = m\cdot CL
+	\]
+	
+	These two equations define a Neyman belt, from which we easily see that the one-sided interval for $m$ is $m\geq \frac{x_0}{CL}$, where $x_0$ is the result of our measured observable. This belt is seen on the left side of figure \ref{fig:uniform_belts}.
+	
+	Let's solve the same problem, this time using \textit{LR} ordering to obtain a two-sided interval for our parameter. We know that for a uniform distribution, as we have worked out in appendix \textcolor{red}{REF} the \textit{MLE} for $m$ is $m=x$ itself, and the \textit{LR} function can be written as:
+	
+	\[
+	LR(x) = \frac{x}{m}
+	\]
+	
+	To satisfy Likelihood Ratio ordering, we pick the x with the largest values of \textit{LR} first, and so our interval in $x$ will be $[x_{min}, m]$, chosen so that:
+	
+	\[
+	\int_{x_{min}}^m \frac{1}{m}\dd x = CL
+	\]
+	
+	Solving the above integral, we get that
+	
+	\[
+	x_{min} = (1-CL)\cdot m \quad x_{max} = m
+	\]
+	
+	which, after a measurement $x_0$, translates to an interval of $x_0\leq m \leq \frac{x_0}{1-CL}$
+	
+	The following figure shows the two different belts that we were able to construct analytically for this problem, and it's clear how inverting the $x$ limits as a function of $m$ brings us the interval for $m$.
+		\begin{figure}[H]
+		\centering
+		\input{images/uniform_belts.pgf}
+		\caption{bli bli blu bla bla bla}
+		\label{fig:uniform_belts}
+	\end{figure}
+	
+	
+\end{example}
 
 However, the belt is not always possible to express analytically, and so often we must use numerical techniques or searched tabular data to find the interval we desire. Naturally, not every possible parameter-\textit{pdf} combination will be expressed in tables, and for that reason we must find a way to transform our specific cases into general, standard problems that have already been solved before us. Luckily, in the next section we will introduce \textit{pivotal quantities} and how they can be used to standardize certain types of problems.
 \\
