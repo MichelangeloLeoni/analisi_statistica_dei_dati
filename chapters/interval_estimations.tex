@@ -58,7 +58,7 @@ We now consider the "fortunate" case in which the unknown parameter can be descr
 We then determine a subset $f(x)$ of the parameter space (typically an interval), depending on the observed data $x$, such that
 \begin{equation}
 	\int_{f(x)} \pi_x(\theta)\, d\theta = c
-	\label{eq:bayes_int_eq}
+	\label{eq:Bayes_int_eq}
 \end{equation}
 where $0 < c < 1$ is a constant called the \textit{credibility}. The set $f(x)$ represents a \textit{credible region}, i.e. a set of plausible values for $\theta$ such that the posterior probability of $\theta$ lying within it is equal to $c$:
 \[
@@ -129,7 +129,7 @@ The most common and simple choice is to use \textit{posterior ordering} $o(\thet
 	
 	One may also be tempted to swap between lower and upper limits depending on the measured value of $k$. However, this temptation must be resisted, and in the future we will go into detail as to why this habit is to be avoided (\textit{flip-flopping} between ordering functions).
 \end{example}
-
+\todo{I think there is an error in the lower bound ordering case. The upper bound is set to 10, but to me it seems like a limit imposed in the python script, not the true results of the integration.}
 \todo{Add to the example the variable change stuff?} 
 
 \section{The standard interval estimator}
