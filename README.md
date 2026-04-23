@@ -1,2 +1,15 @@
-# Notes for: _*"Analisi Statistica dei Dati"*_
-Lecture notes for the _Analisi Statistica dei Dati_ course, held in the master's degree course in physics at UniPi.
+These notes are intended to be a comprehensive introduction to the field of statistical data analysis, covering both theoretical foundations and practical applications through examples, exercises, and tests. 
+
+The material is organized into chapters that follow the _Analisi statistica dei dati_ course at the univeristy of Pisa, followed by the authors during the 2024-2026 academic years, and held by professor _Paolo Francavilla_ and professor _Giovanni Punzi_. 
+
+For this reason, the text will follow their lecture notes very closely, and many of the formulations, examples, and concepts are taken directly from those sources, for which we thank the professors. It is by no means an exhaustive treatment, but we hope to leave the readers with a solid understanding of the core concepts and techniques in statistical data analysis, as well as the ability to apply them to exam-style problems. 
+
+As the authors are themselves approaching this complex field, there will surely be some errors and inconsistencies in this text. any errors, typos, or suggestions for improvement are very welcome. Please feel free to add a pull request or reach out to us directly via email. 
+
+These notes will therefore most likely evolve with time, and hopefully will be ever-changing until they converge to something readable. To quote a wise man and a mentor: **"do not print it! :-)"**
+
+We wish you the best of luck in your studies!
+
+---
+
+**Michelangelo and Jacopo**
