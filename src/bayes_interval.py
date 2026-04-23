@@ -128,7 +128,7 @@ def fmt(a, b):
 
 table = rf"""
 \begin{{center}}
-\begin{{tabular}}{{l|c}}
+\begin{{tabular}}{{|l|c|}}
 \hline
 Method & 90\% credible interval \\
 \hline

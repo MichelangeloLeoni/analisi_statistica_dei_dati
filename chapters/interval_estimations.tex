@@ -157,9 +157,10 @@ Alternatively, we could write:
 	\[
 	CL(f) \equiv \inf_\theta \mathcal{C}(\theta)
 	\]
-	\[
+	\begin{equation}
 	\mathcal{C}(\theta) = \int_{x:f(x)\ni\theta} p(x;\theta)\dd x
-	\]
+	\label{eq:coverage}
+	\end{equation}
 
 We call $\mathcal{C}$ the \textit{coverage} probability of the interval estimation procedure $f(x)$, often a function of the parameter $\theta$. This is an interesting concept: a confidence interval method has $95\%$ coverage if, when repeated over many new samples generated under the same true parameter value, the interval contains the true value of $\theta$ $95\%$ of the time. We don't know what this true value is, but we would like for our method of creating the interval to attain the nominal confidence level (i.e, $95\%$) for all $\theta$. However, coverage is itself a function of the parameter, and certain methods may work better or worse depending on the true parameter value. Oftentimes, it is useful to graph $\mathcal{C}(\theta)$. 
 
@@ -476,6 +477,7 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	\lim_{\nu \to \infty} \chi_\nu^2 = \N(\nu,2\nu)
 	\]
 \end{example}
+\todo{Are you sure that presenting the entire derivation of the $\chi^2$ distribution as an example is a good idea? imho this part deserves to be a main topic to be placed outside the example.}
 
 \begin{example}
 	We have already shown how to compute confidence intervals numerically in the Poisson case. We now derive an approximate solution using the log-likelihood ratio (LLR) method.
@@ -502,4 +504,49 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 		&= 2 \left[ n \ln n - n - n \ln \mu + \mu \right] \\
 		&= 2 \left[ n \ln \left(\frac{n}{\mu}\right) + \mu - n \right]
 	\end{align*}
+	
+	According to Wilks' theorem, in the asymptotic regime the statistic $\lambda(n,\mu)$ follows a $\chi^2$ distribution with one degree of freedom. Therefore, a confidence interval at confidence level $\mathrm{CL}$ is obtained by solving
+	\[
+	\lambda(n,\mu) \leq \chi^2_{1,\mathrm{CL}}
+	\]
+	
+	For example, at $\mathrm{CL}=95\%$, the critical value is
+	\[
+	\chi^2_{1,0.95} \simeq 3.84
+	\]
+	
+	The confidence interval for $\mu$ is thus defined as the set of values satisfying
+	\[
+	2 \left[ n \ln \left(\frac{n}{\mu}\right) + \mu - n \right] \leq 3.84
+	\]
+	which must be solved numerically for $\mu$ given the observed $n$.
+	
+	This procedure produces approximate confidence intervals, often referred to as likelihood-ratio intervals. For each observed value of $n$, one obtains a lower and upper bound $(\mu_\text{low}, \mu_\text{up})$ by finding the roots of
+	\[
+	\lambda(n,\mu) = \chi^2_{1,\mathrm{CL}}
+	\]
+	
+	The table below reports the likelihood-ratio intervals for observed counts $n = 0, \dots, 9$:
+	
+	\input{tables/llr_intervals.tex}
+	
+	It is important to stress that these intervals are only asymptotically valid. In the Poisson case, especially for small values of $n$, the discrete nature of the data leads to deviations from the nominal coverage.
+	
+	To quantify this effect, one can compute the coverage function as in \ref{eq:coverage}:
+	\[
+	\mathcal{C}(\mu) = \sum_{n \in \text{accepted}} \text{Poisson}(n;\mu)
+	\]
+	where the sum runs over all values of $n$ for which $\mu$ lies inside the corresponding interval. 
+	
+	As shown in Fig.~\ref{fig:llr_poisson_coverage}, the coverage is not exactly constant and oscillates around the nominal value. These oscillations are a direct consequence of discreteness, as seen before in \ref{fig:binomial_coverage}, and the use of an asymptotic approximation.
+	
+	\begin{figure}[H]
+		\centering
+		\input{images/llr_poisson_coverage.pgf}
+		\caption{Coverage function $\mathcal{C}(\mu)$ for the LLR-based intervals in the Poisson case. The dashed line represents the nominal confidence level.}
+		\label{fig:llr_poisson_coverage}
+	\end{figure}
+	
+	If a more accurate construction is required, one can resort to a fully numerical approach, for instance by computing the distribution of $\lambda(n,\mu)$ via Monte Carlo and inverting it to obtain intervals with exact coverage.
 \end{example}
+\todo{I still have to add another column to the table for the "central limit" intervals, as in the slides. I haven't managed yet to reproduce the number in the slide. I don't understand which method was used to compute those numbers. :(}
