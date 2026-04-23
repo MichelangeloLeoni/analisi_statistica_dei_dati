@@ -3,6 +3,7 @@ appunti_lezioni/
 # Python venv
 .venv/
 venv/
+*.stamps
 
 # Compiled LaTeX files
 *.pdf
