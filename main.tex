@@ -46,8 +46,16 @@
 %------------------------------------------------
 \usepackage{xcolor}
 \usepackage{tcolorbox}
-\usepackage{todonotes}
 \tcbset{colback=gray!5!white, colframe=black!70!black}
+\ifdefined\draft
+  \ifnum\draft=1
+    \usepackage{todonotes}
+  \else
+    \usepackage[disable]{todonotes}
+  \fi
+\else
+  \usepackage{todonotes}
+\fi
 
 %------------------------------------------------
 % HEADER / FOOTER
