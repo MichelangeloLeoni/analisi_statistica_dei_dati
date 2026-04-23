@@ -12,21 +12,23 @@ endif
 
 MAIN = main
 PY = src
+DRAFT_NAME = draft_analisi_statistica_dei_dati
+PRODUCTION_NAME = production_analisi_statistica_dei_dati
 
 all:
 	$(MAKE) build
 	$(MAKE) clean
 
 build:
-	pdflatex -jobname=draft_analisi_statistica_dei_dati $(MAIN).tex
-	pdflatex -jobname=draft_analisi_statistica_dei_dati $(MAIN).tex
+	pdflatex -jobname=$(DRAFT_NAME) $(MAIN).tex
+	pdflatex -jobname=$(DRAFT_NAME) $(MAIN).tex
 
 clean:
 	-$(RM) *.aux *.log *.out *.toc
 
 cleanall:
 	$(MAKE) clean
-	-$(RM) $(MAIN).pdf
+	-$(RM) $(DRAFT_NAME).pdf $(PRODUCTION_NAME).pdf
 
 py:
 	$(FOREACH)
@@ -35,6 +37,6 @@ py:
 
 production:
 	$(FOREACH)
-	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0}\input{$(MAIN).tex}"
-	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0}\input{$(MAIN).tex}"
+	pdflatex -jobname=$(PRODUCTION_NAME) "\def\draft{0}\input{$(MAIN).tex}"
+	pdflatex -jobname=$(PRODUCTION_NAME) "\def\draft{0}\input{$(MAIN).tex}"
 	$(MAKE) clean
