@@ -12,31 +12,34 @@ endif
 
 MAIN = main
 PY = src
+
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
 
-all:
-	$(MAKE) build
-	$(MAKE) clean
+LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error
+
+# ------------------------
+
+all: build
 
 build:
-	pdflatex -jobname=$(DRAFT_NAME) $(MAIN).tex
-	pdflatex -jobname=$(DRAFT_NAME) $(MAIN).tex
+	$(LATEXMK) -jobname=$(DRAFT_NAME) $(MAIN).tex
 
-clean:
-	-$(RM) *.aux *.log *.out *.toc
-
-cleanall:
-	$(MAKE) clean
-	-$(RM) $(DRAFT_NAME).pdf $(PRODUCTION_NAME).pdf
+production:
+	$(FOREACH)
+	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
+		-pdflatex="pdflatex \\def\\draft{0} %O %S" \
+		$(MAIN).tex
 
 py:
 	$(FOREACH)
 	$(MAKE) build
-	$(MAKE) clean
 
-production:
-	$(FOREACH)
-	pdflatex -jobname=$(PRODUCTION_NAME) "\def\draft{0}\input{$(MAIN).tex}"
-	pdflatex -jobname=$(PRODUCTION_NAME) "\def\draft{0}\input{$(MAIN).tex}"
-	$(MAKE) clean
+clean:
+	$(LATEXMK) -c
+	-$(RM) *.out *.toc *.fls *.log *.fdb_latexmk *.aux
+
+cleanall:
+	$(LATEXMK) -C
+	-$(RM) *.out *.toc *.fls *.log *.fdb_latexmk *.aux
+	-$(RM) $(DRAFT_NAME).pdf $(PRODUCTION_NAME).pdf
