@@ -62,6 +62,37 @@ This shows us at a glance that $\hat{p}_{MLE}$ is the minimum variance estimator
 Add the example of the k-median here (distribution of the k-biggest value, it's an important exercise we did in class you'll see)
 \subsubsection{Poisson: For occurrences over time/space}
 
+\label{eq:poisson_mle}
+We now want to find the maximum likelihood estimator (MLE) for a Poisson distribution. 
+Given a sample of $N$ independent observations $\{x_i\}$, the total likelihood is:
+\begin{align*}
+	L_{\text{tot}}(\mu) &= \prod_{i=1}^N \frac{\mu^{x_i} e^{-\mu}}{x_i!}
+\end{align*}
+Taking the logarithm, we obtain the log-likelihood:
+\begin{align*}
+	\ln L_{\text{tot}}(\mu) 
+	&= \sum_{i=1}^N \ln \left( \frac{\mu^{x_i} e^{-\mu}}{x_i!} \right) \\
+	&= \sum_{i=1}^N x_i \ln \mu - \sum_{i=1}^N \mu - \sum_{i=1}^N \ln(x_i!)
+\end{align*}
+Since the last term does not depend on $\mu$, it can be neglected. Therefore,
+\[
+\ln L_{\text{tot}}(\mu) = \sum_{i=1}^N x_i \ln \mu - N\mu
+\]
+
+To find the MLE, we solve the \ref{eq:likelihood}:
+\[
+\frac{\partial \ln L_{\text{tot}}(\mu)}{\partial \mu} 
+= \sum_{i=1}^N \frac{x_i}{\mu} - N = 0
+\]
+Evaluating at $\mu = \hat{\mu}$, we obtain:
+\begin{equation*}
+	\hat{\mu} = \frac{1}{N} \sum_{i=1}^N x_i
+	\label{eq:poissonian_mle}
+	\tag{Poisson MLE}
+\end{equation*}
+
+As expected, the MLE for the Poisson mean coincides with the sample mean. In the simple case of a single observation of $n$ events, we trivially get: $\hat\mu=n$.
+\todo{I wrote this whole section using $\mu$ as the parameter instead of $\theta$ because I feel uneasy using $\theta$ for the expected events of a Poissonian, it just feels wrong. If we want to keep our convention going I can change it, no problem.}
 %Negative Binomial / Geometric: For trials until success. Add if we ever use
 
 \section{Continuos distributions}
