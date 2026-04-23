@@ -36,7 +36,7 @@ build:
 $(STAMP_DIR)/%.stamp: $(PY_DIR)/%.py
 	@$(call MKDIR, $(STAMP_DIR))
 	$(PYTHON) $<
-	@echo "Eseguito $<" > $@
+	@echo "Executed $<" > $@
 
 py: $(PY_STAMPS)
 	$(MAKE) build
