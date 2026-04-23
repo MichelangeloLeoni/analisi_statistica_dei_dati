@@ -378,31 +378,15 @@ Not always are we able to easily identify pivotal quantities for our problems, a
 	Let $p(x;\theta)$ be a \textit{pdf} with domain independent from $\theta\in \R^N$, and at least twice differentiable. In this case, the quantity:
 	
 	\begin{equation}
-	\lambda\left(x,\theta\right) = 2\ln\left[\frac{ p(x;\hat{\theta}_{MLE})}{p(x;\theta)}\right]
+	\lambda\left(x,\theta\right) = 2\ln\left[\frac{\sup_\theta p(x;\theta)}{p(x;\theta)}\right]
 	\tag{Log-Likelihood ratio}
 	\end{equation}
 	
 	asymptotically has a universal distribution. This means that it is independent of the shape of $p(x;\theta)$ and real value of $\theta$ (only its dimension, otherwise known as \textit{degrees of freedom}.)
 \end{theorem}
 
-We note that using $\lambda(x,\theta)> q_{CL}$ as an ordering function is equivalent to using Likelihood Ratio ordering.
-
 This easy to build quantity is a universal pivot for whichever \textit{pdf} we start with, and we know its distribution $p(\lambda)$ is a $\chi^2_\nu$, which means that:
 
 	\[
-	p_\nu(\lambda) = \frac{1}{2^{\frac{\nu}{2}} \Gamma(\frac{\nu}{2})}\lambda^{\frac{\nu}{2}-1}e^{-\frac{\lambda}{2}}
+	p(\lambda) = \frac{1}{2^{\frac{\nu}{2}} \Gamma(\frac{\nu}{2})}\lambda^{\frac{\nu}{2}-1}e^{-\frac{\lambda}{2}}
 	\]
-
-The proof of Wilks' theorem will not be discussed in this write-up, though those who are interested can take a look at the following example to see how we conclude that $\lambda$ is distributed like a $\chi^2$:
-
-\begin{example}
-	Let's derive the asymptotic distribution of the $LLR$, using the fact that Wilks' theorem guarantees its generality. Therefore, we are free to start with whatever distribution we wish, and we decide to use $N$ samples of a Normally distributed variable. We write the log Likelihood:
-	
-	\begin{align*}
-		\lambda(x,\mu) &= 2\ln\left(Ce^{-\sum_i\frac{(x_i-\bar{x})^2}{2\sigma^2}}\right) - 2\ln\left(C e^-\sum_i \frac{(x_i-\mu)^2}{2\sigma^2}\right)\\
-		&= \frac{1}{\sigma^2}\sum_i\left[(x_i-\mu)^2-(x_i-\bar{x})^2\right] = \frac{1}{\sigma^2}\sum_i\left[-2\mu x_i + \mu^2 +2\bar{x}x_i -\bar{x}^2\right] \\
-		&= \frac{1}{\sigma^2}\left[-2\mu N\bar{x} + N\mu^2 +2N\bar{x}^2 -N\bar{x}^2\right] = \frac{1}{\sigma^2}\left[-2\mu N\bar{x} + N\mu^2 +N\bar{x}^2\right]\\
-		&= \frac{N\left(\bar{x} -\mu\right)^2}{\sigma^2} = \frac{\left(\bar{x}-\mu\right)^2}{\left(\frac{\sigma}{\sqrt{N}\right)^2}} \\
-		&= \frac{\left(\bar{x} - \mu \right)^2}{\sigma^2(\bar{x})} = \left(\frac{\bar{x}-\mu}{\sigma(\bar{x})}\right)^2
-	\end{align*}
-\end{example}
