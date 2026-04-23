@@ -20,7 +20,7 @@ PY_STAMPS = $(patsubst $(PY_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(PY_SOURCES))
 
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
-LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR)
+LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR) -silent
 
 # ------------------------
 
@@ -44,7 +44,7 @@ py: $(PY_STAMPS)
 
 clean:
 	$(LATEXMK) -c
-	-$(RM) *.out *.toc *.fls *.log *.fdb_latexmk *.aux
+	-$(RM) *.out *.toc *.fls *.log *.fdb_latexmk *.aux *.synctex.gz
 	-$(if $(filter Windows_NT,$(OS)), rmdir /S /Q $(STAMP_DIR), rm -rf $(STAMP_DIR))
 
 cleanall: clean
