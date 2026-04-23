@@ -12,6 +12,7 @@ endif
 
 MAIN = analisi_statistica_dei_dati
 PY_DIR = src
+OUT_DIR = .build
 STAMP_DIR = .stamps
 
 PY_SOURCES = $(wildcard $(PY_DIR)/*.py)
@@ -19,7 +20,7 @@ PY_STAMPS = $(patsubst $(PY_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(PY_SOURCES))
 
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
-LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error
+LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR)
 
 # ------------------------
 
