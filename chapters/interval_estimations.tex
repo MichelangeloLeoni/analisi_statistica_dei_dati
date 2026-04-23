@@ -389,11 +389,14 @@ We note that using $\lambda(x,\theta)> q_{CL}$ as an ordering function is equiva
 
 This easy to build quantity is a universal pivot for whichever \textit{pdf} we start with, and we know its distribution $p(\lambda)$ is a $\chi^2_\nu$, which means that:
 
-	\[
+	\begin{equation}
 	p_\nu(\lambda) = \frac{1}{2^{\frac{\nu}{2}} \Gamma(\frac{\nu}{2})}\lambda^{\frac{\nu}{2}-1}e^{-\frac{\lambda}{2}}
-	\]
+	\label{eq:chi_squared}
+	\end{equation}
 
-The proof of Wilks' theorem will not be discussed in this write-up, though those who are interested can take a look at the following example to see how we conclude that $\lambda$ is distributed like a $\chi^2$:
+Asymptotically in the degrees of freedom, this distribution approaches a Gaussian with mean $\nu$ and variance $2\nu$. 
+
+The proof of Wilks' theorem will not be discussed in this write-up, though those who are interested can take a look at the following example to see how we conclude that $\lambda$ is distributed like a $\chi^2$, and how it approaches a Gaussian for high degrees of freedom:
 
 \begin{example}
 	Let's derive the asymptotic distribution of the $LLR$, using the fact that Wilks' theorem guarantees its generality. Therefore, we are free to start with whatever distribution we wish, and we decide to use $N$ samples of a Normally distributed variable. We write the log Likelihood:
@@ -424,9 +427,54 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	\begin{align*}
 		\phi_{x^2}(t) &= \E_x\left[e^{itx^2}\right] = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}e^{itx^2}\cdot e^{-\frac{x^2}{2}}\dd x\\
 		&= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}e^{-\left(1-2it\right)\frac{x^2}{2}}\dd x \\
-		& \text{Substituting } \sigma= \left(1-2it\right)^{-\frac{1}{2}}\\
-		&\Rightarrow \phi_{x^2} 
+		&\text{Substituting } \sigma= \left(1-2it\right)^{-\frac{1}{2}}\\
+		\Rightarrow \phi_{x^2} &=\sigma\underbrace{\int_{-\infty}^{+\infty}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{x^2}{2\sigma^2}}\dd x}_{1} = \sigma
 	\end{align*}
 	
+	Therefore, we get:
 	
+	\[
+	\phi_{\chi_1^2}(t) = \left(1-2it\right)^{-\frac{1}{2}}
+	\]
+	
+	Knowing that the distribution of the sum  is the product of the characteristic functions, we can pass to $\nu$ degrees of freedom by elevating to the power of $\nu$.
+	
+	\[
+	\phi_{\chi_\nu^2}(t) = \left(1-2it\right)^{-\frac{\nu}{2}}
+	\]
+	
+	We use the inverse transformation to calculate the \textit{pdf} of $\chi_\nu^2$:
+	
+	\[
+	p_\nu(\chi^2) = \frac{1}{2\pi}\int_{-\infty}^{+\infty}\phi(t)e^{-itx}\dd t
+	\]
+	
+	We introduce the Gamma function defined as:
+	
+	\[
+	\Gamma(\zeta+1) = \int_0^{+\infty}x^\zeta e^{-x} dx
+	\]
+	\[
+	\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}, \quad \Gamma\left(1\right) = 1, \quad \Gamma\left(n+1\right) = n\Gamma(n)
+	\]
+	
+	From which, through a change of variable, we get equation (\ref{eq:chi_squared}):
+	
+	\[
+	p_\nu(\lambda) = \frac{1}{2^{\frac{\nu}{2}} \Gamma(\frac{\nu}{2})}\lambda^{\frac{\nu}{2}-1}e^{-\frac{\lambda}{2}}
+	\]
+	
+	From the derivatives of the characteristic functions we get the moments of this distribution, most notably:
+	
+	\[
+	\E\left[\chi_\nu^2\right] =\nu\quad \Var\left[\chi_\nu^2\right] = 2\nu
+	\]
+	
+	Now we know that this distribution was obtained through the sum of $\nu$ variables with finite variance, and from the CLT we can deduce that
+	
+	\[
+	\lim_{\nu \to \infty} \chi_\nu^2 = \N(\nu,2\nu)
+	\]
 \end{example}
+
+Application: CR for Poisson here please!
