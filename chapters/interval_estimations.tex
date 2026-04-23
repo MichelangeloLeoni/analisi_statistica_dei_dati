@@ -236,7 +236,7 @@ Given an observation of $x$, the interval in $\theta$ is found by intersecting t
 	\label{fig:binomial_Neyman_belts}
 \end{figure}
 
-For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of the belts in figure \ref{fig:binomial_Neyman_belts} and find our interval estimation for $p$. As we have already touched upon briefly, it's important to stick to one belt (and therefore ordering algorithm) for all measured values rather than \textit{flip-flopping} between them. If we "artificially" make the interval smaller by choosing a particular intersection or combination of different ordering algorithms, it only means that we have lowered the coverage below our \textit{CL}, and so we lose the very property that defined our intervals in the first place. The choice of ordering should be determined by the goal of the analyst, like choosing probability-ordering for its small interval or lower ordering for the upper bound.
+For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of the belts in figure \ref{fig:binomial_Neyman_belts} and find our interval estimation for $p$. As we have already touched upon briefly, it's important to stick to one belt (and therefore ordering algorithm) for all measured values rather than \textit{flip-flopping} between them. If we "artificially" make the interval smaller by choosing a particular intersection or combination of different ordering algorithms, it only means that we have lowered the coverage below our \textit{CL}, and so we lose the very property that defined our intervals in the first place. The choice of ordering should be determined by the goal of the analyst, like choosing Likelihood Ratio for the inclusion of the \textit{MLE} or lower ordering for the upper bound.
 
 
 \begin{example}
@@ -261,7 +261,7 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 		\label{fig:neyman_gauss_limited}
 	\end{figure}
 	
-	Figure \ref{fig:neyman_gauss_limited} shows the breaking point of the probability ordering, where it fails to find an interval for $\mu$ for a negative $x$. On the right, the same belt is constructed with the sole difference of using a different ordering function: the Likelihood Ratio, on which we will touch upon in the following section. As we can see, this new ordering function once again allows us to correspond every measure of $x$ to an interval, and takes into consideration the limits on the parameter itself. 
+	Figure \ref{fig:neyman_gauss_limited} shows the breaking point of the probability ordering, where it fails to find an interval for $\mu$ for a negative $x$. On the right, the same belt is constructed with the sole difference of using a different ordering function: the Likelihood Ratio. As we can see, this new ordering function once again allows us to correspond every measure of $x$ to an interval, and takes into consideration the limits on the parameter itself. 
 	
 	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
@@ -304,17 +304,22 @@ Analytically, the goal would be to define a function, or set of functions, of th
 	x_{min} = (1-CL)\cdot m \quad x_{max} = m
 	\]
 	
-	which, after a measurement $x_0$, translates to an interval of $x_0\leq m \leq \frac{x_0}{1-CL}$
+	which, after a measurement $x_0$, translates to an interval of $x_0\leq m \leq \frac{x_0}{1-CL}$. We also note that in this particular case, \textit{LR} ordering corresponds exactly to having used lower ordering (which gives us the upper bound, though the lower bound is fixed by the fact that $x\leq m$).
 	
 	The following figure shows the two different belts that we were able to construct analytically for this problem, and it's clear how inverting the $x$ limits as a function of $m$ brings us the interval for $m$.
+	
 		\begin{figure}[H]
 		\centering
 		\input{images/uniform_belts.pgf}
-		\caption{bli bli blu bla bla bla}
+		\caption{Different Neyman belts for the interval estimate on $m$, the parameter for a uniform distribution with minimum point $0$ and maximum $m$. On the left, upper ordering is shown and on the right Likelihood Ratio ordering. An example measurement of $x_0=1$ is shown, to highlight how the belt can be inverted to obtain a one or two sided interval estimate.}
 		\label{fig:uniform_belts}
 	\end{figure}
 	
-	
+	In this specific case with $90\%$ \textit{CL}, we use as an example the measurement $x_0=1$, which brings the intervals of:
+		
+		\input{tables/uniform_belts.tex}
+		
+	In this case, we are more interested in an upper limit for $m$ so Likelihood/lower ordering would bring more information on the parameter, as the observation of $x_0$ itself already provides a natural lower limit for the value of $m$. 
 \end{example}
 
 However, the belt is not always possible to express analytically, and so often we must use numerical techniques or searched tabular data to find the interval we desire. Naturally, not every possible parameter-\textit{pdf} combination will be expressed in tables, and for that reason we must find a way to transform our specific cases into general, standard problems that have already been solved before us. Luckily, in the next section we will introduce \textit{pivotal quantities} and how they can be used to standardize certain types of problems.

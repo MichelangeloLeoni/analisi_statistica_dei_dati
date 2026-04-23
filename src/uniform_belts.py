@@ -16,10 +16,10 @@ matplotlib.rcParams.update({
 })
 
 CL = 0.9
-m_grid = np.linspace(0.0, 15, 200)
+m_grid = np.linspace(0.0, 12, 500)
 
 # observable x
-x_grid = np.linspace(0, max(m_grid), 700)
+x_grid = np.linspace(0, 6, 500)
 
 def upper_acceptance(m):
     # Upper ordering: accept x in [0, CL*m]
@@ -46,15 +46,41 @@ def build_belt(acceptance_func):
     return np.array(x_low), np.array(x_high)
 
 # Compute belts
-xlow_p, xhigh_p = build_belt(upper_acceptance)
+xlow_upper, xhigh_upper = build_belt(upper_acceptance)
 xlow_lr, xhigh_lr = build_belt(lr_acceptance)
 
+# Compute intervals at x0=1
+x0 = 1
+lo_upper = x0 / CL
+lo_lr = x0
+hi_lr = x0 / (1 - CL)
+
+
+# LaTeX table
+def fmt(a, b):
+    return rf"${a:.2f} \leq m \leq {b:.2f}$" # format the interval in LaTeX math mode
+
+table = rf"""
+\begin{{center}}
+\begin{{tabular}}{{l|c}}
+\hline
+Method & 90\% confidence interval \\
+\hline
+Lower bound & ${lo_upper:.2f} \leq m$ \\
+LR bound & {fmt(lo_lr, hi_lr)} \\
+\hline
+\end{{tabular}}
+\end{{center}}
+"""
+
+with open("tables/uniform_belts.tex", "w") as f:
+    f.write(table)
 
 # Plot
 fig, axes = plt.subplots(1, 2, figsize=(5.5, 3.5), sharey=True)
 
 plots = [
-    ("Upper ordering", xlow_p, xhigh_p),
+    ("Upper ordering", xlow_upper, xhigh_upper),
     ("LR ordering", xlow_lr, xhigh_lr),
 ]
 
@@ -104,8 +130,8 @@ for plot_idx, (ax, (title, low, high)) in enumerate(zip(axes, plots)):
                 ax.scatter(m_grid[i], x0, color="red", s=10)
     ax.set_title(title)
     ax.set_xlabel(r"$m$")
-    ax.set_xlim(0, max(x_grid))
-    ax.set_ylim(-0.5, max(m_grid))
+    ax.set_xlim(0, max(m_grid))
+    ax.set_ylim(-0.5, max(x_grid))
     ax.grid(alpha=0.25)
 
 axes[0].set_ylabel(r"$x$")

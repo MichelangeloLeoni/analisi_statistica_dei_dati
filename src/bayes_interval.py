@@ -124,7 +124,7 @@ lo_high, hi_high = upper_bound(m, post, alpha=0.10)
 
 # LaTeX table
 def fmt(a, b):
-    return rf"${a:.2f} < \mu < {b:.2f}$" # format the interval in LaTeX math mode
+    return rf"${a:.2f} \leq \mu \leq {b:.2f}$" # format the interval in LaTeX math mode
 
 table = rf"""
 \begin{{center}}
