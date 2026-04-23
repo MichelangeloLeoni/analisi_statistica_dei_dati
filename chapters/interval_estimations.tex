@@ -478,10 +478,28 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 \end{example}
 
 \begin{example}
-	We've already showed how one can find numerically confidence intervals in the poissonian case. We now want the approximate solution using the LR method.
+	We have already shown how to compute confidence intervals numerically in the Poisson case. We now derive an approximate solution using the log-likelihood ratio (LLR) method.
 	
-	We know that a sample of $N$ observation $\{x_i\}$ following a Poisson distribution with a parameter $\mu$ the MLE is (\textcolor{red}{ref here the part of the appendix/main chapters where we computed for the first time the MLE of a poisson}):
+	Consider a single observation
 	\[
-		\hat\mu=\frac{\sum_i x_i}{N}
+	n \sim \text{Poisson}(\mu)
 	\]
+	The likelihood is
+	\[
+	p(n;\mu) = \frac{\mu^n e^{-\mu}}{n!}
+	\]
+	and, from \ref{eq:poisson_mle}, the maximum likelihood estimator is
+	\[
+	\hat\mu = n
+	\]
+
+	We now compute the log-likelihood ratio (LLR):
+	\begin{align*}
+		\lambda(n, \mu)
+		&= 2 \ln \left(\frac{p(n;\hat\mu)}{p(n;\mu)}\right) \\
+		&= 2 \left[ \ln p(n; \hat\mu) - \ln p(n;\mu) \right] \\
+		&= 2 \left[ \ln \left(\frac{n^n e^{-n}}{n!}\right) - \ln \left(\frac{\mu^n e^{-\mu}}{n!}\right) \right] \\
+		&= 2 \left[ n \ln n - n - n \ln \mu + \mu \right] \\
+		&= 2 \left[ n \ln \left(\frac{n}{\mu}\right) + \mu - n \right]
+	\end{align*}
 \end{example}
