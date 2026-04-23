@@ -328,8 +328,65 @@ However, the belt is not always possible to express analytically, and so often w
 \todo{A clean way to present this material might be to include references, where appropriate, to a dedicated appendix collecting the relevant code. For example: ``To gain further insight into this concept, see Appendix~X, where the corresponding implementation is provided.''}
 
 \section{Pivotal quantities}
+As we have said, determining confidence regions starting from their direct definition can be especially difficult, even numerically. One way to simplify the problem is to search for \textbf{pivotal quantities}, which we take a second to define:
 
+\begin{definition}[Pivotal quantity]
+	Given a \textit{pdf} $p(x;\theta)$, a function $s(x,\theta)$ is said to be a \textit{pivot} if and only if $\forall \theta_1,\theta_2\in A$ we have that:
+	
+	\[
+	p\left(s(x,\theta_1);\theta_1\right) = p\left(s(x,\theta_2);\theta_2\right) \equiv p_s(s)
+	\]
+\end{definition}
 
+From this definition some confusion may remain as to what exactly we are looking for: we are trying to find a function\sidenote{Question: is such a function a statistic? Hopefully you answered no, as it is, in general, a function that depends on unknown parameters!} of our observable(s) and parameter(s) such that the \textit{pdf} of that function does not depend on the unknown parameters. In a certain sense, we are finding a transformation such that we "standardize" our \textit{pdf} to a more general form, independent on what we don't know. 
+
+For example, consider a Normally distributed observable, coming from $\N(x;\mu,\sigma)$. Let's write:
+
+	\[
+	z\left(x,\mu,\sigma\right) = \frac{x-\mu}{\sigma}
+	\]\sidenote{For this specific pivot the variable $z$ is most commonly used.}
+
+Well, now to write out $p_z(z)$, we need to use the change of variable rule that we worked out way in definition \ref{def:pdf_var_change}, essentially substituting and multiplying by the Jacobian of the inverse transformation:
+
+	\[
+	p_z(z) = \N(x(z))\left|\frac{\dd x}{\dd z}\right| = \frac{1}{\sqrt{2\pi}}e^{-\frac{z^2}{2}}
+	\]
+
+We see that the above expression is nothing more than a "standard Gaussian", which is a Normal distribution with null mean and unitary variance. This is independent of our original parameters, and all of the information we could ever hope to have on this distribution can be found on tables\todo{Perhaps ref ours when we have them} and in literature, as it is an extensively researched function. 
+
+A possible strategy for when we have to deal with Normal distributions could then be to transform them through the pivotal quantity $z$, solve whatever problem it is that we are looking to solve (for example, but not limited to, finding an interval estimate for a parameter), and then transform $z$ back to obtain the necessary information on our parameters. 
+
+Let's look into a key property of pivotal quantities that is in line with what we have been talking about for the last few pages. Let's consider an interval estimate expressed like $f(x): \{\theta: g\left(s(x,\theta)\right)>0\}$\sidenote{My confidence interval is the set of all possible $\theta$ values that make my pivotal test statistic $s$ fall within a certain range defined by the ordering function $g$}. In this case, we have \textit{coverage}:
+	
+	\begin{align*}
+		\mathcal{C} &= \int_{x\in f(x)} p(x;\theta)\dd x = \int_{g\left(s(x,\theta)\right)>0} p(x;\theta)\dd x \\
+		&= \int_{g(s)>0} p_s\left(s(\theta);\theta\right)\dd s = \int_{g(s)> 0} p(s) \dd s
+	\end{align*}
+
+What does this mean? If we express our density function through the pivotal quantity then the coverage is constant in the parameter. That means that the confidence region is easily found for all $\theta$ as the solution to $g\left(s(x,\theta)\right)>0$. The pesky problem that we had, where we had to solve the integral for every possible fixed value of the parameter is now gone: once I solve it for one $\theta$, I have the full belt with constant coverage, pretty cool! 
+
+We note that we have already explored an example of this kind, fig \ref{fig:neyman_gauss} shows the Neyman belt for a Normally distributed $x$ with unitary variance, which is exactly the belt that we would obtain for the pivot $z$\sidenote{We don't need for the observable to have unitary variance, we just use the pivot $z$ which corrects for whatever the variance is}. As we can see in that example, the belt is independent for $\mu$ and its width was found by consulting the tables for the central integral of a standard Gaussian.\todo{ref?}
+
+Other pivotal quantities exist, and when possible it is always a good idea to abuse their general properties.
 
 
 \subsection{Likelihood ratio theorem}
+
+Not always are we able to easily identify pivotal quantities for our problems, and therefore it can be useful to build an approximate quantity that works in most cases.
+
+\begin{theorem}[Likelihood Ratio (Wilks') theorem]
+	Let $p(x;\theta)$ be a \textit{pdf} with domain independent from $\theta\in \R^N$, and at least twice differentiable. In this case, the quantity:
+	
+	\begin{equation}
+	\lambda\left(x,\theta\right) = 2\ln\left[\frac{\sup_\theta p(x;\theta)}{p(x;\theta)}\right]
+	\tag{Log-Likelihood ratio}
+	\end{equation}
+	
+	asymptotically has a universal distribution. This means that it is independent of the shape of $p(x;\theta)$ and real value of $\theta$ (only its dimension, otherwise known as \textit{degrees of freedom}.)
+\end{theorem}
+
+This easy to build quantity is a universal pivot for whichever \textit{pdf} we start with, and we know its distribution $p(\lambda)$ is a $\chi^2_\nu$, which means that:
+
+	\[
+	p(\lambda) = \frac{1}{2^{\frac{\nu}{2}} \Gamma(\frac{\nu}{2})}\lambda^{\frac{\nu}{2}-1}e^{-\frac{\lambda}{2}}
+	\]
