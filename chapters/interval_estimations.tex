@@ -407,4 +407,16 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 		&= \frac{N\left(\bar{x} -\mu\right)^2}{\sigma^2} = \frac{\left(\bar{x}-\mu\right)^2}{\left(\frac{\sigma}{\sqrt{N}}\right)^2} \\
 		&= \frac{\left(\bar{x} - \mu \right)^2}{\sigma^2(\bar{x})} = \left(\frac{\bar{x}-\mu}{\sigma(\bar{x})}\right)^2
 	\end{align*}
+	
+	As we can see, $\lambda$ is a pivot for all $N$, distributed like the square of a standard Gaussian variable. We can see that for an $n-$dimensional Gaussian with mean $\vec{\mu}$, we would have the sum of $n$ equal terms like the one above, one for each of the components of $\mu_i$. These universal distributions are called the \textbf{chi squared with $n$ degrees of freedom $\left(\chi^2_n\right)$}.
+	
+	Let's start by writing $\chi^2_1$, which we get through squaring a Normally distributed $x$ and finding the \textit{pdf} of this new variable:
+	
+	\begin{align*}
+		p_y(y) &= \sum_i^{N_{sol}} p(x) \left|\frac{\dd x}{\dd y}\right| = 2\cdot\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{y}{2}}\cdot\frac{\sigma}{2\sqrt{y}}\\
+		&\Rightarrow p(\chi_1^2) = \frac{1}{\sqrt{2\pi}} \cdot \frac{1}{\sqrt{\chi^2}}e^{-\frac{\chi^2}{2}}
+	\end{align*} 
+	
+	We note that this diverges for $\chi^2=0$, and that the sum over the solutions gave $2$ for the positive and negative square root.
+	
 \end{example}
