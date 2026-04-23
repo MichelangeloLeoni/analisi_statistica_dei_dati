@@ -18,8 +18,8 @@ all:
 	$(MAKE) clean
 
 build:
-	pdflatex $(MAIN).tex
-	pdflatex $(MAIN).tex
+	pdflatex -jobname=draft_analisi_statistica_dei_dati $(MAIN).tex
+	pdflatex -jobname=draft_analisi_statistica_dei_dati $(MAIN).tex
 
 clean:
 	-$(RM) *.aux *.log *.out *.toc
@@ -36,6 +36,6 @@ py:
 
 production:
 	$(FOREACH)
-	pdflatex "\def\draft{0} \input{$(MAIN).tex}"
-	pdflatex "\def\draft{0} \input{$(MAIN).tex}"
+	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0} \input{$(MAIN).tex}"
+	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0} \input{$(MAIN).tex}"
 	$(MAKE) clean
