@@ -10,7 +10,7 @@ else
     MKDIR = mkdir -p $1
 endif
 
-MAIN = main
+MAIN = analisi_statistica_dei_dati
 PY_DIR = src
 STAMP_DIR = .stamps
 
@@ -31,7 +31,7 @@ production: $(PY_STAMPS)
 		$(MAIN).tex
 
 build:
-	$(LATEXMK) -jobname=$(DRAFT_NAME) $(MAIN).tex
+	$(LATEXMK) -jobname=$(MAIN) $(MAIN).tex
 
 $(STAMP_DIR)/%.stamp: $(PY_DIR)/%.py
 	@$(call MKDIR, $(STAMP_DIR))
@@ -48,4 +48,4 @@ clean:
 
 cleanall: clean
 	$(LATEXMK) -C
-	-$(RM) $(DRAFT_NAME).pdf $(PRODUCTION_NAME).pdf
+	-$(RM) $(MAIN).pdf $(DRAFT_NAME).pdf $(PRODUCTION_NAME).pdf
