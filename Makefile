@@ -1,19 +1,19 @@
 ifeq ($(OS),Windows_NT)
     RM = del /Q /F
-    FixPath = $(subst /,\,$1)
     PYTHON = python
-    FOREACH = for %%f in ($(subst /,\,$(PY))/*.py) do $(PYTHON) %%f
+    PYFILES = $(subst /,\,$(wildcard $(PY)/*.py))
+    FOREACH = for %%f in ($(PYFILES)) do $(PYTHON) %%f
 else
     RM = rm -f
-    FixPath = $1
     PYTHON = python3
-    FOREACH = for file in $(PY)/*.py; do $(PYTHON) $$file; done
+    PYFILES = $(wildcard $(PY)/*.py)
+    FOREACH = for file in $(PYFILES); do $(PYTHON) $$file; done
 endif
 
 MAIN = main
 PY = src
 
-all: 
+all:
 	$(MAKE) build
 	$(MAKE) clean
 
@@ -23,10 +23,9 @@ build:
 
 clean:
 	-$(RM) *.aux *.log *.out *.toc
-	-$(RM) $(call FixPath,chapters/*.aux chapters/*.log appendices/*.aux appendices/*.log)
 
-cleanall: 
-	clean
+cleanall:
+	$(MAKE) clean
 	-$(RM) $(MAIN).pdf
 
 py:
@@ -36,6 +35,6 @@ py:
 
 production:
 	$(FOREACH)
-	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0} \input{$(MAIN).tex}"
-	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0} \input{$(MAIN).tex}"
+	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0}\input{$(MAIN).tex}"
+	pdflatex -jobname=production_analisi_statistica_dei_dati "\def\draft{0}\input{$(MAIN).tex}"
 	$(MAKE) clean
