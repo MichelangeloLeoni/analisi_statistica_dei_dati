@@ -417,6 +417,16 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 		&\Rightarrow p(\chi_1^2) = \frac{1}{\sqrt{2\pi}} \cdot \frac{1}{\sqrt{\chi^2}}e^{-\frac{\chi^2}{2}}
 	\end{align*} 
 	
-	We note that this diverges for $\chi^2=0$, and that the sum over the solutions gave $2$ for the positive and negative square root.
+	We note that this diverges for $\chi^2=0$, and that the sum over the solutions gave $2$ for the positive and negative square root. 
+	
+	We now extend the result to $\nu$ degrees of freedom, using the characteristic function $\phi$:
+	
+	\begin{align*}
+		\phi_{x^2}(t) &= \E_x\left[e^{itx^2}\right] = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}e^{itx^2}\cdot e^{-\frac{x^2}{2}}\dd x\\
+		&= \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}e^{-\left(1-2it\right)\frac{x^2}{2}}\dd x \\
+		& \text{Substituting } \sigma= \left(1-2it\right)^{-\frac{1}{2}}\\
+		&\Rightarrow \phi_{x^2} 
+	\end{align*}
+	
 	
 \end{example}
