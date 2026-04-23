@@ -33,3 +33,9 @@ py:
 	$(FOREACH)
 	$(MAKE) build
 	$(MAKE) clean
+
+production:
+	$(FOREACH)
+	pdflatex "\def\draft{0} \input{$(MAIN).tex}"
+	pdflatex "\def\draft{0} \input{$(MAIN).tex}"
+	$(MAKE) clean
