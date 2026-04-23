@@ -1,0 +1,71 @@
+\chapter{Hypothesis Testing}
+In this chapter, we pivot our focus toward a different form of statistical inference: \textbf{hypothesis testing}. The core objective is to collect observable data, develop a model, and determine whether the empirical evidence is statistically consistent with a predefined hypothesis.
+
+We start by defining what a hypothesis is in our case:
+	\begin{align*}
+	H_0&:\text{ "Null hypothesis"}\\
+	H_\alpha/H_1&:\text{ "Alternative hypothesis"}	
+	\end{align*}
+
+In general, we assume the null hypothesis holds unless there is statistical evidence that suggests we should reject it. This right here is a key concept: we can never \textit{prove} that a hypothesis is the "correct" one; we can only \textit{reject} or fail to reject it.
+
+
+
+We also define a \textit{Test statistic}, that takes our data and maps it to a hypothesis. We look at the data, and the Test tells us which hypothesis it belongs to, out of the alternatives (which are subsets of the parameter space). More formally:
+
+	\[
+	T(x) : x\mapsto H_i; \quad H_i\in \mathcal{P}(A)\,\forall i \in \{0,\dots,n\}
+	\]
+
+For example, a hypothesis may be "the parameter is equal to $0$", while an alternative may be "the parameter is not equal to $0$".\sidenote{This means that we could write a statistic of $x$ that instead or mapping to a hypothesis maps to a natural number $i$ that is the index of which alternative hypothesis the Test points to.} It's important that all hypotheses be disjoined, so we impose that
+
+	\[
+	H_i\cap H_j = \emptyset \quad \forall i\neq j
+	\]
+
+Remember, the only significant output of a Test is the rejection of a hypothesis, and so the possible results of a Test can be:
+
+\begin{align*}
+	T(x) \neq H_0&\text{, we reject }H_0\Rightarrow\text{, "significant"}\\
+	T(x) = H_0&\text{, we fail to reject }H_0\Rightarrow\text{, "not significant"}
+\end{align*}
+
+
+We then define a \textbf{critical (rejection) region} $\mathcal{C}$ such that:
+
+	\[
+	\mathcal{C} \equiv \{x: T(x)\neq H_0\}
+	\]
+
+The complement of this region goes under the name of "acceptance region"\sidenote{Important: we never accept hypotheses! Acceptance region, in this case, should more properly be called "failure to reject region"}, and can naturally be written as:
+
+	\[
+	\mathcal{A}\equiv\bar{\mathcal{C}} = \{x: T(x) = H_0\}
+	\]
+
+Under this notation: if our data falls within the rejection region $\mathcal{C}$, the test $T(x)$ maps to an alternative hypothesis $H_i$ (where $i \neq 0$), leading us to reject the null hypothesis.
+
+\section{The standard hypothesis test}
+We will be looking at two main types of hypotheses, depending on what we can infer on $\theta$. The first is the \textit{simple hypothesis}:
+
+\begin{definition}[Simple hypothesis]
+	A \textit{simple hypothesis} is one that uniquely specifies the distribution of the population. In this case, all parameters are fixed to specific values:
+	\[
+	p(x) \equiv p(x; H_i)
+	\]
+\end{definition}
+
+For example, a hypothesis stating that $x$ follows a Normal distribution with a specific mean $\mu=10$ and variance $\sigma^2=1$ is simple.
+
+The other type is the \textit{composite hypothesis}:
+\begin{definition}[Composite hypothesis]
+	A \textit{composite hypothesis} is one that does not uniquely specify the distribution. Instead, it states that the parameters lie within a certain range or subset of the parameter space:
+	\[
+	p(x) \equiv p(x; H_i, \theta) \quad \theta \in \Theta_i
+	\]
+\end{definition}
+
+In this case, the distribution remains dependent on one or more parameters that are not strictly fixed. For example, the hypothesis that $x$ follows a Normal distribution with mean $\mu > 10$ is composite, as it encompasses an infinite set of possible distributions (one for every possible value of $\mu$ greater than 10).
+
+
+
