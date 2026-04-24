@@ -12,6 +12,7 @@ venv/
 *.pdf
 
 # LaTeX auxiliary files
+.build/
 *.aux
 *.lof
 *.log
