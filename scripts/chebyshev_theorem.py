@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from asd import utils
 
+# Define parameters
 MU = 3
 SI = 1.2
 K = 1.5
@@ -10,6 +11,7 @@ Y_VALS = K * SI
 
 def indicator_function(x, mu, threshold):
     '''Implement the indicator function'''
+
     return np.where(np.abs(x - mu) >= threshold, 1.0, 0.0)
 
 xx = np.linspace(MU - 4, MU + 4, 1000)

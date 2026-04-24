@@ -1,84 +1,73 @@
+'''
+Script that generates a plot to illustrate the construction of Bayesian credible intervals 
+using different ordering methods.
+'''
+import math
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 from asd import utils
 
-# Grid for mu
-m = np.linspace(0, 10, 1000)
+# Define parameters
+PRIOR = 0.1 # Prior for Uniform(0, 10)
+ALPHA = 0.10
 
-# Prior: Uniform(0,10)
-prior = 0.1
+def compute_posterior(mu, n):
+    '''Compute the posterior for a Poisson distribution at given mu and observed count'''
 
-# Posterior for observed k
-def posterior(m, k):
-    unnorm = prior * np.exp(-m) * m**k / math.factorial(k)
-    norm = np.trapezoid(unnorm, m)   # updated integration
+    likelihood = np.exp(-mu) * mu**n / math.factorial(n)
+    unnorm = PRIOR * likelihood
+    norm = np.trapezoid(unnorm, mu)
     return unnorm / norm
 
+def posterior_interval(mu, post, alpha=0.10):
+    '''Compute the confidence interval using the posterior as the ordering function'''
 
-def posterior_interval(m, post, alpha=0.10):
-    # local grid widths for integration weights
-    w = np.empty_like(m)
-    w[1:-1] = 0.5 * (m[2:] - m[:-2])
-    w[0] = 0.5 * (m[1] - m[0])
-    w[-1] = 0.5 * (m[-1] - m[-2])
-
-    # sort posterior heights descending
+    dmu = mu[1] - mu[0]
     idx = np.argsort(post)[::-1]
+    mass = np.cumsum(post[idx] * dmu)
 
-    # cumulative posterior mass in that ordering
-    mass = np.cumsum(post[idx] * w[idx])
-
-    # keep enough points to reach target probability
     keep = idx[mass <= (1 - alpha)]
-
-    # include first point exceeding threshold
     if len(keep) < len(idx):
         keep = np.append(keep, idx[len(keep)])
-
     keep = np.sort(keep)
 
-    lower = m[keep[0]]
-    upper = m[keep[-1]]
+    lower = mu[keep[0]]
+    upper = mu[keep[-1]]
 
     return lower, upper
 
-# Lower bound 90% credible interval
-def lower_bound(m, post, alpha=0.10):
-    dx = m[1] - m[0]
-    cdf = np.cumsum(post) * dx
+def lower_bound(mu, post, alpha=0.10):
+    '''Compute the confidence interval using the lower bound ordering'''
+
+    dmu = mu[1] - mu[0]
+    cdf = np.cumsum(post * dmu)
     cdf /= cdf[-1]
 
-    return np.interp(alpha, cdf, m), m[-1]
+    return np.interp(alpha, cdf, mu), mu[-1]
 
-
-# Upper bound 90% credible interval
-def upper_bound(m, post, alpha=0.10):
-    dx = m[1] - m[0]
-    cdf = np.cumsum(post) * dx
+def upper_bound(mu, post, alpha=0.10):
+    '''Compute the confidence interval using the upper bound ordering'''
+    dmu = mu[1] - mu[0]
+    cdf = np.cumsum(post * dmu)
     cdf /= cdf[-1]
 
-    return m[0], np.interp(1 - alpha, cdf, m)
+    return mu[0], np.interp(1 - alpha, cdf, mu)
 
-# Values of k to plot
 k_values = [2, 5, 8]
+m = np.linspace(0, 10, 1000)
 
-
-# Plot
+# Generate first plot
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 for k in k_values:
-    post = posterior(m, k)
+    posterior = compute_posterior(m, k)
 
-    # Plot posterior curve
-    ax.plot(m, post, lw=2)
+    ax.plot(m, posterior, lw=2)
 
-    # Peak location for label
-    peak_idx = np.argmax(post)
+    peak_idx = np.argmax(posterior)
     peak_m = m[peak_idx]
-    peak_y = post[peak_idx]
+    peak_y = posterior[peak_idx]
 
-    # Put label near peak
     ax.text(
         peak_m + 0.5,
         peak_y + 0.005,
@@ -94,37 +83,34 @@ ax.grid(True, alpha=0.3)
 plt.savefig("images/bayes_posterior.pgf", bbox_inches='tight')
 plt.close()
 
-### Different intervals:
-
-# Ordering methods for interval calculation
+# Define ordering methods for interval calculation
 ordering = ["Posterior", "Lower bound", "Upper bound"]
+k = 5
 
-k = 5  # fixed observed count
+posterior = compute_posterior(m, k)
 
-post = posterior(m, k)
+lo_hpd, hi_hpd = posterior_interval(m, posterior, alpha=ALPHA)
+lo_low, hi_low = lower_bound(m, posterior, alpha=ALPHA)
+lo_high, hi_high = upper_bound(m, posterior, alpha=ALPHA)
 
-# Calculate the intervals
-lo_hpd, hi_hpd = posterior_interval(m, post, alpha=0.10)
-lo_low, hi_low = lower_bound(m, post, alpha=0.10)
-lo_high, hi_high = upper_bound(m, post, alpha=0.10)
-
-# LaTeX table
+# Generate LaTeX table
 def fmt(a, b):
+    '''Format the interval in LaTeX math mode'''
     return rf"${a:.2f} \leq \mu \leq {b:.2f}$" # format the interval in LaTeX math mode
 
 utils.table_generator(
-    n_columns=2, 
-    labels=(r"Method", r"90\% credible interval"), 
-    content=(["Posterior", "Lower bound", "Upper bound"], [fmt(lo_hpd, hi_hpd), fmt(lo_low, hi_low), fmt(lo_high, hi_high)]),
+    n_columns=2,
+    labels=(r"Method", r"90\% credible interval"),
+    content=(ordering, [fmt(lo_hpd, hi_hpd), fmt(lo_low, hi_low), fmt(lo_high, hi_high)]),
     output_file_name="bayes_interval.tex"
     )
 
-# Plot
+# Generate second plot
 fig, ax = utils.pgf_generator(nrows=1, ncols=3, figsize=(5.5, 3.5), sharey=True)
 
 for i, o in enumerate(ordering):
 
-    # Select interval rule
+    lo, hi = None, None
     if o == "Posterior":
         lo, hi = lo_hpd, hi_hpd
     elif o == "Lower bound":
@@ -132,26 +118,21 @@ for i, o in enumerate(ordering):
     elif o == "Upper bound":
         lo, hi = lo_high, hi_high
 
-    # Plot posterior curve
-    ax[i].plot(m, post, lw=2)
+    ax[i].plot(m, posterior, lw=2)
 
-    # Shade interval
     mask = (m >= lo) & (m <= hi)
-    ax[i].fill_between(m[mask], post[mask], alpha=0.25)
+    ax[i].fill_between(m[mask], posterior[mask], alpha=0.25)
 
-    # Peak location
-    peak_idx = np.argmax(post)
+    peak_idx = np.argmax(posterior)
     peak_m = m[peak_idx]
-    peak_y = post[peak_idx]
+    peak_y = posterior[peak_idx]
 
-    # Title
     ax[i].set_title(o, fontsize=10)
 
-    # Axes formatting
     ax[i].set_xlabel(r"$\mu$")
     ax[i].grid(True, alpha=0.3)
     ax[i].tick_params(axis='y', left=False, labelleft=False)
-# Shared y-label
+
 ax[0].set_ylabel("Posterior density")
 
 plt.savefig("images/bayes_interval.pgf", bbox_inches='tight')
