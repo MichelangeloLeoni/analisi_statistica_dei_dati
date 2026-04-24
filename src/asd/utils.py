@@ -24,8 +24,23 @@ def pgf_generator(**kwargs):
 
     return matplotlib.pyplot.subplots(**kwargs)
 
-def code_snippet_generator():
-    pass
+def table_generator(n_columns, content, output_file_name):
 
-def table_generator():
+    table = r"""
+    \begin{center}
+    \begin{tabular}{|""" + "c|"*n_columns + r"""}
+    \hline
+    """
+
+    table += content
+
+    table += r"""\hline
+    \end{tabular}
+    \end{center}
+    """
+
+    with open(f"tables/{output_file_name}", "w") as f:
+        f.write(table)
+
+def code_snippet_generator():
     pass

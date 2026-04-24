@@ -131,28 +131,19 @@ def fmt_interval(a, b):
     return rf"${a:.3f} \leq \mu \leq {b:.3f}$"
 
 # GENERATE LATEX TABLE
-table = r"""
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
+content = r"""
 $n$ & Wilks & Feldman-Cousins & Central interval \\
 \hline
 """
 for n in n_table:
-    table += (
+    content += (
         f"{n} & "
         f"{fmt_interval(intervals_cache[n][0], intervals_cache[n][1])} & "
         f"{fmt_interval(lr_intervals[n][0], lr_intervals[n][1])} & "
         f"{fmt_interval(central_intervals[n][0], central_intervals[n][1])} \\\\\n"
     )
-table += r"""\hline
-\end{tabular}
-\end{center}
-"""
 
-# WRITE TABLE TO FILE
-with open("tables/llr_intervals.tex", "w") as f:
-    f.write(table)
+utils.table_generator(4, content, "llr_poisson_intervals.tex")
 
 # WRITE CODE SNIPPET TO FILE
 def extract_snippet(filename, start_tag, end_tag):
