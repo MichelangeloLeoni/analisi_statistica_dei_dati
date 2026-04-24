@@ -17,6 +17,7 @@ matplotlib.rcParams.update({
     """
 })
 
+# START SNIPPET
 def calculate_llr_intervals(n_values, cl=0.95):
     '''Compute LLR (Wilks) intervals for a range of observed counts n.'''
     critical_value = chi2.ppf(cl, df=1)
@@ -108,6 +109,7 @@ def coverage_error(mu, n_test, intervals_cache):
         if low <= mu <= high:
             prob_covered += poisson.pmf(n, mu)
     return 1 - prob_covered
+# END SNIPPET
 
 # COMPUTE COVERAGE ERROR
 mu_axis = np.linspace(0.001, 17, 1000)
@@ -164,3 +166,38 @@ table += r"""\hline
 # WRITE TABLE TO FILE
 with open("tables/llr_intervals.tex", "w") as f:
     f.write(table)
+
+# WRITE CODE SNIPPET TO FILE
+def extract_snippet(filename, start_tag, end_tag):
+    with open(filename, "r") as f:
+        lines = f.readlines()
+
+    inside = False
+    snippet = []
+
+    for line in lines:
+        if start_tag in line:
+            inside = True
+            continue
+        if end_tag in line:
+            break
+        if inside:
+            snippet.append(line)
+
+    return "".join(snippet)
+
+
+snippet_code = extract_snippet(
+    __file__,
+    "START SNIPPET",
+    "END SNIPPET"
+)
+
+latex_code = r"""
+\begin{minted}[fontsize=\small, linenos, breaklines]{python}
+""" + snippet_code + r"""
+\end{minted}
+"""
+
+with open("code/code_llr_poisson.tex", "w") as f:
+    f.write(latex_code)

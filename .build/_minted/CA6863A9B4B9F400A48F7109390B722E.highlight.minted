@@ -1,0 +1,94 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{calculate\PYGZus{}llr\PYGZus{}intervals}\PYG{p}{(}\PYG{n}{n\PYGZus{}values}\PYG{p}{,} \PYG{n}{cl}\PYG{o}{=}\PYG{l+m+mf}{0.95}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}Compute LLR (Wilks) intervals for a range of observed counts n.\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{critical\PYGZus{}value} \PYG{o}{=} \PYG{n}{chi2}\PYG{o}{.}\PYG{n}{ppf}\PYG{p}{(}\PYG{n}{cl}\PYG{p}{,} \PYG{n}{df}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{n}{intervals} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+
+    \PYG{k}{for} \PYG{n}{n} \PYG{o+ow}{in} \PYG{n}{n\PYGZus{}values}\PYG{p}{:}
+
+        \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{f}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{)}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{n} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{k}{return} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{critical\PYGZus{}value}
+            \PYG{k}{if} \PYG{n}{mu} \PYG{o}{\PYGZlt{}}\PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{k}{return} \PYG{l+m+mf}{1e9}
+            \PYG{k}{return} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{p}{(}\PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{n} \PYG{o}{+} \PYG{n}{n} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{n} \PYG{o}{/} \PYG{n}{mu}\PYG{p}{)}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{critical\PYGZus{}value}
+
+        \PYG{k}{try}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{n} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{n}{low} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{low} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mf}{1e\PYGZhy{}12}\PYG{p}{,} \PYG{n}{n}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{root}
+
+            \PYG{n}{upper\PYGZus{}guess} \PYG{o}{=} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{10}\PYG{o}{*}\PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,} \PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{10}\PYG{p}{)}
+            \PYG{n}{high} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{f}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{n}{n}\PYG{p}{,} \PYG{n}{upper\PYGZus{}guess}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{root}
+
+            \PYG{n}{intervals}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{low}\PYG{p}{,} \PYG{n}{high}\PYG{p}{)}\PYG{p}{)}
+
+        \PYG{k}{except} \PYG{n+ne}{ValueError}\PYG{p}{:}
+            \PYG{n}{intervals}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{n}{intervals}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{calculate\PYGZus{}lr\PYGZus{}interval\PYGZus{}mu}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{mu\PYGZus{}grid}\PYG{p}{,} \PYG{n}{cl}\PYG{o}{=}\PYG{l+m+mf}{0.95}\PYG{p}{,} \PYG{n}{n\PYGZus{}max}\PYG{o}{=}\PYG{l+m+mi}{100}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}Compute the Feldman\PYGZhy{}Cousins interval for a given observed count n\PYGZus{}obs.\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{accepted\PYGZus{}mu} \PYG{o}{=} \PYG{p}{[}\PYG{p}{]}
+    \PYG{n}{n\PYGZus{}values} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{n\PYGZus{}max}\PYG{p}{)}
+
+    \PYG{k}{for} \PYG{n}{mu} \PYG{o+ow}{in} \PYG{n}{mu\PYGZus{}grid}\PYG{p}{:}
+        \PYG{n}{pdf} \PYG{o}{=} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{pmf}\PYG{p}{(}\PYG{n}{n\PYGZus{}values}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{)}
+        \PYG{n}{mu\PYGZus{}hat} \PYG{o}{=} \PYG{n}{n\PYGZus{}values}
+        \PYG{n}{den} \PYG{o}{=} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{pmf}\PYG{p}{(}\PYG{n}{n\PYGZus{}values}\PYG{p}{,} \PYG{n}{mu\PYGZus{}hat}\PYG{p}{)}
+        \PYG{n}{R} \PYG{o}{=} \PYG{n}{pdf} \PYG{o}{/} \PYG{n}{den}
+
+        \PYG{n}{order} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{R}\PYG{p}{)}\PYG{p}{[}\PYG{p}{:}\PYG{p}{:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+        \PYG{n}{cum} \PYG{o}{=} \PYG{l+m+mi}{0}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{order}\PYG{p}{:}
+            \PYG{n}{cum} \PYG{o}{+}\PYG{o}{=} \PYG{n}{pdf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+            \PYG{k}{if} \PYG{n}{cum} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{n}{cl}\PYG{p}{:}
+                \PYG{n}{c} \PYG{o}{=} \PYG{n}{R}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+                \PYG{k}{break}
+
+        \PYG{n}{mask} \PYG{o}{=} \PYG{n}{R} \PYG{o}{\PYGZgt{}}\PYG{o}{=} \PYG{n}{c}
+
+        \PYG{k}{if} \PYG{n}{n\PYGZus{}obs} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{mask}\PYG{p}{)} \PYG{o+ow}{and} \PYG{n}{mask}\PYG{p}{[}\PYG{n}{n\PYGZus{}obs}\PYG{p}{]}\PYG{p}{:}
+            \PYG{n}{accepted\PYGZus{}mu}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{)}
+
+    \PYG{k}{if} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{accepted\PYGZus{}mu}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{k}{return} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{p}{(}\PYG{n+nb}{min}\PYG{p}{(}\PYG{n}{accepted\PYGZus{}mu}\PYG{p}{)}\PYG{p}{,} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{accepted\PYGZus{}mu}\PYG{p}{)}\PYG{p}{)}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{calculate\PYGZus{}central\PYGZus{}interval\PYGZus{}mu}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{cl}\PYG{o}{=}\PYG{l+m+mf}{0.95}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}Compute the central interval for a given observed count n\PYGZus{}obs.\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{alpha} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{cl}
+
+    \PYG{k}{try}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{n\PYGZus{}obs} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{low} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{f\PYGZus{}low}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{)}\PYG{p}{:}
+                \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{cdf}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{)}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{alpha}\PYG{o}{/}\PYG{l+m+mi}{2}
+
+            \PYG{n}{low} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{f\PYGZus{}low}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mf}{1e\PYGZhy{}12}\PYG{p}{,} \PYG{n}{n\PYGZus{}obs}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{root}
+
+        \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{f\PYGZus{}high}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{)}\PYG{p}{:}
+            \PYG{k}{return} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{cdf}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{alpha}\PYG{o}{/}\PYG{l+m+mi}{2}
+
+        \PYG{n}{high\PYGZus{}guess} \PYG{o}{=} \PYG{n}{n\PYGZus{}obs} \PYG{o}{+} \PYG{l+m+mi}{10} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{20}
+        \PYG{n}{high} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{f\PYGZus{}high}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{high\PYGZus{}guess}\PYG{p}{]}\PYG{p}{)}\PYG{o}{.}\PYG{n}{root}
+
+        \PYG{k}{return} \PYG{p}{(}\PYG{n}{low}\PYG{p}{,} \PYG{n}{high}\PYG{p}{)}
+
+    \PYG{k}{except} \PYG{p}{(}\PYG{n+ne}{ValueError}\PYG{p}{,} \PYG{n+ne}{RuntimeError}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{return} \PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{,} \PYG{n}{np}\PYG{o}{.}\PYG{n}{nan}\PYG{p}{)}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{coverage\PYGZus{}error}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{,} \PYG{n}{n\PYGZus{}test}\PYG{p}{,} \PYG{n}{intervals\PYGZus{}cache}\PYG{p}{)}\PYG{p}{:}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}Calculate the coverage error for a given true mean mu.\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+    \PYG{n}{prob\PYGZus{}covered} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{k}{for} \PYG{n}{n}\PYG{p}{,} \PYG{p}{(}\PYG{n}{low}\PYG{p}{,} \PYG{n}{high}\PYG{p}{)} \PYG{o+ow}{in} \PYG{n+nb}{zip}\PYG{p}{(}\PYG{n}{n\PYGZus{}test}\PYG{p}{,} \PYG{n}{intervals\PYGZus{}cache}\PYG{p}{)}\PYG{p}{:}
+        \PYG{k}{if} \PYG{n}{low} \PYG{o}{\PYGZlt{}}\PYG{o}{=} \PYG{n}{mu} \PYG{o}{\PYGZlt{}}\PYG{o}{=} \PYG{n}{high}\PYG{p}{:}
+            \PYG{n}{prob\PYGZus{}covered} \PYG{o}{+}\PYG{o}{=} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{pmf}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{)}
+    \PYG{k}{return} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{prob\PYGZus{}covered}
+
+\end{MintedVerbatim}

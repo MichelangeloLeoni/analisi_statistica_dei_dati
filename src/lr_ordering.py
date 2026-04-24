@@ -16,6 +16,7 @@ matplotlib.rcParams.update({
     """
 })
 
+# START SNIPPET
 CL = 0.95
 mu = 0.5
 
@@ -63,6 +64,7 @@ if mask[0]:
     starts.insert(0, 0)
 if mask[-1]:
     ends.append(len(mask)-1)
+# END SNIPPET
 
 # Plot
 fig, ax1 = plt.subplots(figsize=(5.5,3.5))
@@ -99,3 +101,37 @@ lines2, labels2 = ax2.get_legend_handles_labels()
 ax1.legend(lines1 + lines2, labels1 + labels2, loc="upper right")
 plt.savefig("images/lr_ordering.pgf", bbox_inches='tight')
 plt.close()
+
+def extract_snippet(filename, start_tag, end_tag):
+    with open(filename, "r") as f:
+        lines = f.readlines()
+
+    inside = False
+    snippet = []
+
+    for line in lines:
+        if start_tag in line:
+            inside = True
+            continue
+        if end_tag in line:
+            break
+        if inside:
+            snippet.append(line)
+
+    return "".join(snippet)
+
+
+snippet_code = extract_snippet(
+    __file__,
+    "START SNIPPET",
+    "END SNIPPET"
+)
+
+latex_code = r"""
+\begin{minted}[fontsize=\small, linenos, breaklines]{python}
+""" + snippet_code + r"""
+\end{minted}
+"""
+
+with open("code/code_lr_ordering.tex", "w") as f:
+    f.write(latex_code)

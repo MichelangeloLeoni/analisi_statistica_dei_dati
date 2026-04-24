@@ -1,6 +1,7 @@
 appunti_lezioni/
 images/
 tables/
+code/
 
 # Python venv
 .venv/
