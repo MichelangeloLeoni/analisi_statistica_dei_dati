@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from asd import utils
 
+# START SNIPPET
 # Define parameters
 PRIOR = 0.1 # Prior for Uniform(0, 10)
 ALPHA = 0.10
@@ -52,6 +53,7 @@ def upper_bound(mu, post, alpha=0.10):
     cdf /= cdf[-1]
 
     return mu[0], np.interp(1 - alpha, cdf, mu)
+# END SNIPPET
 
 k_values = [2, 5, 8]
 m = np.linspace(0, 10, 1000)
@@ -137,3 +139,10 @@ ax[0].set_ylabel("Posterior density")
 
 plt.savefig("images/bayes_interval.pgf", bbox_inches='tight')
 plt.close()
+
+utils.code_snippet_generator(
+    file=__file__,
+    start_tag="# START SNIPPET",
+    end_tag="# END SNIPPET",
+    output_file_name="code_bayes_interval.tex"
+)
