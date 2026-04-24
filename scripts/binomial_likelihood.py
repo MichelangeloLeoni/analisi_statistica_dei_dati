@@ -1,20 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.special import comb
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 k1 = 1
 k2 = 0
@@ -25,7 +12,7 @@ xx = np.linspace(0, 1, 1000)
 def binomial_pmf(k, n, p):
     return comb(n, k) * (p ** k) * ((1 - p) ** (n - k))
 
-fig, ax = plt.subplots(figsize=(5.5, 3.5))
+fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 ax.plot(xx, binomial_pmf(k1, n, xx), label=r'$L_{n=1,k=1}$', color='#1f77b4', lw=1.5)
 ax.plot(xx, binomial_pmf(k2, n, xx), label=r'$L_{n=1,k=0}$', color='#ff7f0e', lw=1.5)

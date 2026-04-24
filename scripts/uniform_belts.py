@@ -1,19 +1,6 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 CL = 0.9
 m_grid = np.linspace(0.0, 12, 500)
@@ -77,7 +64,7 @@ with open("tables/uniform_belts.tex", "w") as f:
     f.write(table)
 
 # Plot
-fig, axes = plt.subplots(1, 2, figsize=(5.5, 3.5), sharey=True)
+fig, axes = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 3.5), sharey=True)
 
 plots = [
     ("Upper ordering", xlow_upper, xhigh_upper),

@@ -1,19 +1,6 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 x = np.array([1, 2, 3, 4, 5, 6, 7])
 exp_x = np.exp(x*0.5)
@@ -21,7 +8,7 @@ exp_x = np.exp(x*0.5)
 median_1 = np.median(x)
 median_2 = np.median(exp_x)
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(5.5, 1.5))
+fig, (ax1, ax2) = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 1.5))
 
 ax1.errorbar(x, np.zeros_like(x), fmt=".")
 ax1.axvline(median_1, linestyle='--')

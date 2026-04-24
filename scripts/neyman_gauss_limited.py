@@ -1,20 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 CL = 0.95
 mu_grid = np.linspace(0.0, 3.0, 200)
@@ -92,7 +79,7 @@ xlow_lr, xhigh_lr = build_belt(acceptance_lr)
 
 
 # Plot
-fig, axes = plt.subplots(1, 2, figsize=(5.5, 3.5), sharey=True)
+fig, axes = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 3.5), sharey=True)
 
 plots = [
     ("Probability ordering", xlow_p, xhigh_p),

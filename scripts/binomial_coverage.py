@@ -1,20 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import binom
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 n = 20                 # sample size
 alpha = 0.05           # 95% confidence intervals
@@ -81,7 +68,8 @@ def build_belt(acceptance_func):
         x_high.append(max(acc))
 
     return np.array(x_low), np.array(x_high)
-fig, axes = plt.subplots(1, 3, figsize=(5.5, 3.5), sharey=True)
+
+fig, axes = utils.pgf_generator(nrows=1, ncols=3, figsize=(5.5, 3.5), sharey=True)
 
 methods = [
     ("Probability ordering", acceptance_p_ordering),

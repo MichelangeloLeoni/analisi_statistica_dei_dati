@@ -1,19 +1,6 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 mu = 3
 sigma = 1.2
@@ -24,7 +11,7 @@ xx = np.linspace(mu - 4, mu + 4, 1000)
 def indicator_function(x, mu, threshold):
     return np.where(np.abs(x - mu) >= threshold, 1.0, 0.0)
 
-fig, ax = plt.subplots(figsize=(5.5, 3.5))
+fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 ax.hlines(y_val, xx.min(), xx.max(), linestyles=":", color='gray', alpha=0.5, label=r'$k\sigma$')
 

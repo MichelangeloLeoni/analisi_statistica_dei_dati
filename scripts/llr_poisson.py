@@ -1,21 +1,8 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 from scipy.stats import chi2, poisson
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif",
-    "font.size": 10,
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 # START SNIPPET
 def calculate_llr_intervals(n_values, cl=0.95):
@@ -119,7 +106,7 @@ intervals_cache = calculate_llr_intervals(n_test)
 errors = np.array([coverage_error(m, n_test, intervals_cache) for m in mu_axis])
 
 # PLOT COVERAGE ERROR
-fig, ax = plt.subplots(figsize=(5.5, 3.5))
+fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 ax.plot(mu_axis, errors, lw=1.0, label=r"$1 - \mathcal{C}(\mu)$")
 ax.axhline(0.05, ls="--", lw=1.0, label=r"Nominal level $0.05$")
 

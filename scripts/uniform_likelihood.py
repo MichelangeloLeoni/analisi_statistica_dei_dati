@@ -1,20 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.special import comb
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 x0 = 1
 xx = np.linspace(0, 10, 1000)
@@ -23,7 +10,7 @@ likelihood = np.zeros_like(xx)
 mask = (xx >= x0)
 likelihood[mask] = 1 / xx[mask]
 
-fig, ax = plt.subplots(figsize=(5.5, 3.5))
+fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 ax.plot(xx, likelihood, label=r'$L_{x_0}(m)$', color='#1f77b4', lw=1.5)
 

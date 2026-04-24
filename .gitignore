@@ -7,6 +7,22 @@ code/
 .venv/
 venv/
 *.stamps
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg
 
 # Compiled LaTeX files
 *.pdf

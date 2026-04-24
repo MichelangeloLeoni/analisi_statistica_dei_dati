@@ -1,20 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
+from asd import utils
 
 # START SNIPPET
 CL = 0.95
@@ -67,7 +54,7 @@ if mask[-1]:
 # END SNIPPET
 
 # Plot
-fig, ax1 = plt.subplots(figsize=(5.5,3.5))
+fig, ax1 = utils.pgf_generator(figsize=(5.5,3.5))
 
 # PDF
 ax1.plot(x, pdf, lw=2, label=r"$\mathcal{N}(x|\mu)$")

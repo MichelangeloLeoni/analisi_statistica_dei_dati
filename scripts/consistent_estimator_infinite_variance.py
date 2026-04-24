@@ -1,22 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 import os
-
-# Configurazione Backend PGF
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-        \providecommand{\mathdefault}[1]{#1}
-    """
-})
+from asd import utils
 
 if not os.path.exists("images"):
     os.makedirs("images")
@@ -24,7 +9,7 @@ if not os.path.exists("images"):
 N_values = [2, 5, 10]
 colors = ['#1f77b4', '#ff7f0e', '#2ca02c']
 
-fig, ax = plt.subplots(figsize=(5.5, 3.8))
+fig, ax = utils.pgf_generator(figsize=(5.5, 3.8))
 
 for i, N in enumerate(N_values):
     x = np.array([-N**2, 0, N**2])

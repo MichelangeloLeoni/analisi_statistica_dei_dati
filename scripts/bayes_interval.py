@@ -1,21 +1,7 @@
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 import math
-
-matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "text.usetex": True,
-    "pgf.rcfonts": False,
-    "font.family": "serif", 
-    "font.size": 10,  
-    "pgf.preamble": r"""
-        \usepackage{amsmath}
-        \usepackage{mathrsfs}
-    """
-})
-
+from asd import utils
 
 # Grid for mu
 m = np.linspace(0, 10, 1000)
@@ -79,7 +65,7 @@ k_values = [2, 5, 8]
 
 
 # Plot
-fig, ax = plt.subplots(figsize=(5.5, 3.5))
+fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 for k in k_values:
     post = posterior(m, k)
