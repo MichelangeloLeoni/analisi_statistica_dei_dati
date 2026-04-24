@@ -1,67 +1,76 @@
+'''
+Script that compute the confidence interval in the poissonian case using:
+- llr method
+- central interval
+- feldman-cousins method
+then populate a latex table to be put on the notes.
+For the llr method is computed and plotted the coverage error.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 from scipy.stats import chi2, poisson
 from asd import utils
 
+# Define parameters
+CL = 0.95
+
 # START SNIPPET
-def calculate_llr_intervals(n_values, cl=0.95):
-    '''Compute LLR (Wilks) intervals for a range of observed counts n.'''
+def calculate_llr_intervals(n_values, cl=CL):
+    '''Compute LLR (Wilks) interval at confidence level cl for a range of observed counts n_values.'''
+
     critical_value = chi2.ppf(cl, df=1)
     intervals = []
 
     for n in n_values:
 
-        def f(mu):
+        def lam(mu, n=n):
+            '''Compute the log-likelihood-ratio for the poissonian case.'''
             if n == 0:
                 return 2 * mu - critical_value
             if mu <= 0:
                 return 1e9
             return 2 * (mu - n + n * np.log(n / mu)) - critical_value
 
-        try:
-            if n == 0:
-                low = 0.0
-            else:
-                low = root_scalar(f, bracket=[1e-12, n]).root
+        if n == 0:
+            low = 0.0
+        else:
+            low = root_scalar(lam, bracket=[1e-12, n]).root
 
-            upper_guess = max(n + 10*np.sqrt(n + 1), n + 10)
-            high = root_scalar(f, bracket=[n, upper_guess]).root
+        upper_guess = max(n + 10*np.sqrt(n + 1), n + 10)
+        high = root_scalar(lam, bracket=[n, upper_guess]).root
 
-            intervals.append((low, high))
-
-        except ValueError:
-            intervals.append((np.nan, np.nan))
+        intervals.append((low, high))
 
     return intervals
 
-def calculate_lr_interval_mu(n_obs, mu_grid, cl=0.95, n_max=100):
-    '''Compute the Feldman-Cousins interval for a given observed count n_obs.'''
+def calculate_lr_interval_mu(n_obs, mu_grid, cl=0.95, n_range=np.arange(0, 100)):
+    '''
+    Compute the Feldman-Cousins interval at confidence level cl
+    for a given observed count n_obs, building the neyman belt for parameter values mu_grid.
+    '''
+
     accepted_mu = []
-    n_values = np.arange(0, n_max)
 
     for mu in mu_grid:
-        pdf = poisson.pmf(n_values, mu)
-        mu_hat = n_values
-        den = poisson.pmf(n_values, mu_hat)
-        R = pdf / den
+        pdf = poisson.pmf(n_range, mu)
+        mu_hat = n_range
+        den = poisson.pmf(n_range, mu_hat)
+        r = pdf / den
 
-        order = np.argsort(R)[::-1]
+        order = np.argsort(r)[::-1]
 
         cum = 0
         for i in order:
             cum += pdf[i]
             if cum >= cl:
-                c = R[i]
+                c = r[i]
                 break
 
-        mask = R >= c
+        mask = r >= c
 
         if n_obs < len(mask) and mask[n_obs]:
             accepted_mu.append(mu)
-
-    if len(accepted_mu) == 0:
-        return (np.nan, np.nan)
 
     return (min(accepted_mu), max(accepted_mu))
 
@@ -98,14 +107,14 @@ def coverage_error(mu, n_test, intervals_cache):
     return 1 - prob_covered
 # END SNIPPET
 
-# COMPUTE COVERAGE ERROR
+# Compute coverage error
 mu_axis = np.linspace(0.001, 17, 1000)
 mu_span = np.linspace(0.0001, 100, 1000)
 n_test = np.arange(0, 51)
 intervals_cache = calculate_llr_intervals(n_test)
 errors = np.array([coverage_error(m, n_test, intervals_cache) for m in mu_axis])
 
-# PLOT COVERAGE ERROR
+# Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 ax.plot(mu_axis, errors, lw=1.0, label=r"$1 - \mathcal{C}(\mu)$")
 ax.axhline(0.05, ls="--", lw=1.0, label=r"Nominal level $0.05$")
@@ -119,30 +128,31 @@ ax.legend()
 plt.savefig("images/llr_poisson_coverage.pgf", bbox_inches="tight")
 plt.close()
 
-# COMPUTE INTERVALS FOR TABLE
+# Compute intervals for the table
 n_table = np.concatenate([np.arange(0, 10), [50]])
 lr_intervals = {n: calculate_lr_interval_mu(n, mu_span) for n in n_table}
 central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
 
-# FORMAT TABLE
+# Format table content
 def fmt_interval(a, b):
+    '''Format an interval for LaTeX.'''
     if np.isnan(a) or np.isnan(b):
         return r"$\text{--}$"
     return rf"${a:.3f} \leq \mu \leq {b:.3f}$"
 
-# GENERATE LATEX TABLE
+# Generate table
 fmt_lr_intervals = [fmt_interval(*lr_intervals[n]) for n in n_table]
 fmt_central_intervals = [fmt_interval(*central_intervals[n]) for n in n_table]
 fmt_wisks = [fmt_interval(*intervals_cache[i]) for i in n_table]
 
 utils.table_generator(
-    n_columns=4, 
-    labels=("$n$", "Wilks", "Feldman-Cousins", "Central interval"), 
-    content=(n_table, fmt_wisks, fmt_lr_intervals, fmt_central_intervals), 
+    n_columns=4,
+    labels=("$n$", "Wilks", "Feldman-Cousins", "Central interval"),
+    content=(n_table, fmt_wisks, fmt_lr_intervals, fmt_central_intervals),
     output_file_name="llr_poisson_intervals.tex"
     )
 
-# WRITE CODE SNIPPET TO FILE
+# Generate code snippet
 utils.code_snippet_generator(
     start_tag="# START SNIPPET",
     end_tag="# END SNIPPET",
