@@ -42,26 +42,16 @@ lo_upper = x0 / CL
 lo_lr = x0
 hi_lr = x0 / (1 - CL)
 
-
 # LaTeX table
 def fmt(a, b):
     return rf"${a:.2f} \leq m \leq {b:.2f}$" # format the interval in LaTeX math mode
 
-table = rf"""
-\begin{{center}}
-\begin{{tabular}}{{|l|c|}}
-\hline
-Method & 90\% confidence interval \\
-\hline
-Lower bound & ${lo_upper:.2f} \leq m$ \\
-LR bound & {fmt(lo_lr, hi_lr)} \\
-\hline
-\end{{tabular}}
-\end{{center}}
-"""
-
-with open("tables/uniform_belts.tex", "w") as f:
-    f.write(table)
+utils.table_generator(
+    n_columns=2,
+    labels=("Method", r"90\% confidence interval"),
+    content=(["Lower bound", "LR bound"], [rf"$ {lo_upper:.2f} \leq m$", fmt(lo_lr, hi_lr)]),
+    output_file_name="uniform_belts.tex"
+    )
 
 # Plot
 fig, axes = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 3.5), sharey=True)

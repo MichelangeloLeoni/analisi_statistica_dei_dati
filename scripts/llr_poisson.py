@@ -131,19 +131,16 @@ def fmt_interval(a, b):
     return rf"${a:.3f} \leq \mu \leq {b:.3f}$"
 
 # GENERATE LATEX TABLE
-content = r"""
-$n$ & Wilks & Feldman-Cousins & Central interval \\
-\hline
-"""
-for n in n_table:
-    content += (
-        f"{n} & "
-        f"{fmt_interval(intervals_cache[n][0], intervals_cache[n][1])} & "
-        f"{fmt_interval(lr_intervals[n][0], lr_intervals[n][1])} & "
-        f"{fmt_interval(central_intervals[n][0], central_intervals[n][1])} \\\\\n"
-    )
+fmt_lr_intervals = [fmt_interval(*lr_intervals[n]) for n in n_table]
+fmt_central_intervals = [fmt_interval(*central_intervals[n]) for n in n_table]
+fmt_wisks = [fmt_interval(*intervals_cache[i]) for i in n_table]
 
-utils.table_generator(4, content, "llr_poisson_intervals.tex")
+utils.table_generator(
+    n_columns=4, 
+    labels=("$n$", "Wilks", "Feldman-Cousins", "Central interval"), 
+    content=(n_table, fmt_wisks, fmt_lr_intervals, fmt_central_intervals), 
+    output_file_name="llr_poisson_intervals.tex"
+    )
 
 # WRITE CODE SNIPPET TO FILE
 def extract_snippet(filename, start_tag, end_tag):

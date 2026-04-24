@@ -112,25 +112,15 @@ lo_high, hi_high = upper_bound(m, post, alpha=0.10)
 def fmt(a, b):
     return rf"${a:.2f} \leq \mu \leq {b:.2f}$" # format the interval in LaTeX math mode
 
-table = rf"""
-\begin{{center}}
-\begin{{tabular}}{{|l|c|}}
-\hline
-Method & 90\% credible interval \\
-\hline
-Posterior & {fmt(lo_hpd, hi_hpd)} \\
-Lower bound & {fmt(lo_low, hi_low)} \\
-Upper bound & {fmt(lo_high, hi_high)} \\
-\hline
-\end{{tabular}}
-\end{{center}}
-"""
-
-with open("tables/bayes_interval.tex", "w") as f:
-    f.write(table)
+utils.table_generator(
+    n_columns=2, 
+    labels=(r"Method", r"90\% credible interval"), 
+    content=(["Posterior", "Lower bound", "Upper bound"], [fmt(lo_hpd, hi_hpd), fmt(lo_low, hi_low), fmt(lo_high, hi_high)]),
+    output_file_name="bayes_interval.tex"
+    )
 
 # Plot
-fig, ax = plt.subplots(1, 3, figsize=(5.5, 3.5), sharey=True)
+fig, ax = utils.pgf_generator(nrows=1, ncols=3, figsize=(5.5, 3.5), sharey=True)
 
 for i, o in enumerate(ordering):
 

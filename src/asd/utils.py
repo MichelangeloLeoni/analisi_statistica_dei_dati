@@ -24,7 +24,20 @@ def pgf_generator(**kwargs):
 
     return matplotlib.pyplot.subplots(**kwargs)
 
-def table_generator(n_columns, content, output_file_name):
+def table_generator(n_columns: int, labels: tuple, content: tuple, output_file_name: str):
+    '''
+    Generates a LaTeX table and writes it to a file. At the moment the content is expected to be 
+    already formatted as LaTeX math mode strings, but this can be extended in the future to allow
+    for more flexible content formatting.
+
+    Parameters:
+        n_columns: Number of columns in the table.
+        labels: Tuple of column labels.
+            e.g. ("$n$", "Wilks", "Feldman-Cousins", "Central interval")
+        content: Tuple of numpy arrays or lists, each containing the content for a column.
+            e.g. (n_table, wilks_intervals, lr_intervals, central_intervals)
+        output_file_name: Name of the output .tex file to write the table to.
+    '''
 
     table = r"""
     \begin{center}
@@ -32,14 +45,30 @@ def table_generator(n_columns, content, output_file_name):
     \hline
     """
 
-    table += content
+    for i, label in enumerate(labels):
+        table += f" {label} "
+        if i < n_columns - 1:
+            table += "& "
 
-    table += r"""\hline
+    table += r"""\\
+    \hline
+    """
+
+    for i in range(len(content[0])):
+        for j, col in enumerate(content):
+            table += f" {col[i]} "
+            if j < n_columns - 1:
+                table += "& "
+        table += r"""\\
+            \hline
+            """
+
+    table += r"""
     \end{tabular}
     \end{center}
     """
 
-    with open(f"tables/{output_file_name}", "w") as f:
+    with open(f"tables/{output_file_name}", "w", encoding="utf-8") as f:
         f.write(table)
 
 def code_snippet_generator():
