@@ -1,0 +1,16 @@
+[project]
+name = "asd"
+version = "0.1.0"
+description = "Utilities library for the asd notes."
+readme = "README.md"
+requires-python = ">=3.8"
+
+dependencies = [
+    "scipy",
+    "numpy",
+    "matplotlib"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
