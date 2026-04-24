@@ -11,7 +11,7 @@ else
 endif
 
 MAIN = analisi_statistica_dei_dati
-PY_DIR = src
+PY_DIR = scripts
 OUT_DIR = .build
 STAMP_DIR = .stamps
 
