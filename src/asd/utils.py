@@ -71,5 +71,39 @@ def table_generator(n_columns: int, labels: tuple, content: tuple, output_file_n
     with open(f"tables/{output_file_name}", "w", encoding="utf-8") as f:
         f.write(table)
 
-def code_snippet_generator():
-    pass
+def code_snippet_generator(start_tag, end_tag, output_file_name, file=__file__):
+    '''
+    Extracts a code snippet from the current file between specified start and end tags, 
+    formats it as a LaTeX minted environment, and writes it to a .tex file.
+    Parameters:
+        start_tag: String that marks the beginning of the code snippet in the source file.
+        end_tag: String that marks the end of the code snippet in the source file.
+        output_file_name: Name of the output .tex file to write the code snippet to.
+        file: The source file to read the code snippet from (default is the current file).
+    '''
+
+    with open(file, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    inside = False
+    snippet = []
+
+    for line in lines:
+        if start_tag in line:
+            inside = True
+            continue
+        if end_tag in line:
+            break
+        if inside:
+            snippet.append(line)
+
+    snippet_code = "".join(snippet)
+
+    latex_code = r"""
+    \begin{minted}[fontsize=\small, linenos, breaklines]{python}
+    """ + snippet_code + r"""
+    \end{minted}
+    """
+
+    with open(f"code/{output_file_name}", "w", encoding="utf-8") as f:
+        f.write(latex_code)

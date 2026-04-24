@@ -143,36 +143,9 @@ utils.table_generator(
     )
 
 # WRITE CODE SNIPPET TO FILE
-def extract_snippet(filename, start_tag, end_tag):
-    with open(filename, "r") as f:
-        lines = f.readlines()
-
-    inside = False
-    snippet = []
-
-    for line in lines:
-        if start_tag in line:
-            inside = True
-            continue
-        if end_tag in line:
-            break
-        if inside:
-            snippet.append(line)
-
-    return "".join(snippet)
-
-
-snippet_code = extract_snippet(
-    __file__,
-    "START SNIPPET",
-    "END SNIPPET"
+utils.code_snippet_generator(
+    start_tag="# START SNIPPET",
+    end_tag="# END SNIPPET",
+    output_file_name="code_llr_poisson.tex",
+    file=__file__
 )
-
-latex_code = r"""
-\begin{minted}[fontsize=\small, linenos, breaklines]{python}
-""" + snippet_code + r"""
-\end{minted}
-"""
-
-with open("code/code_llr_poisson.tex", "w") as f:
-    f.write(latex_code)
