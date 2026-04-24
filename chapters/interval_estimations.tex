@@ -479,7 +479,7 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 \end{example}
 \todo{Are you sure that presenting the entire derivation of the $\chi^2$ distribution as an example is a good idea? imho this part deserves to be a main topic to be placed outside the example.}
 
-\begin{example}
+\begin{example}\label{ex:llr_poissonian}
 	We have already shown how to compute confidence intervals numerically in the Poisson case. We now derive an approximate solution using the log-likelihood ratio (LLR) method.
 	
 	Consider a single observation
@@ -549,3 +549,54 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	
 	If a more accurate construction is required, one can resort to a fully numerical approach, for instance by computing the distribution of $\lambda(n,\mu)$ via Monte Carlo and inverting it to obtain intervals with exact coverage.
 \end{example}
+
+If you're as confused as I was when I first approached the topic of interval estimation (frankly I'm still more than a bit confused :|), it could be helpful to make a real quick and general summary of the concepts introduced\sidenote{The reader is warned that in the following we are going to talk about the core concepts in a mathematically loose way and in a more qualitative manner then previously done. The many imprecision (and possibly blunders) that we are going to make are to be intended as a genuine attempt at making the bigger picture clearer. If you think you already have a good grasp on the matter, you can skip what comes!}. We can exploit the example on the use of LLR on Poissonian (\ref{ex:llr_poissonian}) to sum up some concepts. To build the table we used three different approaches:
+\begin{itemize}
+	\item Wilks' method
+	\item Central interval (equal-tail)
+	\item Feldman-Cousins method
+\end{itemize}
+We can gain some further insight on the matter by better understanding the difference between this different methods.
+
+From the point of view of Neyman's construction of confidence intervals, all three methods can be understood as different ways of defining the same fundamental object: a region of acceptance $\mathcal{A}(\mu)$ in the space of possible observations $n$, such that
+\[
+P(n \in \mathcal{A}(\mu) \mid \mu) = 1 - \alpha
+\]
+
+Once this region is defined for every possible value of $\mu$, the confidence interval for a given observed value $n_{\text{obs}}$ is obtained by inversion:
+\[
+\text{CI}(n_{\text{obs}}) = \{ \mu \;:\; n_{\text{obs}} \in \mathcal{A}(\mu) \}
+\]
+
+The key difference between the methods lies in how this construction is practically implemented, and in particular in whether one works directly in terms of $\mu$ or instead constructs a full mapping between $\mu$ and the distribution of $n$.
+
+In the central (equal-tail) construction and in the Wilks (log-likelihood-ratio) approach, one effectively works in a \emph{pointwise} manner. That is, for a fixed observed value $n_{\text{obs}}$, one directly solves conditions of the form
+\[
+\text{(quantile condition in } \mu \text{)} \quad \text{or} \quad t(n_{\text{obs}}, \mu) = \text{constant}
+\]
+to determine the set of values of $\mu$ compatible with the observation. In these cases, there is no need to explicitly construct the full acceptance region $\mathcal{A}(\mu)$ for every $\mu$ in advance; instead, the interval is obtained by inverting a condition evaluated at the observed $n_{\text{obs}}$.
+
+The Feldman--Cousins construction is conceptually different because it implements Neyman's method in its most explicit form. One does not start from a fixed observation $n_{\text{obs}}$, but instead builds the entire \emph{confidence belt} in the $(\mu, n)$ plane.
+
+The procedure is the following: for each fixed value of $\mu$, one considers all possible outcomes $n$ and defines an ordering via the likelihood ratio
+\[
+R(n,\mu) = \frac{P(n;\hat\mu_n)}{P(n;\hat\mu)}
+\]
+For this fixed $\mu$, the values of $n$ are sorted according to decreasing $R(n;\mu)$, and then included in the acceptance region $\mathcal{A}(\mu)$ until the desired total probability is reached:
+\[
+\sum_{n \in \mathcal{A}(\mu)} P(n;\mu) = 1 - \alpha
+\]
+
+Repeating this procedure for all values of $\mu$ produces a complete mapping:
+\[
+\mu \;\longrightarrow\; \mathcal{A}(\mu)
+\]
+which can be visualized as a \emph{confidence belt} in the $(\mu,n)$ plane. The final confidence interval is then obtained by slicing this belt at the observed value $n_{\text{obs}}$:
+\[
+\text{CI}(n_{\text{obs}}) = \{ \mu : n_{\text{obs}} \in \mathcal{A}(\mu) \}
+\]
+
+The crucial conceptual difference can now be summarized more clearly: Wilks and central intervals effectively work by \emph{inverting a condition at fixed $n$}, while Feldman--Cousins requires the explicit construction of the full Neyman confidence belt by scanning over $\mu$ and defining acceptance regions in the observation space for each of them.
+
+As a consequence, Feldman--Cousins is computationally more involved, but it is also the most faithful implementation of Neyman's construction, since it makes explicit the full two-dimensional structure underlying the problem.
+\todo{This whole part is really an experiment and I'm not satisfied with the result. I'll try to refine it little by little, because I think that a qualitative overview of the subject can be hugely helpful.}
