@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from scipy.special import comb
 from asd import utils
 
+# Define parameters
 K1 = 1
 K2 = 0
 N = 1
@@ -18,6 +19,7 @@ def binomial_pmf(k, n, p):
 
     return comb(n, k) * (p ** k) * ((1 - p) ** (n - k))
 
+# Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 ax.plot(xx, binomial_pmf(K1, N, xx), label=r'$L_{n=1,k=1}$', color='#1f77b4', lw=1.5)
