@@ -526,13 +526,13 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	\lambda(n,\mu) = \chi^2_{1,\mathrm{CL}}
 	\]
 	
-	The table below reports the likelihood-ratio intervals for observed counts $n = 0, \dots, 9$:
+	The following table compares the likelihood-ratio (Wilks) intervals with the exact Feldman-Cousins construction and the central (equal-tail) intervals, for $n = 0, \dots, 9, 50$:
 	
 	\input{tables/llr_intervals.tex}
 	
-	It is important to stress that these intervals are only asymptotically valid. In the Poisson case, especially for small values of $n$, the discrete nature of the data leads to deviations from the nominal coverage.
-	
-	To quantify this effect, one can compute the coverage function as in \ref{eq:coverage}:
+	Differences are most visible at small $n$: the Wilks intervals are typically narrower, while the central ones are more conservative, whereas Feldman-Cousins provides the reference construction with correct coverage. As $n$ increases, all methods converge, reflecting the asymptotic validity of the likelihood-ratio approximation.
+
+	This behavior can be quantified through the coverage function (see \ref{eq:coverage}):
 	\[
 	\mathcal{C}(\mu) = \sum_{n \in \text{accepted}} \text{Poisson}(n;\mu)
 	\]
@@ -549,4 +549,3 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	
 	If a more accurate construction is required, one can resort to a fully numerical approach, for instance by computing the distribution of $\lambda(n,\mu)$ via Monte Carlo and inverting it to obtain intervals with exact coverage.
 \end{example}
-\todo{I still have to add another column to the table for the "central limit" intervals, as in the slides. I haven't managed yet to reproduce the number in the slide. I don't understand which method was used to compute those numbers. :(}
