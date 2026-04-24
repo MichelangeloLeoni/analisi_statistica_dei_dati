@@ -550,54 +550,85 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	If a more accurate construction is required, one can resort to a fully numerical approach, for instance by computing the distribution of $\lambda(n,\mu)$ via Monte Carlo and inverting it to obtain intervals with exact coverage.
 \end{example}
 
-\subsubsection{A unifying perspective}
-If you're as confused as I was when I first approached the topic of interval estimations (frankly I'm still more than a bit confused :|), it could be helpful to make a real quick and general summary of the concepts introduced\sidenote{The reader is warned that in the following we are going to talk about the core concepts in a mathematically loose way and in a more qualitative manner then previously done. The many imprecision (and possibly blunders) that we are going to make are to be intended as a genuine attempt at making the bigger picture clearer. If you think you already have a good grasp on the matter, you can skip what comes!}. We can exploit the example on the use of LLR on Poissonian (\ref{ex:llr_poissonian}) to sum up some concepts. To build the table we used three different approaches:
+\subsection[A unifying perspective]{A unifying perspective\protect\sidenotemark}
+\sidenotetext{The reader is warned that in the following we are going to talk about the core concepts in a mathematically loose way and in a more qualitative manner then previously done. The many imprecision (and possibly blunders) that we are going to make are to be intended as a genuine attempt at making the bigger picture clearer. If you think you already have a good grasp on the matter, you can skip what comes!}
+If you're as confused as I was when I first approached the topic of interval estimations (frankly I'm still more than a bit confused :|), it could be helpful to make a real quick and general summary of the concepts introduced. We can exploit the example on the use of LLR on Poissonian (\ref{ex:llr_poissonian}) to sum up some concepts. To build the table we used three different approaches:
 \begin{itemize}
 	\item Wilks' method
 	\item Central interval (equal-tail)
 	\item Feldman-Cousins method
 \end{itemize}
-We can gain some further insight on the matter by better understanding the difference between this different methods.
+We can gain some further insight on the matter by better understanding the difference between this methods.
 
-From the point of view of Neyman's construction of confidence intervals, all three methods can be understood as different ways of defining the same fundamental object: a region of acceptance $\mathcal{P}(\mu)$ in the space of possible observations $n$, such that
+From the point of view of Neyman’s construction, all these approaches aim at defining the same fundamental object: an acceptance region $\mathcal{P}(\theta)$ in the space of possible observations, such that
 \[
-P(n \in \mathcal{P}(\mu) \mid \mu) = CL
+P(x \in \mathcal{P}(\theta)\mid \theta) = CL
 \]
 
-Once this region is defined for every possible value of $\mu$, the confidence interval for a given observed value $n_{\text{obs}}$ is obtained by inversion:
+Once this region is specified for every value of $\theta$, the confidence interval corresponding to an observed value $x_ {obs}$ is obtained by inversion:
 \[
-\text{CI}(n_{\text{obs}}) = \{ \mu: n_{\text{obs}} \in \mathcal{P}(\mu) \}
+\text{CI}(x_{\text{obs}}) = \{ \theta: x_{\text{obs}} \in \mathcal{P}(\theta) \}
 \]
 
-The key difference between the methods lies in how this construction is practically implemented, and in particular in whether one works directly in terms of $\mu$ or instead constructs a full mapping between $\mu$ and the distribution of $n$.
+In this sense, all interval estimation methods differ only in how the acceptance regions $\mathcal{P}(\theta)$ are constructed.
 
-In the central (equal-tail) construction and in the Wilks (log-likelihood-ratio) approach, one effectively works in a \emph{pointwise} manner. That is, for a fixed observed value $n_{\text{obs}}$, one directly solves conditions of the form
+A useful way to classify the methods discussed so far is the following.
+
+\paragraph{Explicit Neyman construction}
+
+The Feldman--Cousins method represents the most direct implementation of Neyman’s idea. For each fixed value of $\theta$, one considers all possible outcomes $x$ and introduces an ordering principle (in this case based on the likelihood ratio)
 \[
-\text{(quantile condition in } \mu \text{)} \quad \text{or} \quad \lambda(n_{\text{obs}}, \mu) = \text{constant}
+R(x,\theta) = \frac{p(x;\theta)}{p(x;\hat{\theta}_{MLE})}
 \]
-to determine the set of values of $\mu$ compatible with the observation. In these cases, there is no need to explicitly construct the full acceptance region $\mathcal{P}(\mu)$ for every $\mu$ in advance; instead, the interval is obtained by inverting a condition evaluated at the observed $n_{\text{obs}}$.
-
-The Feldman--Cousins construction is conceptually different because it implements Neyman's method in its most explicit form. One does not start from a fixed observation $n_{\text{obs}}$, but instead builds the entire \emph{confidence belt} in the $(\mu, n)$ plane.
-
-The procedure is the following: for each fixed value of $\mu$, one considers all possible outcomes $n$ and defines an ordering via the likelihood ratio
+The values of $x$ are then included in the acceptance region $\mathcal{P}(\theta)$ in order of decreasing $R(x,\theta)$ until the desired probability content $CL$ is reached:
 \[
-R(n,\mu) = \frac{P(n;\mu)}{P(n;\hat\mu_n)}
-\]
-For this fixed $\mu$, the values of $n$ are sorted according to decreasing $R(n;\mu)$, and then included in the acceptance region $\mathcal{P}(\mu)$ until the desired total probability is reached:
-\[
-\sum_{n \in \mathcal{A}(\mu)} P(n;\mu) = CL
+\int_{x \in \mathcal{P}(\theta)} p(x;\theta)dx = CL
 \]
 
-Repeating this procedure for all values of $\mu$ produces a complete mapping:
+Repeating this procedure for all $\theta$ produces a full mapping
 \[
-\mu \;\longrightarrow\; \mathcal{P}(\mu)
+\theta \longrightarrow \mathcal{P}(\theta)
 \]
-which can be visualized as a \emph{confidence belt} in the $(\mu,n)$ plane. The final confidence interval is then obtained by slicing this belt at the observed value $n_{\text{obs}}$:
-\[
-\text{CI}(n_{\text{obs}}) = \{ \mu : n_{\text{obs}} \in \mathcal{P}(\mu) \}
-\]
+which can be visualized as a confidence belt in the $(\theta, x)$ plane. The interval for a given observation is then obtained by intersecting this belt with the line $x = x_{obs}$.
 
-The crucial conceptual difference can now be summarized more clearly: Wilks and central intervals effectively work by \emph{inverting a condition at fixed $n$}, while Feldman--Cousins requires the explicit construction of the full Neyman confidence belt by scanning over $\mu$ and defining acceptance regions in the observation space for each of them.
+This construction is conceptually complete and guarantees correct coverage by design, but it is often computationally demanding.
 
-As a consequence, Feldman--Cousins is computationally more involved, but it is also the most faithful implementation of Neyman's construction, since it makes explicit the full two-dimensional structure underlying the problem.
+In practice, the acceptance regions are evaluated \emph{numerically} for the different $\theta$, \emph{then} the corresponding interval is extracted from the observed value $x_{obs}$. 
+
+\paragraph{Implicit constructions}
+
+Other methods, such as central intervals and likelihood-ratio (Wilks) intervals, can be understood as implicit implementations of the same idea. In these cases, the acceptance regions are not constructed explicitly for all $\theta$, but are instead obtained by inverting conditions evaluated at the observed value.
+
+For instance:
+\begin{itemize}
+	\item In the central (equal-tail) construction, the interval is obtained by selecting $\theta$ values such that $x_{obs}$ lies between appropriate quantiles of the distribution.
+	\item In the Wilks approach, one considers the log-likelihood ratio
+	\[
+	\lambda(x,\theta) = 2\ln\left(\frac{p(x;\hat{\theta}_{MLE})}{p(x;\theta)}\right)
+	\]
+	and defines the interval through the condition
+	\[
+	\lambda(x_{obs},\theta) \leq q_{CL}
+	\]
+\end{itemize}
+
+These methods rely on statistics whose distribution is known exactly or asymptotically. In particular, Wilks' theorem provides an asymptotic pivotal quantity, allowing one to avoid the explicit construction of the confidence belt.
+
+In practice, one \emph{directly} evaluates the condition at $x_{obs}$ and solves for $\theta$.
+
+\paragraph{Summary}
+
+All the interval estimation procedures discussed can be viewed as implementations of the same underlying idea:
+\begin{itemize}
+	\item define a region in the observation space with probability content $CL$
+	\item invert this construction to obtain a set of plausible parameter values
+\end{itemize}
+
+The difference lies in how this is achieved:
+\begin{itemize}
+	\item explicitly, by constructing the full Neyman belt (Feldman-Cousins);
+	\item implicitly, by exploiting pivotal quantities or approximations (central intervals, Wilks)
+\end{itemize}
+
+In all cases, the objective is to obtain intervals with the desired coverage. The choice of method is therefore guided by practical considerations such as computational cost, optimality criteria, and the validity of asymptotic approximations.
 \todo{This whole part is really an experiment and I'm not satisfied with the result. I'll try to refine it little by little, because I think that a qualitative overview of the subject can be hugely helpful.}
