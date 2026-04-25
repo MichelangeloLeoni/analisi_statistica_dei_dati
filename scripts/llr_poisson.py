@@ -75,28 +75,27 @@ def calculate_lr_interval_mu(n_obs, mu_grid, cl=0.95, n_range=np.arange(0, 100))
     return (min(accepted_mu), max(accepted_mu))
 
 def calculate_central_interval_mu(n_obs, cl=0.95):
-    '''Compute the central interval for a given observed count n_obs.'''
+    '''
+    Compute the central interval for a given observed count n_obs.
+    '''
+
     alpha = 1 - cl
-    
-    try:
-        if n_obs == 0:
-            low = 0.0
-        else:
-            def f_low(mu):
-                return (1 - poisson.cdf(n_obs - 1, mu)) - alpha/2
 
-            low = root_scalar(f_low, bracket=[1e-12, n_obs]).root
+    if n_obs == 0:
+        low = 0.0
+    else:
+        def f_low(mu):
+            return (1 - poisson.cdf(n_obs - 1, mu)) - alpha/2
 
-        def f_high(mu):
-            return poisson.cdf(n_obs, mu) - alpha/2
+        low = root_scalar(f_low, bracket=[1e-12, n_obs]).root
 
-        high_guess = n_obs + 10 * np.sqrt(n_obs + 1) + 20
-        high = root_scalar(f_high, bracket=[n_obs, high_guess]).root
+    def f_high(mu):
+        return poisson.cdf(n_obs, mu) - alpha/2
 
-        return (low, high)
+    high_guess = n_obs + 10 * np.sqrt(n_obs + 1) + 20
+    high = root_scalar(f_high, bracket=[n_obs, high_guess]).root
 
-    except (ValueError, RuntimeError):
-        return (np.nan, np.nan)
+    return (low, high)
 
 def coverage_error(mu, n_test, intervals_cache):
     '''Calculate the coverage error for a given true mean mu.'''
