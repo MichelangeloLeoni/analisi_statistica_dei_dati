@@ -108,7 +108,6 @@ def coverage_error(mu, n_test, intervals):
             prob_covered += poisson.pmf(n, mu)
 
     return 1 - prob_covered
-# END SNIPPET
 
 # Compute coverage error
 mu_axis = np.linspace(0.001, 17, 1000)
@@ -116,6 +115,12 @@ mu_span = np.linspace(0.0001, 100, 1000)
 n_grid = np.arange(0, 51)
 intervals_cache = calculate_llr_intervals(n_grid)
 errors = np.array([coverage_error(m, n_grid, intervals_cache) for m in mu_axis])
+
+# Compute intervals for the table
+n_table = np.concatenate([np.arange(0, 10), [50]])
+lr_intervals = {n: calculate_lr_interval_mu(n, mu_span) for n in n_table}
+central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
+# END SNIPPET
 
 # Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
@@ -130,11 +135,6 @@ ax.legend()
 
 plt.savefig("images/llr_poisson_coverage.pgf", bbox_inches="tight")
 plt.close()
-
-# Compute intervals for the table
-n_table = np.concatenate([np.arange(0, 10), [50]])
-lr_intervals = {n: calculate_lr_interval_mu(n, mu_span) for n in n_table}
-central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
 
 # Format table content
 def fmt_interval(a, b):
