@@ -1,21 +1,24 @@
+'''
+Script that builds the Neyman confidence belt for a Gaussian with non-negative mean, 
+using both probability ordering and likelihood ratio ordering.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from asd import utils
 
+# Define parameters
 CL = 0.95
-mu_grid = np.linspace(0.0, 3.0, 200)
 
-# observable x
+mu_grid = np.linspace(0.0, 3.0, 200)
 x_grid = np.linspace(-3.5, 5.0, 700)
 dx = x_grid[1] - x_grid[0]
 
-
-# Acceptance rules
 def acceptance_p_ordering(mu):
-    """
-    Rank x by highest density f(x|mu)
-    """
+    '''
+    Rank x by probability density f(x|mu).
+    '''
+
     dens = norm.pdf(x_grid, loc=mu, scale=1.0)
 
     order = np.argsort(dens)[::-1]
@@ -31,22 +34,20 @@ def acceptance_p_ordering(mu):
 
     return acc
 
-
 def acceptance_lr(mu):
-    """
-    Likelihood-ratio ordering with constrained MLE:
-        mu_hat(x) = max(0, x)
-    Rank by:
-        f(x|mu) / f(x|mu_hat)
-    """
+    '''
+    Rank x by likelihood ratio f(x|mu) / f(x|mu_hat),
+    where mu_hat is the MLE of mu given x.
+    '''
+
     num = norm.pdf(x_grid, loc=mu, scale=1.0)
 
     mu_hat = np.maximum(0.0, x_grid)
     den = norm.pdf(x_grid, loc=mu_hat, scale=1.0)
 
-    R = np.divide(num, den, out=np.zeros_like(num), where=(den > 0))
+    r = np.divide(num, den, out=np.zeros_like(num), where=den > 0)
 
-    order = np.argsort(R)[::-1]
+    order = np.argsort(r)[::-1]
 
     total = 0.0
     acc = set()
@@ -59,9 +60,9 @@ def acceptance_lr(mu):
 
     return acc
 
-
-# Build belt boundaries
 def build_belt(acceptance_func):
+    '''Build the confidence belt for a given acceptance function.'''
+
     x_low = []
     x_high = []
 
@@ -72,13 +73,10 @@ def build_belt(acceptance_func):
 
     return np.array(x_low), np.array(x_high)
 
-
-# Compute belts
 xlow_p, xhigh_p = build_belt(acceptance_p_ordering)
 xlow_lr, xhigh_lr = build_belt(acceptance_lr)
 
-
-# Plot
+# Generate plot
 fig, axes = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 3.5), sharey=True)
 
 plots = [
@@ -92,34 +90,31 @@ for ax, (title, low, high) in zip(axes, plots):
     ax.plot(mu_grid, low, lw=1.0, color="black")
     ax.plot(mu_grid, high, lw=1.0, color="black")
 
-    # Vertical black line at mu=0 bounding min and max x
     min_x = np.min(low)
     max_x = np.min(high)
     ax.vlines(0, min_x, max_x, color="black", lw=1.0)
-    # Red dotted line at x=-2.5
     ax.axhline(-2.5, ls=":", color="red", lw=1.0)
 
-    # Solid red line where it overlaps the belt
     mask = (low <= -2.5) & (-2.5 <= high)
     mu_over = mu_grid[mask]
     if len(mu_over) > 0:
         ax.plot(mu_over, -2.5 * np.ones(len(mu_over)), color="red", ls="-", lw=1.0)
 
-        # Red points at intersections
         starts = []
         ends = []
-        for i in range(1, len(mask)):
-            if not mask[i-1] and mask[i]:
-                starts.append(i)
-            if mask[i-1] and not mask[i]:
-                ends.append(i-1)
+        for ind in range(1, len(mask)):
+            if not mask[ind-1] and mask[ind]:
+                starts.append(ind)
+            if mask[ind-1] and not mask[ind]:
+                ends.append(ind-1)
         if mask[0]:
             starts.insert(0, 0)
         if mask[-1]:
             ends.append(len(mask)-1)
-        
+
         for idx in starts + ends:
             ax.scatter(mu_grid[idx], -2.5, color="red", s=10)
+
     ax.set_title(title)
     ax.set_xlabel(r"$\mu$")
     ax.set_xlim(-0.25, 3.0)
