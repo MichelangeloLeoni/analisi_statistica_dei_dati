@@ -1,17 +1,22 @@
+'''
+Script that builds the Neyman confidence belt for a Gaussian
+with mean allowed to be any real number.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from asd import utils
 
+# Define parameters
 CL = 0.95
-mu_grid = np.linspace(-3.0, 3.0, 400)
 
-# 1.95996... known table value for 95% confidence intervals of a Gaussian with known variance
-z = norm.ppf((1 + CL)/2)   
+mu_grid = np.linspace(-3.0, 3.0, 400)
+z = norm.ppf((1 + CL)/2)
 
 x_low = mu_grid - z
 x_high = mu_grid + z
 
+# Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5,3.5))
 
 ax.fill_between(mu_grid, x_low, x_high, alpha=0.4)
