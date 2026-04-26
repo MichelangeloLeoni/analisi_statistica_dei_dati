@@ -17,7 +17,8 @@ CL = 0.95
 
 # START SNIPPET
 def calculate_llr_intervals(n_values, cl=CL):
-    '''Compute LLR (Wilks) interval at confidence level cl for a range of observed counts n_values.'''
+    '''Compute LLR (Wilks) interval at confidence level cl
+    for a range of observed counts n_values.'''
 
     critical_value = chi2.ppf(cl, df=1)
     intervals = []
@@ -76,7 +77,8 @@ def calculate_lr_interval_mu(n_obs, mu_grid, cl=0.95, n_range=np.arange(0, 100))
 
 def calculate_central_interval_mu(n_obs, cl=0.95):
     '''
-    Compute the central interval for a given observed count n_obs.
+    Compute the central interval at confidence level cl
+    for a given observed count n_obs.
     '''
 
     alpha = 1 - cl
@@ -97,21 +99,23 @@ def calculate_central_interval_mu(n_obs, cl=0.95):
 
     return (low, high)
 
-def coverage_error(mu, n_test, intervals_cache):
+def coverage_error(mu, n_test, intervals):
     '''Calculate the coverage error for a given true mean mu.'''
+
     prob_covered = 0.0
-    for n, (low, high) in zip(n_test, intervals_cache):
+    for n, (low, high) in zip(n_test, intervals):
         if low <= mu <= high:
             prob_covered += poisson.pmf(n, mu)
+
     return 1 - prob_covered
 # END SNIPPET
 
 # Compute coverage error
 mu_axis = np.linspace(0.001, 17, 1000)
 mu_span = np.linspace(0.0001, 100, 1000)
-n_test = np.arange(0, 51)
-intervals_cache = calculate_llr_intervals(n_test)
-errors = np.array([coverage_error(m, n_test, intervals_cache) for m in mu_axis])
+n_grid = np.arange(0, 51)
+intervals_cache = calculate_llr_intervals(n_grid)
+errors = np.array([coverage_error(m, n_grid, intervals_cache) for m in mu_axis])
 
 # Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
