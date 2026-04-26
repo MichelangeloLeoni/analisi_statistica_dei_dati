@@ -1,59 +1,67 @@
+'''
+Script that builds the confidence belts for a uniform distribution
+with unknown upper bound.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 from asd import utils
 
+# Define parameters
 CL = 0.9
-m_grid = np.linspace(0.0, 12, 500)
+X0 = 1
+LO_UPPER = X0 / CL
+LO_LR = X0
+HI_LR = X0 / (1 - CL)
 
-# observable x
+m_grid = np.linspace(0.0, 12, 500)
 x_grid = np.linspace(0, 6, 500)
 
-def upper_acceptance(m):
-    # Upper ordering: accept x in [0, CL*m]
+def upper_acceptance(m, x ,cl=CL):
+    '''Upper ordering: accept x in [0, cl*m]'''
+
     lower = 0
-    upper = CL * m
-    return np.where((x_grid >= lower) & (x_grid <= upper))[0]
+    upper = cl * m
 
-def lr_acceptance(m):
-    # LR/Central ordering: accept x in [m*(1-CL), m]
-    lower = m * (1-CL)
-    upper = m 
-    return np.where((x_grid >= lower) & (x_grid <= upper))[0]
+    return np.where((x >= lower) & (x <= upper))[0]
 
+def lr_acceptance(m, x, cl=CL):
+    '''LR/Central ordering: accept x in [m*(1-cl), m]'''
 
-def build_belt(acceptance_func):
+    lower = m * (1-cl)
+    upper = m
+
+    return np.where((x >= lower) & (x <= upper))[0]
+
+def build_belt(acceptance_func, mu_grid, x, cl=CL):
+    '''Build the confidence belt for a given acceptance function.'''
+
     x_low = []
     x_high = []
 
-    for m in m_grid:
-        acc = sorted(list(acceptance_func(m)))
+    for m in mu_grid:
+        acc = sorted(list(acceptance_func(m, x, cl=cl)))
         x_low.append(x_grid[min(acc)])
         x_high.append(x_grid[max(acc)])
 
     return np.array(x_low), np.array(x_high)
 
-# Compute belts
-xlow_upper, xhigh_upper = build_belt(upper_acceptance)
-xlow_lr, xhigh_lr = build_belt(lr_acceptance)
+xlow_upper, xhigh_upper = build_belt(upper_acceptance, m_grid, x_grid)
+xlow_lr, xhigh_lr = build_belt(lr_acceptance, m_grid, x_grid)
 
-# Compute intervals at x0=1
-x0 = 1
-lo_upper = x0 / CL
-lo_lr = x0
-hi_lr = x0 / (1 - CL)
-
-# LaTeX table
+# Generate table
 def fmt(a, b):
-    return rf"${a:.2f} \leq m \leq {b:.2f}$" # format the interval in LaTeX math mode
+    '''Format the confidence interval as a LaTeX string.'''
+
+    return rf"${a:.2f} \leq m \leq {b:.2f}$"
 
 utils.table_generator(
     n_columns=2,
     labels=("Method", r"90\% confidence interval"),
-    content=(["Lower bound", "LR bound"], [rf"$ {lo_upper:.2f} \leq m$", fmt(lo_lr, hi_lr)]),
+    content=(["Lower bound", "LR bound"], [rf"$ {LO_UPPER:.2f} \leq m$", fmt(LO_LR, HI_LR)]),
     output_file_name="uniform_belts.tex"
     )
 
-# Plot
+# Generate plot
 fig, axes = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 3.5), sharey=True)
 
 plots = [
@@ -67,26 +75,21 @@ for plot_idx, (ax, (title, low, high)) in enumerate(zip(axes, plots)):
     ax.plot(m_grid, low, lw=1.0, color="black")
     ax.plot(m_grid, high, lw=1.0, color="black")
 
-    # Red dotted line at x=x0
-    x0 = 1
-    ax.axhline(x0, ls=":", color="red", lw=1.0)
+    ax.axhline(X0, ls=":", color="red", lw=1.0)
 
-    # Solid red line where it overlaps the belt
-    mask = (low <= x0) & (x0 <= high)
+    mask = (low <= X0) & (X0 <= high)
     m_over = m_grid[mask]
     if len(m_over) > 0:
-        if plot_idx == 0:  # Left plot: upper ordering - limit to half of max(x_grid)
+        if plot_idx == 0:
             x0_max = max(x_grid) / 2
             m_over_cut = m_over[m_over <= x0_max]
             if len(m_over_cut) > 0:
-                ax.plot(m_over_cut, x0 * np.ones(len(m_over_cut)), color="red", ls="-", lw=1.0)
-                # Add right arrow at the end
-                ax.annotate("", xy=(m_over_cut[-1] + 0.3, x0), xytext=(m_over_cut[-1], x0),
-                           arrowprops=dict(arrowstyle='->', color='red', lw=1.0))
-        else:  # Right plot: leave as is
-            ax.plot(m_over, x0 * np.ones(len(m_over)), color="red", ls="-", lw=1.0)
+                ax.plot(m_over_cut, X0 * np.ones(len(m_over_cut)), color="red", ls="-", lw=1.0)
+                ax.annotate("", xy=(m_over_cut[-1] + 0.3, X0), xytext=(m_over_cut[-1], X0),
+                           arrowprops={"arrowstyle": "->", "color": "red", "lw": 1.0})
+        else:
+            ax.plot(m_over, X0 * np.ones(len(m_over)), color="red", ls="-", lw=1.0)
 
-        # Red points at intersections
         starts = []
         ends = []
         for i in range(1, len(mask)):
@@ -98,13 +101,14 @@ for plot_idx, (ax, (title, low, high)) in enumerate(zip(axes, plots)):
             starts.insert(0, 0)
         if mask[-1]:
             ends.append(len(mask)-1)
-        
+
         for i in starts + ends:
             if plot_idx == 0:
                 if m_grid[i] <= max(x_grid) / 2:
-                    ax.scatter(m_grid[i], x0, color="red", s=10)
+                    ax.scatter(m_grid[i], X0, color="red", s=10)
             else:
-                ax.scatter(m_grid[i], x0, color="red", s=10)
+                ax.scatter(m_grid[i], X0, color="red", s=10)
+
     ax.set_title(title)
     ax.set_xlabel(r"$m$")
     ax.set_xlim(0, max(m_grid))
