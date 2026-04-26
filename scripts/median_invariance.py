@@ -1,3 +1,7 @@
+'''
+Script that genertes a simple plot to illustrate the invariance
+of the median under monotone transformation.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 from asd import utils
@@ -8,6 +12,7 @@ exp_x = np.exp(x*0.5)
 median_1 = np.median(x)
 median_2 = np.median(exp_x)
 
+# Generate plot
 fig, (ax1, ax2) = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 1.5))
 
 ax1.errorbar(x, np.zeros_like(x), fmt=".")
