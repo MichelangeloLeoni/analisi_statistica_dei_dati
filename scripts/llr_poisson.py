@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 from scipy.stats import chi2, poisson
 from asd import utils
-from asd.asdmath import interval_estimation as asdinterval
+from asd.asdmath.interval_estimation import interval_estimation as asdinterval
 
 # Define parameters
 CL = 0.95
@@ -98,7 +98,7 @@ estimator = asdinterval.IntervalEstimator(
 )
 
 lr_intervals = {n:
-                estimator.find_neyman_interval(
+                estimator.get_interval(
                     x_obs=n,
                     ordering="p",
                     method="fc") for n in n_table}
