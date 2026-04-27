@@ -19,22 +19,32 @@ class NeymanConstruction:
             mask, thr = ordering.p_ordering(score, pdf, self.model.cl, self.model.dx)
 
         elif ordering_type == "upper":
-            mask, thr = ordering.upper_ordering(pdf, self.model.cl, self.model.dx)
+            mask, thr = ordering.upper_ordering(self.x_range, pdf, self.model.cl, self.model.dx)
 
         elif ordering_type == "lower":
-            mask, thr = ordering.lower_ordering(pdf, self.model.cl, self.model.dx)
+            mask, thr = ordering.lower_ordering(self.x_range, pdf, self.model.cl, self.model.dx)
 
         else:
             raise ValueError(ordering_type)
 
         return mask, thr
 
-    def find_interval(self, x_obs, method, ordering_type):
-        accepted_mu = []
+    def build_belt(self, method, ordering_type):
+
+        mask_list = []
 
         for mu in self.mu_grid:
             mask, _ = self.get_slice(mu, method, ordering_type)
+            mask_list.append(mask)
 
+        return mask_list
+
+    def find_interval(self, x_obs, method, ordering_type):
+
+        accepted_mu = []
+        mask_list = self.build_belt(method, ordering_type)
+
+        for mu, mask in zip(self.mu_grid, mask_list):
             if self.discrete:
                 if x_obs < len(mask) and mask[x_obs]:
                     accepted_mu.append(mu)
@@ -47,23 +57,3 @@ class NeymanConstruction:
             return (np.nan, np.nan)
 
         return (min(accepted_mu), max(accepted_mu))
-
-    def coverage(self, mu_vals, x_vals, method="fc", ordering_type="p"):
-        cov = []
-
-        for mu in mu_vals:
-            mask, _ = self.get_slice(mu, method, ordering_type)
-
-            hits = 0
-            total = 0
-
-            for x in x_vals:
-                total += 1
-                idx = np.searchsorted(self.x_range, x)
-
-                if idx < len(mask) and mask[idx]:
-                    hits += 1
-
-            cov.append(hits / total)
-
-        return np.array(cov)

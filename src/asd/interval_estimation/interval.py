@@ -32,9 +32,3 @@ class IntervalEstimator:
         pdf = self.pdf(mu)
         den = self.prob_func(self.x_range, self.mu_hat_func(self.x_range))
         return pdf / den
-
-    def get_interval(self, x_obs, method, ordering):
-        return self.neyman.find_interval(x_obs, method, ordering)
-
-    def compute_coverage(self, mu_vals, x_vals, method, ordering):
-        return self.neyman.coverage(mu_vals, x_vals, method, ordering)
