@@ -38,19 +38,19 @@ def feldman_cousins_slice(x_range, mu, mu_hat_func, prob_func, cl, dx=None, disc
         val = pdf[i] if discrete else pdf[i] * dx
         cum += val
         if cum >= cl:
-            c = r[i]
+            threshold = r[i]
             break
 
-    mask = r >= c
+    mask = r >= threshold
 
-    return mask
+    return mask, threshold
 
 def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, dx=None, discrete=True):
 
     accepted_mu = []
 
     for mu in mu_grid:
-        mask = feldman_cousins_slice(
+        mask, _ = feldman_cousins_slice(
             x_range=x_range,
             mu=mu,
             mu_hat_func=mu_hat_func,
@@ -60,7 +60,12 @@ def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, dx=None, d
             discrete=discrete
         )
 
-        if x_obs < len(mask) and mask[x_obs]:
-            accepted_mu.append(mu)
+        if discrete:
+            if x_obs < len(mask) and mask[x_obs]:
+                accepted_mu.append(mu)
+        else:
+            idx = np.searchsorted(x_range, x_obs)
+            if idx < len(mask) and mask[idx]:
+                accepted_mu.append(mu)
 
     return (min(accepted_mu), max(accepted_mu))

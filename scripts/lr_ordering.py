@@ -23,19 +23,15 @@ den = norm.pdf(x, loc=mu_hat, scale=1)
 
 r = pdf / den
 
-order = np.argsort(r)[::-1]
-
-cum = 0
-accepted = np.zeros_like(x, dtype=bool)
-
-for i in order:
-    accepted[i] = True
-    cum += pdf[i] * dx
-    if cum >= CL:
-        c = r[i]
-        break
-
-mask = r >= c
+mask, threshold = asdmath.feldman_cousins_slice(
+    x_range=x,
+    mu=MU,
+    mu_hat_func=lambda x : np.maximum(0, x),
+    prob_func=norm.pdf,
+    cl=CL,
+    dx=dx,
+    discrete=False
+)
 
 starts, ends = asdmath.find_intervals_indices(mask)
 
@@ -52,11 +48,11 @@ ax1.set_ylim(0, max(pdf)*1.2)
 
 ax2 = ax1.twinx()
 ax2.plot(x, r, lw=2, ls="--", label=r"$LR(x)$")
-ax2.axhline(c, ls=":", color="black", lw=1.0, label="Threshold")
+ax2.axhline(threshold, ls=":", color="black", lw=1.0, label="Threshold")
 
 for idx in starts + ends:
     x_inter = x[idx]
-    ax2.vlines(x_inter, -TRASL, c, ls=":", color="black", lw=1.0)
+    ax2.vlines(x_inter, -TRASL, threshold, ls=":", color="black", lw=1.0)
 
 ax2.set_ylabel("LR ratio")
 ax2.set_ylim(-TRASL, max(r)*1.1)

@@ -97,7 +97,7 @@ lr_intervals = {n:
                     mu_grid=mu_span,
                     mu_hat_func=mu_hat_func,
                     prob_func=poisson.pmf,
-                    cl=0.95) 
+                    cl=0.95)
                 for n in n_table}
 central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
 # END SNIPPET
