@@ -13,27 +13,23 @@ CL = 0.95
 MU = 0.5
 TRASL = 0.5
 
-x = np.linspace(-4, 5, 2000)
-dx = x[1] - x[0]
-
-pdf = norm.pdf(x, loc=MU, scale=1)
-
-mu_hat = np.maximum(0, x)
-
-den = norm.pdf(x, loc=mu_hat, scale=1)
-
-r = pdf / den
-
-mask, threshold = asdinterval.feldman_cousins_slice(
-    x_range=x,
-    mu=MU,
+estimator = asdinterval.IntervalEstimator(
+    x_range=np.linspace(-4, 5, 2000),
     mu_hat_func=lambda x : np.maximum(0, x),
     prob_func=norm.pdf,
     cl=CL,
     discrete=False
 )
 
-starts, ends = asdinterval.find_intervals_indices(mask)
+pdf = estimator.get_pdf(MU)
+r = estimator.get_ratio(MU)
+x = estimator.x_range
+dx = estimator.dx
+mu_hat = np.maximum(0, x)
+
+mask, threshold = estimator.feldman_cousins_slice(MU)
+
+starts, ends = estimator.find_intervals_indices(mask)
 
 # Generate plot
 fig, ax1 = utils.pgf_generator(figsize=(5.5,3.5))

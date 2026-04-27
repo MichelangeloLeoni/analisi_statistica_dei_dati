@@ -16,7 +16,6 @@ from asd.asdmath import interval_estimation as asdinterval
 # Define parameters
 CL = 0.95
 
-# START SNIPPET
 def calculate_llr_intervals(n_values, cl=CL):
     '''Compute LLR (Wilks) interval at confidence level cl
     for a range of observed counts n_values.'''
@@ -86,22 +85,20 @@ mu_span = np.linspace(0.0001, 100, 1000)
 n_grid = np.arange(0, 51)
 intervals_cache = calculate_llr_intervals(n_grid)
 errors = np.array([coverage_error(m, n_grid, intervals_cache) for m in mu_axis])
-def mu_hat_func(x):
-    '''Compute the MLE of mu for the poissonin case.'''
-    return x
+
 # Compute intervals for the table
 n_table = np.concatenate([np.arange(0, 10), [50]])
-lr_intervals = {n:
-                asdinterval.lr_intervals(
-                    x_obs=n,
-                    x_range=np.arange(0, 300),
-                    mu_grid=mu_span,
-                    mu_hat_func=mu_hat_func,
-                    prob_func=poisson.pmf,
-                    cl=0.95)
-                for n in n_table}
+estimator = asdinterval.IntervalEstimator(
+    x_range=np.arange(0, 300),
+    mu_grid=mu_span,
+    mu_hat_func=lambda x: x,
+    prob_func=poisson.pmf,
+    cl=0.95,
+    discrete=True
+)
+
+lr_intervals = {n: estimator.lr_interval(x_obs=n) for n in n_table}
 central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
-# END SNIPPET
 
 # Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
@@ -135,11 +132,3 @@ utils.table_generator(
     content=(n_table, fmt_wisks, fmt_lr_intervals, fmt_central_intervals),
     output_file_name="llr_poisson_intervals.tex"
     )
-
-# Generate code snippet
-utils.code_snippet_generator(
-    start_tag="# START SNIPPET",
-    end_tag="# END SNIPPET",
-    output_file_name="code_llr_poisson.tex",
-    file=__file__
-)

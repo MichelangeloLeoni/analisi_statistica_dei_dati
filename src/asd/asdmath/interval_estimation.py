@@ -1,179 +1,126 @@
-'''
-Interval estimation mathematical utilities for the Analisi Statistica dei Dati notes.
-'''
+from dataclasses import dataclass, field
 import numpy as np
-from asd.utils import code_snippet_generator
 
-def find_intervals_indices(mask):
-    '''
-    Find the start and end indices of contiguous True values in a boolean array.
+@dataclass
+class IntervalEstimator:
+    x_range: np.ndarray
+    mu_hat_func: callable
+    prob_func: callable
+    cl: float
+    discrete: bool = True
+    mu_grid: np.ndarray | None = None
 
-    Parameters:
-        mask: a boolean array
-    '''
+    # cache
+    _pdf_cache: dict = field(default_factory=dict, init=False)
+    _ratio_cache: dict = field(default_factory=dict, init=False)
+    _slice_cache: dict = field(default_factory=dict, init=False)
+    _interval_cache: dict = field(default_factory=dict, init=False)
 
-    starts = []
-    ends = []
-    for i in range(1, len(mask)):
-        if not mask[i-1] and mask[i]:
-            starts.append(i)
-        if mask[i-1] and not mask[i]:
-            ends.append(i-1)
-    if mask[0]:
-        starts.insert(0, 0)
-    if mask[-1]:
-        ends.append(len(mask)-1)
+    def __post_init__(self):
+        self.dx = 1 if self.discrete else self.x_range[1] - self.x_range[0]
 
-    return starts, ends
+    def get_pdf(self, mu):
+        if mu not in self._pdf_cache:
+            self._pdf_cache[mu] = self.prob_func(self.x_range, mu)
+        return self._pdf_cache[mu]
 
-# START SNIPPET
-def p_ordering(p, pdf, x_range, cl, discrete=True):
-    '''
-    Compute the acceptance region for a given p ordering.
+    def get_ratio(self, mu):
+        if mu not in self._ratio_cache:
+            pdf = self.get_pdf(mu)
+            den = self.prob_func(self.x_range, self.mu_hat_func(self.x_range))
+            self._ratio_cache[mu] = pdf / den
+        return self._ratio_cache[mu]
 
-    Parameters:
-        p: the ordering variable (e.g., likelihood ratio)
-        pdf: the probability density/mass function values for the given x_range
-        x_range: the range of x values to consider
-        cl: the confidence level (e.g., 0.95)
-        discrete: whether the x values are discrete (default: True)
-            at the moment this only affects the use of dx,
-            dx is computed supposing x_range is uniformly spaced
-    '''
+    def find_intervals_indices(self, mask):
+        starts, ends = [], []
 
-    order = np.argsort(p)[::-1]
-    cum = 0
-    dx = x_range[1] - x_range[0] if not discrete else 1
+        for i in range(1, len(mask)):
+            if not mask[i-1] and mask[i]:
+                starts.append(i)
+            if mask[i-1] and not mask[i]:
+                ends.append(i-1)
 
-    for i in order:
-        val = pdf[i] * dx
-        cum += val
-        if cum >= cl:
-            threshold = p[i]
-            break
+        if mask[0]:
+            starts.insert(0, 0)
+        if mask[-1]:
+            ends.append(len(mask)-1)
 
-    mask = p >= threshold
+        return starts, ends
 
-    return mask, threshold
+    def p_ordering(self, p, pdf):
+        order = np.argsort(p)[::-1]
+        cum = 0
 
-def upper_ordering(p, pdf, x_range, cl, discrete=True):
+        for i in order:
+            cum += pdf[i] * self.dx
+            if cum >= self.cl:
+                threshold = p[i]
+                break
 
-    cum = 0
-    dx = x_range[1] - x_range[0] if not discrete else 1
+        return p >= threshold, threshold
 
-    for i in range(len(x_range)):
-        val = pdf[i] * dx
-        cum += val
-        if cum >= cl:
-            threshold = p[i]
-            break
+    def upper_ordering(self, pdf):
+        cum = 0
+        for i in range(len(self.x_range)):
+            cum += pdf[i] * self.dx
+            if cum >= self.cl:
+                threshold = pdf[i]
+                break
 
-    mask = p >= threshold
+        return pdf >= threshold, threshold
 
-    return mask, threshold
+    def lower_ordering(self, pdf):
+        cum = 0
+        for i in reversed(range(len(self.x_range))):
+            cum += pdf[i] * self.dx
+            if cum >= self.cl:
+                threshold = pdf[i]
+                break
 
-def lower_ordering(p, pdf, x_range, cl, discrete=True):
+        return pdf >= threshold, threshold
 
-    cum = 0
-    dx = x_range[1] - x_range[0] if not discrete else 1
+    def build_neyman_belt(self, slice_func):
+        return [slice_func(mu)[0] for mu in self.mu_grid]
 
-    for i in reversed(range(len(x_range))):
-        val = pdf[i] * dx
-        cum += val
-        if cum >= cl:
-            threshold = p[i]
-            break
+    def find_neyman_interval(self, x_obs, slice_func):
+        accepted_mu = []
 
-    mask = p >= threshold
+        for mu in self.mu_grid:
+            mask, _ = slice_func(mu)
 
-    return mask, threshold
+            if self.discrete:
+                if x_obs < len(mask) and mask[x_obs]:
+                    accepted_mu.append(mu)
+            else:
+                idx = np.searchsorted(self.x_range, x_obs)
+                if idx < len(mask) and mask[idx]:
+                    accepted_mu.append(mu)
 
-def feldman_cousins_slice(mu, x_range, mu_hat_func, prob_func, cl, discrete=True):
-    '''
-    Compute the Feldman-Cousins acceptance region for a given mu.
-    
-    Parameters:
-        mu: the parameter value for which to compute the acceptance region
-        x_range: the range of x values to consider
-        mu_hat_func: a function that computes the MLE for mu given x
-        prob_func: a function that computes the probability density/mass for given x and mu
-        cl: the confidence level (e.g., 0.95)
-        discrete: whether the x values are discrete (default: True)
-            at the moment this only affects the use of dx,
-            dx is computed supposing x_range is uniformly spaced
+        if not accepted_mu:
+            return (np.nan, np.nan)
 
-    Example usage:
-        For a guassian distribution with mean MU positive and unit variance:
-            mask, threshold = asdmath.feldman_cousins_slice(
-                x_range=x, # x = np.linspace(-4, 5, 2000)
-                mu=MU,
-                mu_hat_func=lambda x : np.maximum(0, x),
-                prob_func=norm.pdf,
-                cl=CL,
-                discrete=False
-            )
-    '''
+        return min(accepted_mu), max(accepted_mu)
 
-    pdf = prob_func(x_range, mu)
-    den = prob_func(x_range, mu_hat_func(x_range))
-    r = pdf / den
+    def feldman_cousins_slice(self, mu):
+        if mu in self._slice_cache:
+            return self._slice_cache[mu]
 
-    return p_ordering(r, pdf, x_range, cl, discrete=discrete)
+        pdf = self.get_pdf(mu)
+        r = self.get_ratio(mu)
 
-def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, discrete=True):
-    '''
-    Compute the confidence interval for a given observed x_obs using the likelihood-ratio ordering.
-    
-    Parameters:
-        x_obs: the observed value of x
-        x_range: the range of x values to consider for the ordering
-        mu_grid: the grid of mu values to consider for the confidence interval
-        mu_hat_func: a function that computes the MLE for mu given x
-        prob_func: a function that computes the probability density/mass for given x and mu
-        cl: the confidence level (e.g., 0.95)
-        discrete: whether the x values are discrete (default: True)
-            at the moment this only affects the use of dx,
-            dx is computed supposing x_range is uniformly spaced
-    
-    Example usage:
-        When observing n count from a poisson distribution:
-            mu_interval = asdmath.lr_intervals(
-                    x_obs=n,
-                    x_range=np.arange(0, 300),
-                    mu_grid=mu_span, # mu_span = np.linspace(0.0001, 100, 1000)
-                    mu_hat_func=mu_hat_func, # mu_hat_func = lambda x: x
-                    prob_func=poisson.pmf,
-                    cl=0.95
-                    )
-    '''
+        mask, thr = self.p_ordering(r, pdf)
 
-    accepted_mu = []
+        self._slice_cache[mu] = (mask, thr)
+        return mask, thr
 
-    for mu in mu_grid:
-        mask, _ = feldman_cousins_slice(
-            x_range=x_range,
-            mu=mu,
-            mu_hat_func=mu_hat_func,
-            prob_func=prob_func,
-            cl=cl,
-            discrete=discrete
+    def lr_interval(self, x_obs):
+        if x_obs in self._interval_cache:
+            return self._interval_cache[x_obs]
+
+        interval = self.find_neyman_interval(
+            x_obs,
+            self.feldman_cousins_slice
         )
 
-        if discrete:
-            if x_obs < len(mask) and mask[x_obs]:
-                accepted_mu.append(mu)
-        else:
-            idx = np.searchsorted(x_range, x_obs)
-            if idx < len(mask) and mask[idx]:
-                accepted_mu.append(mu)
-
-    return (min(accepted_mu), max(accepted_mu))
-# END SNIPPET
-
-if __name__ == "__main__":
-    code_snippet_generator(
-        "# START SNIPPET",
-        "# END SNIPPET",
-        output_file_name="lr_intervals_function.tex",
-        file=__file__
-    )
+        self._interval_cache[x_obs] = interval
+        return interval
