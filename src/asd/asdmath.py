@@ -27,20 +27,16 @@ def find_intervals_indices(mask):
 
 def feldman_cousins_slice(x_range, mu, mu_hat_func, prob_func, cl, dx=None, discrete=True):
 
-    # Compute Neyman belt slice
     pdf = prob_func(x_range, mu)
     den = prob_func(x_range, mu_hat_func(x_range))
     r = pdf / den
 
     order = np.argsort(r)[::-1]
-
     cum = 0
-    for i in order:
-        if discrete:
-            cum += pdf[i]
-        else:
-            cum += pdf[i] * dx
 
+    for i in order:
+        val = pdf[i] if discrete else pdf[i] * dx
+        cum += val
         if cum >= cl:
             c = r[i]
             break
