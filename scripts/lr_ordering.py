@@ -29,7 +29,6 @@ mask, threshold = asdmath.feldman_cousins_slice(
     mu_hat_func=lambda x : np.maximum(0, x),
     prob_func=norm.pdf,
     cl=CL,
-    dx=dx,
     discrete=False
 )
 

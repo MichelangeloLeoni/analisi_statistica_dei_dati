@@ -25,7 +25,31 @@ def find_intervals_indices(mask):
 
     return starts, ends
 
-def feldman_cousins_slice(x_range, mu, mu_hat_func, prob_func, cl, dx=None, discrete=True):
+def feldman_cousins_slice(mu, x_range, mu_hat_func, prob_func, cl, discrete=True):
+    '''
+    Compute the Feldman-Cousins acceptance region for a given mu.
+    
+    Parameters:
+        mu: the parameter value for which to compute the acceptance region
+        x_range: the range of x values to consider
+        mu_hat_func: a function that computes the MLE for mu given x
+        prob_func: a function that computes the probability density/mass for given x and mu
+        cl: the confidence level (e.g., 0.95)
+        discrete: whether the x values are discrete (default: True)
+            at the moment this only affects the use of dx,
+            dx is computed supposing x_range is uniformly spaced
+
+    Example usage:
+        For a guassian distribution with mean MU positive and unit variance:
+            mask, threshold = asdmath.feldman_cousins_slice(
+                x_range=x, # x = np.linspace(-4, 5, 2000)
+                mu=MU,
+                mu_hat_func=lambda x : np.maximum(0, x),
+                prob_func=norm.pdf,
+                cl=CL,
+                discrete=False
+            )
+    '''
 
     pdf = prob_func(x_range, mu)
     den = prob_func(x_range, mu_hat_func(x_range))
@@ -33,9 +57,10 @@ def feldman_cousins_slice(x_range, mu, mu_hat_func, prob_func, cl, dx=None, disc
 
     order = np.argsort(r)[::-1]
     cum = 0
+    dx = x_range[1] - x_range[0] if not discrete else 1
 
     for i in order:
-        val = pdf[i] if discrete else pdf[i] * dx
+        val = pdf[i] * dx
         cum += val
         if cum >= cl:
             threshold = r[i]
@@ -45,7 +70,32 @@ def feldman_cousins_slice(x_range, mu, mu_hat_func, prob_func, cl, dx=None, disc
 
     return mask, threshold
 
-def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, dx=None, discrete=True):
+def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, discrete=True):
+    '''
+    Compute the confidence interval for a given observed x_obs using the likelihood-ratio ordering.
+    
+    Parameters:
+        x_obs: the observed value of x
+        x_range: the range of x values to consider for the ordering
+        mu_grid: the grid of mu values to consider for the confidence interval
+        mu_hat_func: a function that computes the MLE for mu given x
+        prob_func: a function that computes the probability density/mass for given x and mu
+        cl: the confidence level (e.g., 0.95)
+        discrete: whether the x values are discrete (default: True)
+            at the moment this only affects the use of dx,
+            dx is computed supposing x_range is uniformly spaced
+    
+    Example usage:
+        When observing n count from a poisson distribution:
+            mu_interval = asdmath.lr_intervals(
+                    x_obs=n,
+                    x_range=np.arange(0, 300),
+                    mu_grid=mu_span, # mu_span = np.linspace(0.0001, 100, 1000)
+                    mu_hat_func=mu_hat_func, # mu_hat_func = lambda x: x
+                    prob_func=poisson.pmf,
+                    cl=0.95
+                    )
+    '''
 
     accepted_mu = []
 
@@ -56,7 +106,6 @@ def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, dx=None, d
             mu_hat_func=mu_hat_func,
             prob_func=prob_func,
             cl=cl,
-            dx=dx,
             discrete=discrete
         )
 
