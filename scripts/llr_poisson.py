@@ -98,9 +98,9 @@ estimator = asdinterval.IntervalEstimator(
 )
 
 lr_intervals = {n:
-                estimator.get_interval(
+                estimator.neyman.find_interval(
                     x_obs=n,
-                    ordering="p",
+                    ordering_type="p",
                     method="fc") for n in n_table}
 
 central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}

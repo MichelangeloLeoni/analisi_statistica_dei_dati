@@ -27,9 +27,9 @@ x = estimator.x_range
 dx = estimator.dx
 mu_hat = np.maximum(0, x)
 
-mask, threshold = estimator.feldman_cousins_slice(MU)
+mask, threshold = estimator.neyman.get_slice(mu=MU, method="fc", ordering_type="p")
 
-starts, ends = estimator.find_intervals_indices(mask)
+starts, ends = asdinterval.find_intervals_indices(mask)
 
 # Generate plot
 fig, ax1 = utils.pgf_generator(figsize=(5.5,3.5))

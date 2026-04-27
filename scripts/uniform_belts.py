@@ -5,7 +5,7 @@ with unknown upper bound.
 import numpy as np
 import matplotlib.pyplot as plt
 from asd import utils
-from asd.asdmath import interval_estimation as asdinterval
+from asd.interval_estimation import interval as asdinterval
 
 # Define parameters
 CL = 0.9
