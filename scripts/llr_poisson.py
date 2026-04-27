@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 from scipy.stats import chi2, poisson
-from asd import utils
+from asd import utils, asdmath
 
 # Define parameters
 CL = 0.95
@@ -44,36 +44,6 @@ def calculate_llr_intervals(n_values, cl=CL):
         intervals.append((low, high))
 
     return intervals
-
-def calculate_lr_interval_mu(n_obs, mu_grid, cl=0.95, n_range=np.arange(0, 100)):
-    '''
-    Compute the Feldman-Cousins interval at confidence level cl
-    for a given observed count n_obs, building the neyman belt for parameter values mu_grid.
-    '''
-
-    accepted_mu = []
-
-    for mu in mu_grid:
-        pdf = poisson.pmf(n_range, mu)
-        mu_hat = n_range
-        den = poisson.pmf(n_range, mu_hat)
-        r = pdf / den
-
-        order = np.argsort(r)[::-1]
-
-        cum = 0
-        for i in order:
-            cum += pdf[i]
-            if cum >= cl:
-                c = r[i]
-                break
-
-        mask = r >= c
-
-        if n_obs < len(mask) and mask[n_obs]:
-            accepted_mu.append(mu)
-
-    return (min(accepted_mu), max(accepted_mu))
 
 def calculate_central_interval_mu(n_obs, cl=0.95):
     '''
@@ -118,7 +88,15 @@ errors = np.array([coverage_error(m, n_grid, intervals_cache) for m in mu_axis])
 
 # Compute intervals for the table
 n_table = np.concatenate([np.arange(0, 10), [50]])
-lr_intervals = {n: calculate_lr_interval_mu(n, mu_span) for n in n_table}
+lr_intervals = {n:
+    asdmath.find_lr_intervals(
+        x_obs=n,
+        x_range=np.arange(0, 100),
+        mu_grid=mu_span,
+        mu_hat=n,
+        prob_func=poisson.pmf,
+        cl=CL
+        ) for n in n_table}
 central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
 # END SNIPPET
 
