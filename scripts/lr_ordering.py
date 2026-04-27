@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from asd import utils
-from asd.asdmath import interval_estimation as asdinterval
+from asd.interval_estimation import interval as asdinterval
 
 # Define parameters
 CL = 0.95
@@ -21,8 +21,8 @@ estimator = asdinterval.IntervalEstimator(
     discrete=False
 )
 
-pdf = estimator.get_pdf(MU)
-r = estimator.get_ratio(MU)
+pdf = estimator.pdf(MU)
+r = estimator.ratio(MU)
 x = estimator.x_range
 dx = estimator.dx
 mu_hat = np.maximum(0, x)

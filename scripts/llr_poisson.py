@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 from scipy.stats import chi2, poisson
 from asd import utils
-from asd.asdmath.interval_estimation import interval_estimation as asdinterval
+from asd.interval_estimation import interval as asdinterval
 
 # Define parameters
 CL = 0.95
