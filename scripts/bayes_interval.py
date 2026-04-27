@@ -2,58 +2,15 @@
 Script that generates a plot to illustrate the construction of Bayesian credible intervals 
 using different ordering methods.
 '''
-import math
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import poisson
 from asd import utils
+from asd.asdmath import bayesian
 
-# START SNIPPET
 # Define parameters
 PRIOR = 0.1 # Prior for Uniform(0, 10)
-ALPHA = 0.10
-
-def compute_posterior(mu, n):
-    '''Compute the posterior for a Poisson distribution at given mu and observed count'''
-
-    likelihood = np.exp(-mu) * mu**n / math.factorial(n)
-    unnorm = PRIOR * likelihood
-    norm = np.trapezoid(unnorm, mu)
-    return unnorm / norm
-
-def posterior_interval(mu, post, alpha=0.10):
-    '''Compute the confidence interval using the posterior as the ordering function'''
-
-    dmu = mu[1] - mu[0]
-    idx = np.argsort(post)[::-1]
-    mass = np.cumsum(post[idx] * dmu)
-
-    keep = idx[mass <= (1 - alpha)]
-    if len(keep) < len(idx):
-        keep = np.append(keep, idx[len(keep)])
-    keep = np.sort(keep)
-
-    lower = mu[keep[0]]
-    upper = mu[keep[-1]]
-
-    return lower, upper
-
-def lower_bound(mu, post, alpha=0.10):
-    '''Compute the confidence interval using the lower bound ordering'''
-
-    dmu = mu[1] - mu[0]
-    cdf = np.cumsum(post * dmu)
-    cdf /= cdf[-1]
-
-    return np.interp(alpha, cdf, mu), mu[-1]
-
-def upper_bound(mu, post, alpha=0.10):
-    '''Compute the confidence interval using the upper bound ordering'''
-    dmu = mu[1] - mu[0]
-    cdf = np.cumsum(post * dmu)
-    cdf /= cdf[-1]
-
-    return mu[0], np.interp(1 - alpha, cdf, mu)
-# END SNIPPET
+CL = 0.9
 
 k_values = [2, 5, 8]
 m = np.linspace(0, 10, 1000)
@@ -62,7 +19,12 @@ m = np.linspace(0, 10, 1000)
 fig, ax = utils.pgf_generator(figsize=(5.5, 3.5))
 
 for k in k_values:
-    posterior = compute_posterior(m, k)
+    posterior = bayesian.compute_posterior(
+        x=k,
+        mu=m,
+        prob_func=poisson.pmf,
+        prior_func=lambda mu: PRIOR
+        )
 
     ax.plot(m, posterior, lw=2)
 
@@ -89,11 +51,16 @@ plt.close()
 ordering = ["Posterior", "Lower bound", "Upper bound"]
 k = 5
 
-posterior = compute_posterior(m, k)
+posterior = bayesian.compute_posterior(
+        x=k,
+        mu=m,
+        prob_func=poisson.pmf,
+        prior_func=lambda mu: PRIOR
+        )
 
-lo_hpd, hi_hpd = posterior_interval(m, posterior, alpha=ALPHA)
-lo_low, hi_low = lower_bound(m, posterior, alpha=ALPHA)
-lo_high, hi_high = upper_bound(m, posterior, alpha=ALPHA)
+lo_hpd, hi_hpd = bayesian.posterior_interval(k, m, poisson.pmf, lambda mu: PRIOR, cl=CL)
+lo_low, hi_low = bayesian.lower_bound(k, m, poisson.pmf, lambda mu: PRIOR, cl=CL)
+lo_high, hi_high = bayesian.upper_bound(k, m, poisson.pmf, lambda mu: PRIOR, cl=CL)
 
 # Generate LaTeX table
 def fmt(a, b):
@@ -139,10 +106,3 @@ ax[0].set_ylabel("Posterior density")
 
 plt.savefig("images/bayes_interval.pgf", bbox_inches='tight')
 plt.close()
-
-utils.code_snippet_generator(
-    file=__file__,
-    start_tag="# START SNIPPET",
-    end_tag="# END SNIPPET",
-    output_file_name="code_bayes_interval.tex"
-)

@@ -10,7 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import root_scalar
 from scipy.stats import chi2, poisson
-from asd import utils, asdmath
+from asd import utils
+from asd.asdmath import interval_estimation as asdinterval
 
 # Define parameters
 CL = 0.95
@@ -91,7 +92,7 @@ def mu_hat_func(x):
 # Compute intervals for the table
 n_table = np.concatenate([np.arange(0, 10), [50]])
 lr_intervals = {n:
-                asdmath.lr_intervals(
+                asdinterval.lr_intervals(
                     x_obs=n,
                     x_range=np.arange(0, 300),
                     mu_grid=mu_span,

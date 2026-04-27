@@ -4,7 +4,8 @@ with unknown upper bound.
 '''
 import numpy as np
 import matplotlib.pyplot as plt
-from asd import utils, asdmath
+from asd import utils
+from asd.asdmath import interval_estimation as asdinterval
 
 # Define parameters
 CL = 0.9
@@ -90,7 +91,7 @@ for plot_idx, (ax, (title, low, high)) in enumerate(zip(axes, plots)):
         else:
             ax.plot(m_over, X0 * np.ones(len(m_over)), color="red", ls="-", lw=1.0)
 
-        starts, ends = asdmath.find_intervals_indices(mask)
+        starts, ends = asdinterval.find_intervals_indices(mask)
 
         for i in starts + ends:
             if plot_idx == 0:

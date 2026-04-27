@@ -5,7 +5,8 @@ distribution with mean mu and unit variance, to be put on the notes.
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-from asd import utils, asdmath
+from asd import utils
+from asd.asdmath import interval_estimation as asdinterval
 
 # Define parameters
 CL = 0.95
@@ -23,7 +24,7 @@ den = norm.pdf(x, loc=mu_hat, scale=1)
 
 r = pdf / den
 
-mask, threshold = asdmath.feldman_cousins_slice(
+mask, threshold = asdinterval.feldman_cousins_slice(
     x_range=x,
     mu=MU,
     mu_hat_func=lambda x : np.maximum(0, x),
@@ -32,7 +33,7 @@ mask, threshold = asdmath.feldman_cousins_slice(
     discrete=False
 )
 
-starts, ends = asdmath.find_intervals_indices(mask)
+starts, ends = asdinterval.find_intervals_indices(mask)
 
 # Generate plot
 fig, ax1 = utils.pgf_generator(figsize=(5.5,3.5))

@@ -1,5 +1,5 @@
 '''
-Mathematical utilities for the Analisi Statistica dei Dati notes.
+Interval estimation mathematical utilities for the Analisi Statistica dei Dati notes.
 '''
 import numpy as np
 from asd.utils import code_snippet_generator

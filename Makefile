@@ -3,13 +3,13 @@ ifeq ($(OS),Windows_NT)
     PYTHON = python
     FIXPATH = $(subst /,\,$1)
     MKDIR = if not exist $(subst /,\,$1) mkdir $(subst /,\,$1)
-	SRC_DIR = src\asd
+	SRC_DIR = src\asd\asdmath
 else
     RM = rm -f
     PYTHON = python3
     FIXPATH = $1
     MKDIR = mkdir -p $1
-	SRC_DIR = src/asd
+	SRC_DIR = src/asd/asdmath
 endif
 
 MAIN = analisi_statistica_dei_dati
