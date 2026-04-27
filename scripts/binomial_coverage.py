@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import binom
 from asd import utils
+from asd.interval_estimation import interval as asdinterval
 
 # Define parameters
 N = 20
@@ -120,11 +121,19 @@ def coverage_curve(intervals, p_grid, x_vals):
 
 prob_grid = np.linspace(0, 1, 100)
 x_values = np.arange(N + 1)
-methods = [
-    ("Probability ordering", acceptance_p_ordering),
-    ("Upper ordering", acceptance_upper),
-    ("Lower ordering", acceptance_lower)
+order = [
+    ("Probability ordering", "p"),
+    ("Upper ordering", "upper"),
+    ("Lower ordering", "lower")
 ]
+def binomial(x, p):
+    return binom.pmf(x, N, p)
+estimator = asdinterval.IntervalEstimator(
+    prob_func=binomial,
+    cl=CL,
+    mu_grid=prob_grid,
+    x_range=x_values
+)
 int_p_ordering  = invert_belt(acceptance_p_ordering, x_values, prob_grid)
 int_upper       = invert_belt(acceptance_upper, x_values, prob_grid)
 int_lower       = invert_belt(acceptance_lower, x_values, prob_grid)
@@ -147,8 +156,14 @@ curves = [
 # Generate first plot
 fig, axes = utils.pgf_generator(nrows=1, ncols=3, figsize=(5.5, 3.5), sharey=True)
 
-for ax, (title, func) in zip(axes, methods):
-    x_low, x_high = build_belt(func, prob_grid)
+for ax, (title, ordering_type) in zip(axes, order):
+    mask_list = estimator.neyman.build_belt(method="pdf", ordering_type=ordering_type)
+    x_low = []
+    x_high = []
+
+    for mask in mask_list:
+        x_low.append(min(x_values[mask]))
+        x_high.append(max(x_values[mask]))
 
     ax.fill_between(
         prob_grid,

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Callable
 import numpy as np
 from asd.interval_estimation import neyman
 
@@ -6,10 +7,10 @@ from asd.interval_estimation import neyman
 @dataclass
 class IntervalEstimator:
 
-    mu_hat_func: callable
     prob_func: callable
     cl: float
 
+    mu_hat_func: Callable | None = None
     discrete: bool = True
     x_range: np.ndarray | None = None
     mu_grid: np.ndarray | None = None
@@ -26,13 +27,14 @@ class IntervalEstimator:
             discrete=self.discrete
         )
 
-    def pdf(self, mu):
-        return self.prob_func(self.x_range, mu)
-
     def ratio(self, mu):
         pdf = self.pdf(mu)
         den = self.prob_func(self.x_range, self.mu_hat_func(self.x_range))
         return pdf / den
+
+    def pdf(self, mu):
+        return self.prob_func(self.x_range, mu)
+
 
 def find_intervals_indices(mask):
     '''
