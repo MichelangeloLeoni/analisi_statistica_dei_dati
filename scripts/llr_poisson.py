@@ -97,7 +97,12 @@ estimator = asdinterval.IntervalEstimator(
     discrete=True
 )
 
-lr_intervals = {n: estimator.lr_interval(x_obs=n) for n in n_table}
+lr_intervals = {n:
+                estimator.find_neyman_interval(
+                    x_obs=n,
+                    ordering="p",
+                    method="fc") for n in n_table}
+
 central_intervals = {n: calculate_central_interval_mu(n) for n in n_table}
 
 # Generate plot
