@@ -37,7 +37,7 @@ for i in order:
 
 mask = r >= c
 
-starts, ends = asdmath.find_intervals(mask)
+starts, ends = asdmath.find_intervals_indices(mask)
 
 # Generate plot
 fig, ax1 = utils.pgf_generator(figsize=(5.5,3.5))
