@@ -5,6 +5,7 @@ from asd.interval_estimation import neyman
 
 @dataclass
 class IntervalEstimator:
+
     mu_hat_func: callable
     prob_func: callable
     cl: float
