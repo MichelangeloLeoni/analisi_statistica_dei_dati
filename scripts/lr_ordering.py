@@ -5,7 +5,7 @@ distribution with mean mu and unit variance, to be put on the notes.
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-from asd import utils
+from asd import utils, asdmath
 
 # Define parameters
 CL = 0.95
@@ -37,17 +37,7 @@ for i in order:
 
 mask = r >= c
 
-starts = []
-ends = []
-for i in range(1, len(mask)):
-    if not mask[i-1] and mask[i]:
-        starts.append(i)
-    if mask[i-1] and not mask[i]:
-        ends.append(i-1)
-if mask[0]:
-    starts.insert(0, 0)
-if mask[-1]:
-    ends.append(len(mask)-1)
+starts, ends = asdmath.find_intervals(mask)
 
 # Generate plot
 fig, ax1 = utils.pgf_generator(figsize=(5.5,3.5))

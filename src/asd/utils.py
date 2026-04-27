@@ -101,7 +101,7 @@ def code_snippet_generator(start_tag, end_tag, output_file_name, file=__file__):
 
     latex_code = r"""\begin{minted}[fontsize=\small, linenos, breaklines]{python}"""
     latex_code += "\n"
-    latex_code += snippet_code 
+    latex_code += snippet_code
     latex_code += r"""\end{minted}"""
 
     with open(f"code/{output_file_name}", "w", encoding="utf-8") as f:

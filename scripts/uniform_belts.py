@@ -4,7 +4,7 @@ with unknown upper bound.
 '''
 import numpy as np
 import matplotlib.pyplot as plt
-from asd import utils
+from asd import utils, asdmath
 
 # Define parameters
 CL = 0.9
@@ -90,17 +90,7 @@ for plot_idx, (ax, (title, low, high)) in enumerate(zip(axes, plots)):
         else:
             ax.plot(m_over, X0 * np.ones(len(m_over)), color="red", ls="-", lw=1.0)
 
-        starts = []
-        ends = []
-        for i in range(1, len(mask)):
-            if not mask[i-1] and mask[i]:
-                starts.append(i)
-            if mask[i-1] and not mask[i]:
-                ends.append(i-1)
-        if mask[0]:
-            starts.insert(0, 0)
-        if mask[-1]:
-            ends.append(len(mask)-1)
+        starts, ends = asdmath.find_intervals(mask)
 
         for i in starts + ends:
             if plot_idx == 0:
