@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import poisson
 from asd import utils
-from asd.asdmath import bayesian
+from asd.asdmath.interval_estimation import bayesian
 
 # Define parameters
 PRIOR = 0.1 # Prior for Uniform(0, 10)
