@@ -56,6 +56,38 @@ def p_ordering(p, pdf, x_range, cl, discrete=True):
 
     return mask, threshold
 
+def upper_ordering(p, pdf, x_range, cl, discrete=True):
+
+    cum = 0
+    dx = x_range[1] - x_range[0] if not discrete else 1
+
+    for i in range(len(x_range)):
+        val = pdf[i] * dx
+        cum += val
+        if cum >= cl:
+            threshold = p[i]
+            break
+
+    mask = p >= threshold
+
+    return mask, threshold
+
+def lower_ordering(p, pdf, x_range, cl, discrete=True):
+
+    cum = 0
+    dx = x_range[1] - x_range[0] if not discrete else 1
+
+    for i in reversed(range(len(x_range))):
+        val = pdf[i] * dx
+        cum += val
+        if cum >= cl:
+            threshold = p[i]
+            break
+
+    mask = p >= threshold
+
+    return mask, threshold
+
 def feldman_cousins_slice(mu, x_range, mu_hat_func, prob_func, cl, discrete=True):
     '''
     Compute the Feldman-Cousins acceptance region for a given mu.
