@@ -3,11 +3,13 @@ ifeq ($(OS),Windows_NT)
     PYTHON = python
     FIXPATH = $(subst /,\,$1)
     MKDIR = if not exist $(subst /,\,$1) mkdir $(subst /,\,$1)
+	SRC_DIR = src\asd
 else
     RM = rm -f
     PYTHON = python3
     FIXPATH = $1
     MKDIR = mkdir -p $1
+	SRC_DIR = src/asd
 endif
 
 MAIN = analisi_statistica_dei_dati
@@ -17,6 +19,8 @@ STAMP_DIR = .stamps
 
 PY_SOURCES = $(wildcard $(PY_DIR)/*.py)
 PY_STAMPS = $(patsubst $(PY_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(PY_SOURCES))
+SRC_SOURCES = $(wildcard $(SRC_DIR)/*.py)
+SRC_STAMPS = $(patsubst $(SRC_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(SRC_SOURCES))
 
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
@@ -26,7 +30,7 @@ LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR
 
 all: build
 
-production: $(PY_STAMPS)
+production: $(PY_STAMPS) $(SRC_STAMPS)
 	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
 		-pdflatex='pdflatex %O "\def\draft{0}\input{%S}"' \
 		$(MAIN).tex
@@ -39,7 +43,12 @@ $(STAMP_DIR)/%.stamp: $(PY_DIR)/%.py
 	$(PYTHON) $<
 	@echo "Executed $<" > $@
 
-py: $(PY_STAMPS)
+$(STAMP_DIR)/%.stamp: $(SRC_DIR)/%.py
+	@$(call MKDIR, $(STAMP_DIR))
+	$(PYTHON) $<
+	@echo "Executed $<" > $@
+
+py: $(PY_STAMPS) $(SRC_STAMPS)
 	$(MAKE) build
 
 clean:

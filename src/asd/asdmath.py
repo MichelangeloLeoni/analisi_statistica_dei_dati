@@ -2,6 +2,7 @@
 Mathematical utilities for the Analisi Statistica dei Dati notes.
 '''
 import numpy as np
+from asd.utils import code_snippet_generator
 
 def find_intervals_indices(mask):
     '''
@@ -25,6 +26,7 @@ def find_intervals_indices(mask):
 
     return starts, ends
 
+# START SNIPPET
 def feldman_cousins_slice(mu, x_range, mu_hat_func, prob_func, cl, discrete=True):
     '''
     Compute the Feldman-Cousins acceptance region for a given mu.
@@ -118,3 +120,12 @@ def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, discrete=T
                 accepted_mu.append(mu)
 
     return (min(accepted_mu), max(accepted_mu))
+# END SNIPPET
+
+if __name__ == "__main__":
+    code_snippet_generator(
+        "# START SNIPPET",
+        "# END SNIPPET",
+        output_file_name="lr_intervals_function.tex",
+        file=__file__
+    )
