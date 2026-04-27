@@ -93,7 +93,7 @@ lr_intervals = {n:
         x_obs=n,
         x_range=np.arange(0, 100),
         mu_grid=mu_span,
-        mu_hat=n,
+        mu_hat=np.arange(0, 100),
         prob_func=poisson.pmf,
         cl=CL
         ) for n in n_table}
