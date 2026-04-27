@@ -27,6 +27,35 @@ def find_intervals_indices(mask):
     return starts, ends
 
 # START SNIPPET
+def p_ordering(p, pdf, x_range, cl, discrete=True):
+    '''
+    Compute the acceptance region for a given p ordering.
+
+    Parameters:
+        p: the ordering variable (e.g., likelihood ratio)
+        pdf: the probability density/mass function values for the given x_range
+        x_range: the range of x values to consider
+        cl: the confidence level (e.g., 0.95)
+        discrete: whether the x values are discrete (default: True)
+            at the moment this only affects the use of dx,
+            dx is computed supposing x_range is uniformly spaced
+    '''
+
+    order = np.argsort(p)[::-1]
+    cum = 0
+    dx = x_range[1] - x_range[0] if not discrete else 1
+
+    for i in order:
+        val = pdf[i] * dx
+        cum += val
+        if cum >= cl:
+            threshold = p[i]
+            break
+
+    mask = p >= threshold
+
+    return mask, threshold
+
 def feldman_cousins_slice(mu, x_range, mu_hat_func, prob_func, cl, discrete=True):
     '''
     Compute the Feldman-Cousins acceptance region for a given mu.
@@ -57,20 +86,7 @@ def feldman_cousins_slice(mu, x_range, mu_hat_func, prob_func, cl, discrete=True
     den = prob_func(x_range, mu_hat_func(x_range))
     r = pdf / den
 
-    order = np.argsort(r)[::-1]
-    cum = 0
-    dx = x_range[1] - x_range[0] if not discrete else 1
-
-    for i in order:
-        val = pdf[i] * dx
-        cum += val
-        if cum >= cl:
-            threshold = r[i]
-            break
-
-    mask = r >= threshold
-
-    return mask, threshold
+    return p_ordering(r, pdf, x_range, cl, discrete=discrete)
 
 def lr_intervals(x_obs, x_range, mu_grid, mu_hat_func, prob_func, cl, discrete=True):
     '''
