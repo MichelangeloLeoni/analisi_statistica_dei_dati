@@ -124,7 +124,13 @@ def fmt_interval(a, b):
     '''Format an interval for LaTeX.'''
     if np.isnan(a) or np.isnan(b):
         return r"$\text{--}$"
-    return rf"${a:.3f} \leq \mu \leq {b:.3f}$"
+    if a < 10 and b < 10:
+        return rf"${a:.3f} \leq \mu \leq {b:.3f}$"
+    if a < 10 and b >= 10:
+        return rf"${a:.3f} \leq \mu \leq {b:.2f}$"
+    if a >= 10 and b < 10:
+        return rf"${a:.2f} \leq \mu \leq {b:.3f}$"
+    return rf"${a:.2f} \leq \mu \leq {b:.2f}$"
 
 # Generate table
 fmt_lr_intervals = [fmt_interval(*lr_intervals[n]) for n in n_table]
