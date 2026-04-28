@@ -25,7 +25,7 @@ SRC_STAMPS = $(patsubst $(SRC_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(SRC_SOURCES))
 
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
-LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -shell-escape -outdir=$(OUT_DIR) -output-directory=. -silent
+LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -shell-escape -outdir=$(OUT_DIR) -silent
 # ------------------------
 
 all: py
