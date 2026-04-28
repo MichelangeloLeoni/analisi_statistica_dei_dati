@@ -1,0 +1,183 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{score\PYGZus{}ordering}\PYG{p}{(}\PYG{n}{score}\PYG{p}{,} \PYG{n}{pdf}\PYG{p}{,} \PYG{n}{cl}\PYG{p}{,} \PYG{n}{dx}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Builds a Neyman acceptance region using probability (score\PYGZhy{}value) ordering.}
+
+\PYG{l+s+sd}{    The function sorts observations by a given score (typically likelihood\PYGZhy{}ratio or}
+\PYG{l+s+sd}{    probability), then accumulates probability mass until the desired}
+\PYG{l+s+sd}{    confidence level is reached.}
+
+\PYG{l+s+sd}{    Parameters:}
+\PYG{l+s+sd}{        score : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Ordering statistic evaluated on each x (higher values are preferred).}
+\PYG{l+s+sd}{        pdf : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Probability density (or mass) function evaluated on the same grid as score.}
+\PYG{l+s+sd}{        cl : float}
+\PYG{l+s+sd}{            Confidence level (e.g. 0.68, 0.95).}
+\PYG{l+s+sd}{        dx : float}
+\PYG{l+s+sd}{            Grid spacing used for numerical integration.}
+
+\PYG{l+s+sd}{    Output:}
+\PYG{l+s+sd}{        mask : array\PYGZhy{}like (bool)}
+\PYG{l+s+sd}{            Boolean mask selecting the acceptance region.}
+\PYG{l+s+sd}{        threshold : float}
+\PYG{l+s+sd}{            Critical value of the ordering variable defining the cutoff.}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+    \PYG{c+c1}{\PYGZsh{} Sort indices in descending order of the score (highest first)}
+    \PYG{n}{order} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argsort}\PYG{p}{(}\PYG{n}{score}\PYG{p}{)[::}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+
+    \PYG{c+c1}{\PYGZsh{} Initialize cumulative probability}
+    \PYG{n}{cum} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+
+    \PYG{n}{threshold} \PYG{o}{=} \PYG{k+kc}{None}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n}{order}\PYG{p}{:}
+        \PYG{c+c1}{\PYGZsh{} Increment cumulative probability}
+        \PYG{c+c1}{\PYGZsh{} For discrete distributions, dx = 1}
+        \PYG{n}{cum} \PYG{o}{+=} \PYG{n}{pdf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{dx}
+
+        \PYG{c+c1}{\PYGZsh{} Stop once the desired confidence level is reached}
+        \PYG{k}{if} \PYG{n}{cum} \PYG{o}{\PYGZgt{}=} \PYG{n}{cl}\PYG{p}{:}
+            \PYG{n}{threshold} \PYG{o}{=} \PYG{n}{score}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+            \PYG{k}{break}
+
+    \PYG{k}{return} \PYG{n}{score} \PYG{o}{\PYGZgt{}=} \PYG{n}{threshold}\PYG{p}{,} \PYG{n}{threshold}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{upper\PYGZus{}ordering}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{,} \PYG{n}{pdf}\PYG{p}{,} \PYG{n}{cl}\PYG{p}{,} \PYG{n}{dx}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Constructs a one\PYGZhy{}sided upper confidence interval (right tail).}
+
+\PYG{l+s+sd}{    The acceptance region includes values from the lower end of the}
+\PYG{l+s+sd}{    distribution up to a threshold such that the integrated probability}
+\PYG{l+s+sd}{    equals the confidence level.}
+
+\PYG{l+s+sd}{    Parameters:}
+\PYG{l+s+sd}{        x\PYGZus{}range : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Grid of observation values (assumed ordered).}
+\PYG{l+s+sd}{        pdf : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Probability density (or mass) function on x\PYGZus{}range.}
+\PYG{l+s+sd}{        cl : float}
+\PYG{l+s+sd}{            Confidence level (e.g. 0.95).}
+\PYG{l+s+sd}{        dx : float}
+\PYG{l+s+sd}{            Grid spacing used for numerical integration.}
+
+\PYG{l+s+sd}{    Output:}
+\PYG{l+s+sd}{        mask : array\PYGZhy{}like (bool)}
+\PYG{l+s+sd}{            Boolean mask selecting values below the threshold.}
+\PYG{l+s+sd}{        threshold : float}
+\PYG{l+s+sd}{            Upper bound of the confidence interval.}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+    \PYG{c+c1}{\PYGZsh{} Initialize cumulative probability}
+    \PYG{n}{cum} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{threshold} \PYG{o}{=} \PYG{k+kc}{None}
+
+    \PYG{c+c1}{\PYGZsh{} Scan from left to right accumulating probability mass}
+    \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{):}
+        \PYG{n}{cum} \PYG{o}{+=} \PYG{n}{pdf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{dx}
+
+        \PYG{c+c1}{\PYGZsh{} Stop once the desired confidence level is reached}
+        \PYG{k}{if} \PYG{n}{cum} \PYG{o}{\PYGZgt{}=} \PYG{n}{cl}\PYG{p}{:}
+            \PYG{n}{threshold} \PYG{o}{=} \PYG{n}{x}
+            \PYG{k}{break}
+
+    \PYG{c+c1}{\PYGZsh{} Return acceptance region (left\PYGZhy{}sided interval) and the threshold value}
+    \PYG{k}{return} \PYG{n}{x\PYGZus{}range} \PYG{o}{\PYGZlt{}=} \PYG{n}{threshold}\PYG{p}{,} \PYG{n}{threshold}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{lower\PYGZus{}ordering}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{,} \PYG{n}{pdf}\PYG{p}{,} \PYG{n}{cl}\PYG{p}{,} \PYG{n}{dx}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Constructs a one\PYGZhy{}sided lower confidence interval (left tail).}
+
+\PYG{l+s+sd}{    The acceptance region includes values from the upper end of the}
+\PYG{l+s+sd}{    distribution down to a threshold such that the integrated probability}
+\PYG{l+s+sd}{    equals the confidence level.}
+
+\PYG{l+s+sd}{    Parameters:}
+\PYG{l+s+sd}{        x\PYGZus{}range : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Grid of observation values (assumed ordered).}
+\PYG{l+s+sd}{        pdf : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Probability density (or mass) function on x\PYGZus{}range.}
+\PYG{l+s+sd}{        cl : float}
+\PYG{l+s+sd}{            Confidence level (e.g. 0.95).}
+\PYG{l+s+sd}{        dx : float}
+\PYG{l+s+sd}{            Grid spacing used for numerical integration.}
+
+\PYG{l+s+sd}{    Output:}
+\PYG{l+s+sd}{        mask : array\PYGZhy{}like (bool)}
+\PYG{l+s+sd}{            Boolean mask selecting values above the threshold.}
+\PYG{l+s+sd}{        threshold : float}
+\PYG{l+s+sd}{            Lower bound of the confidence interval.}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+    \PYG{c+c1}{\PYGZsh{} Initialize cumulative probability}
+    \PYG{n}{cum} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{threshold} \PYG{o}{=} \PYG{k+kc}{None}
+
+    \PYG{c+c1}{\PYGZsh{} Scan from right to left accumulating probability mass}
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{reversed}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{))):}
+        \PYG{n}{cum} \PYG{o}{+=} \PYG{n}{pdf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{dx}
+
+        \PYG{c+c1}{\PYGZsh{} Stop once the desired confidence level is reached}
+        \PYG{k}{if} \PYG{n}{cum} \PYG{o}{\PYGZgt{}=} \PYG{n}{cl}\PYG{p}{:}
+            \PYG{n}{threshold} \PYG{o}{=} \PYG{n}{x\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+            \PYG{k}{break}
+
+    \PYG{k}{return} \PYG{n}{x\PYGZus{}range} \PYG{o}{\PYGZgt{}=} \PYG{n}{threshold}\PYG{p}{,} \PYG{n}{threshold}
+
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{central\PYGZus{}ordering}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{,} \PYG{n}{pdf}\PYG{p}{,} \PYG{n}{cl}\PYG{p}{,} \PYG{n}{dx}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Constructs a central (two\PYGZhy{}sided) confidence interval.}
+
+\PYG{l+s+sd}{    The acceptance region is defined by removing equal probability}
+\PYG{l+s+sd}{    mass from both tails (alpha/2 on each side), leaving the central}
+\PYG{l+s+sd}{    region with total probability equal to the confidence level.}
+
+\PYG{l+s+sd}{    Parameters:}
+\PYG{l+s+sd}{        x\PYGZus{}range : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Grid of observation values (assumed ordered).}
+\PYG{l+s+sd}{        pdf : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Probability density (or mass) function on x\PYGZus{}range.}
+\PYG{l+s+sd}{        cl : float}
+\PYG{l+s+sd}{            Confidence level (e.g. 0.95).}
+\PYG{l+s+sd}{        dx : float}
+\PYG{l+s+sd}{            Grid spacing used for numerical integration.}
+
+\PYG{l+s+sd}{    Output:}
+\PYG{l+s+sd}{        mask : array\PYGZhy{}like (bool)}
+\PYG{l+s+sd}{            Boolean mask selecting the central acceptance region.}
+\PYG{l+s+sd}{        thresholds : tuple (low, high)}
+\PYG{l+s+sd}{            Lower and upper bounds of the confidence interval.}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+    \PYG{n}{alpha} \PYG{o}{=} \PYG{l+m+mf}{1.0} \PYG{o}{\PYGZhy{}} \PYG{n}{cl}
+    \PYG{n}{tail} \PYG{o}{=} \PYG{n}{alpha} \PYG{o}{/} \PYG{l+m+mf}{2.0}
+
+    \PYG{c+c1}{\PYGZsh{} Lower threshold (left tail)}
+    \PYG{n}{cum} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{low} \PYG{o}{=} \PYG{k+kc}{None}
+
+    \PYG{k}{for} \PYG{n}{i}\PYG{p}{,} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{enumerate}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{):}
+        \PYG{n}{cum} \PYG{o}{+=} \PYG{n}{pdf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{dx}
+
+        \PYG{c+c1}{\PYGZsh{} Stop once left tail reaches alpha/2}
+        \PYG{k}{if} \PYG{n}{cum} \PYG{o}{\PYGZgt{}=} \PYG{n}{tail}\PYG{p}{:}
+            \PYG{n}{low} \PYG{o}{=} \PYG{n}{x}
+            \PYG{k}{break}
+
+    \PYG{c+c1}{\PYGZsh{} Upper threshold (right tail)}
+    \PYG{n}{cum} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{n}{high} \PYG{o}{=} \PYG{k+kc}{None}
+
+    \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{reversed}\PYG{p}{(}\PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{x\PYGZus{}range}\PYG{p}{))):}
+        \PYG{n}{cum} \PYG{o}{+=} \PYG{n}{pdf}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]} \PYG{o}{*} \PYG{n}{dx}
+
+        \PYG{c+c1}{\PYGZsh{} Stop once right tail reaches alpha/2}
+        \PYG{k}{if} \PYG{n}{cum} \PYG{o}{\PYGZgt{}=} \PYG{n}{tail}\PYG{p}{:}
+            \PYG{n}{high} \PYG{o}{=} \PYG{n}{x\PYGZus{}range}\PYG{p}{[}\PYG{n}{i}\PYG{p}{]}
+            \PYG{k}{break}
+
+    \PYG{c+c1}{\PYGZsh{} Central acceptance region}
+    \PYG{n}{mask} \PYG{o}{=} \PYG{p}{(}\PYG{n}{x\PYGZus{}range} \PYG{o}{\PYGZgt{}=} \PYG{n}{low}\PYG{p}{)} \PYG{o}{\PYGZam{}} \PYG{p}{(}\PYG{n}{x\PYGZus{}range} \PYG{o}{\PYGZlt{}=} \PYG{n}{high}\PYG{p}{)}
+
+    \PYG{k}{return} \PYG{n}{mask}\PYG{p}{,} \PYG{p}{(}\PYG{n}{low}\PYG{p}{,} \PYG{n}{high}\PYG{p}{)}
+\end{MintedVerbatim}

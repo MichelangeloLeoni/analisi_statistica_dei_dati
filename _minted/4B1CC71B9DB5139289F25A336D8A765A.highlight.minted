@@ -1,0 +1,40 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{calculate\PYGZus{}central\PYGZus{}interval\PYGZus{}mu}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{cl}\PYG{o}{=}\PYG{n}{CL}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Compute central confidence interval for Poisson mean.}
+
+\PYG{l+s+sd}{    The interval is defined by equal tail probabilities.}
+
+\PYG{l+s+sd}{    Parameters:}
+\PYG{l+s+sd}{        n\PYGZus{}obs : int}
+\PYG{l+s+sd}{            Observed count.}
+\PYG{l+s+sd}{        cl : float}
+\PYG{l+s+sd}{            Confidence level.}
+
+\PYG{l+s+sd}{    Output:}
+\PYG{l+s+sd}{        (low, high) : tuple}
+\PYG{l+s+sd}{            Central confidence interval.}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+    \PYG{n}{alpha} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{cl}
+
+    \PYG{c+c1}{\PYGZsh{} Lower bound}
+    \PYG{k}{if} \PYG{n}{n\PYGZus{}obs} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{n}{low} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+    \PYG{k}{else}\PYG{p}{:}
+        \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{f\PYGZus{}low}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{):}
+            \PYG{c+c1}{\PYGZsh{} Upper tail condition}
+            \PYG{k}{return} \PYG{p}{(}\PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{cdf}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{))} \PYG{o}{\PYGZhy{}} \PYG{n}{alpha} \PYG{o}{/} \PYG{l+m+mi}{2}
+
+        \PYG{n}{low} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{f\PYGZus{}low}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mf}{1e\PYGZhy{}12}\PYG{p}{,} \PYG{n}{n\PYGZus{}obs}\PYG{p}{])}\PYG{o}{.}\PYG{n}{root}
+
+    \PYG{c+c1}{\PYGZsh{} Upper bound}
+    \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{f\PYGZus{}high}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{):}
+        \PYG{c+c1}{\PYGZsh{} Lower tail condition}
+        \PYG{k}{return} \PYG{n}{poisson}\PYG{o}{.}\PYG{n}{cdf}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{mu}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{alpha} \PYG{o}{/} \PYG{l+m+mi}{2}
+
+    \PYG{n}{high\PYGZus{}guess} \PYG{o}{=} \PYG{n}{n\PYGZus{}obs} \PYG{o}{+} \PYG{l+m+mi}{10} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{n\PYGZus{}obs} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{20}
+    \PYG{n}{high} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{f\PYGZus{}high}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{n}{n\PYGZus{}obs}\PYG{p}{,} \PYG{n}{high\PYGZus{}guess}\PYG{p}{])}\PYG{o}{.}\PYG{n}{root}
+
+    \PYG{k}{return} \PYG{p}{(}\PYG{n}{low}\PYG{p}{,} \PYG{n}{high}\PYG{p}{)}
+\end{MintedVerbatim}

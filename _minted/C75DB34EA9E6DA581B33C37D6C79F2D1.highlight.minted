@@ -1,0 +1,51 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{calculate\PYGZus{}llr\PYGZus{}intervals}\PYG{p}{(}\PYG{n}{n\PYGZus{}values}\PYG{p}{,} \PYG{n}{cl}\PYG{o}{=}\PYG{n}{CL}\PYG{p}{):}
+\PYG{+w}{    }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{    Compute likelihood\PYGZhy{}ratio (Wilks) intervals for Poisson counts.}
+
+\PYG{l+s+sd}{    For each observed count n, solves the likelihood ratio equation:}
+\PYG{l+s+sd}{        \PYGZhy{}2 log lambda(mu) = chi2 quantile}
+
+\PYG{l+s+sd}{    Parameters:}
+\PYG{l+s+sd}{        n\PYGZus{}values : array\PYGZhy{}like}
+\PYG{l+s+sd}{            Observed counts.}
+\PYG{l+s+sd}{        cl : float}
+\PYG{l+s+sd}{            Confidence level.}
+
+\PYG{l+s+sd}{    Output:}
+\PYG{l+s+sd}{        intervals : list of tuples}
+\PYG{l+s+sd}{            (lower, upper) bounds for each n.}
+\PYG{l+s+sd}{    \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+
+    \PYG{c+c1}{\PYGZsh{} Critical value from chi\PYGZhy{}square distribution (Wilks\PYGZsq{} theorem)}
+    \PYG{n}{critical\PYGZus{}value} \PYG{o}{=} \PYG{n}{chi2}\PYG{o}{.}\PYG{n}{ppf}\PYG{p}{(}\PYG{n}{cl}\PYG{p}{,} \PYG{n}{df}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+    \PYG{n}{intervals} \PYG{o}{=} \PYG{p}{[]}
+
+    \PYG{k}{for} \PYG{n}{n} \PYG{o+ow}{in} \PYG{n}{n\PYGZus{}values}\PYG{p}{:}
+
+        \PYG{k}{def}\PYG{+w}{ }\PYG{n+nf}{lam}\PYG{p}{(}\PYG{n}{mu}\PYG{p}{,} \PYG{n}{n}\PYG{o}{=}\PYG{n}{n}\PYG{p}{):}
+\PYG{+w}{            }\PYG{l+s+sd}{\PYGZsq{}\PYGZsq{}\PYGZsq{}}
+\PYG{l+s+sd}{            Likelihood ratio equation for Poisson model.}
+
+\PYG{l+s+sd}{            Returns zero at the interval boundaries.}
+\PYG{l+s+sd}{            \PYGZsq{}\PYGZsq{}\PYGZsq{}}
+            \PYG{k}{if} \PYG{n}{n} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{k}{return} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{critical\PYGZus{}value}
+            \PYG{k}{if} \PYG{n}{mu} \PYG{o}{\PYGZlt{}=} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{k}{return} \PYG{l+m+mf}{1e9}  \PYG{c+c1}{\PYGZsh{} avoid invalid region}
+            \PYG{k}{return} \PYG{l+m+mi}{2} \PYG{o}{*} \PYG{p}{(}\PYG{n}{mu} \PYG{o}{\PYGZhy{}} \PYG{n}{n} \PYG{o}{+} \PYG{n}{n} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{log}\PYG{p}{(}\PYG{n}{n} \PYG{o}{/} \PYG{n}{mu}\PYG{p}{))} \PYG{o}{\PYGZhy{}} \PYG{n}{critical\PYGZus{}value}
+
+        \PYG{c+c1}{\PYGZsh{} Lower bound}
+        \PYG{k}{if} \PYG{n}{n} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{low} \PYG{o}{=} \PYG{l+m+mf}{0.0}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{low} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{lam}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{l+m+mf}{1e\PYGZhy{}12}\PYG{p}{,} \PYG{n}{n}\PYG{p}{])}\PYG{o}{.}\PYG{n}{root}
+
+        \PYG{c+c1}{\PYGZsh{} Upper bound (use a wide bracket to ensure root is found)}
+        \PYG{n}{upper\PYGZus{}guess} \PYG{o}{=} \PYG{n+nb}{max}\PYG{p}{(}\PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{10} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sqrt}\PYG{p}{(}\PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{),} \PYG{n}{n} \PYG{o}{+} \PYG{l+m+mi}{10}\PYG{p}{)}
+        \PYG{n}{high} \PYG{o}{=} \PYG{n}{root\PYGZus{}scalar}\PYG{p}{(}\PYG{n}{lam}\PYG{p}{,} \PYG{n}{bracket}\PYG{o}{=}\PYG{p}{[}\PYG{n}{n}\PYG{p}{,} \PYG{n}{upper\PYGZus{}guess}\PYG{p}{])}\PYG{o}{.}\PYG{n}{root}
+
+        \PYG{n}{intervals}\PYG{o}{.}\PYG{n}{append}\PYG{p}{((}\PYG{n}{low}\PYG{p}{,} \PYG{n}{high}\PYG{p}{))}
+
+    \PYG{k}{return} \PYG{n}{intervals}
+\end{MintedVerbatim}

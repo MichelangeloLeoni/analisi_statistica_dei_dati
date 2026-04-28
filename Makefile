@@ -25,14 +25,15 @@ SRC_STAMPS = $(patsubst $(SRC_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(SRC_SOURCES))
 
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
-LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR) -silent
-
+LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -shell-escape -outdir=$(OUT_DIR) -output-directory=. -silent
 # ------------------------
 
 all: py
 
 check-dirs:
-	@$(foreach dir,$(REQUIRED_DIRS),$(call MKDIR,$(dir));)
+	@$(call MKDIR,images)
+	@$(call MKDIR,code)
+	@$(call MKDIR,tables)
 
 production: check-dirs $(PY_STAMPS) $(SRC_STAMPS)
 	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
