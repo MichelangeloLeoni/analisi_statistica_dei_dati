@@ -6,9 +6,9 @@ import numpy as np
 from asd import utils
 
 # START SNIPPET
-def p_ordering(score, pdf, cl, dx):
+def score_ordering(score, pdf, cl, dx):
     '''
-    Builds a Neyman acceptance region using probability (p-value) ordering.
+    Builds a Neyman acceptance region using probability (score-value) ordering.
 
     The function sorts observations by a given score (typically likelihood-ratio or
     probability), then accumulates probability mass until the desired
@@ -121,12 +121,12 @@ def lower_ordering(x_range, pdf, cl, dx):
     threshold = None
 
     # Scan from right to left accumulating probability mass
-    for i, x in enumerate(reversed(x_range)):
+    for i in reversed(range(len(x_range))):
         cum += pdf[i] * dx
 
         # Stop once the desired confidence level is reached
         if cum >= cl:
-            threshold = x
+            threshold = x_range[i]
             break
 
     return x_range >= threshold, threshold

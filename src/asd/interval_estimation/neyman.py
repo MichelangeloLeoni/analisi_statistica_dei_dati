@@ -66,7 +66,7 @@ class NeymanConstruction:
             score = self.model.ratio(mu) if method == "fc" else pdf
 
             # Build acceptance region using probability ordering
-            mask, thr = ordering.p_ordering(
+            mask, thr = ordering.score_ordering(
                 score,
                 pdf,
                 self.model.cl,

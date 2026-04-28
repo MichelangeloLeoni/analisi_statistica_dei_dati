@@ -45,7 +45,7 @@ def calculate_llr_intervals(n_values, cl=CL):
 
     return intervals
 
-def calculate_central_interval_mu(n_obs, cl=0.95):
+def calculate_central_interval_mu(n_obs, cl=CL):
     '''
     Compute the central interval at confidence level cl
     for a given observed count n_obs.
