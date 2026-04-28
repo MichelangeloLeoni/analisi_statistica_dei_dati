@@ -20,13 +20,15 @@
 
 \vspace{2cm}
 
-Up until now, several methods for estimating properties of \textit{pdf's} have been discussed along with techniques for obtaining the variance of these estimators. One such method was the point estimate of a parameter, where we discussed, along with the value obtained by the estimate itself, its variance. Essentially, we looked at \textit{how widely} the estimates would be distributed if the experiment would be repeated many times in the same way. What the title of this chapter suggests is that we are now looking for a way to express, up to a certain degree of confidence what interval the parameter that we are trying to estimate falls within. We take a second to note that while it may seem that we have already achieved something similar, this request is fundamentally different than anything our point estimate theory can provide. A naïve reader may say:
+In our eternal fight to try to infer something about the unknown parameters that govern the observables we measure, we introduce a new type of inference: the interval estimation. 
+
+We are looking for a way to express, up to a certain degree of \textit{confidence}\sidenote{We'll define what confidence really is in a moment, so just bear with us} what interval the parameter that we are trying to estimate falls within. We take a second to note that while it may seem that we have already achieved something similar, this request is fundamentally different than anything our point estimate theory can provide. A naïve reader may say:
 
 	\[
 	\hat\theta = a \pm \sigma_a \Rightarrow \hat\theta \in \left[a-\sigma_a, a+\sigma_a\right]
 	\]
 
-Though you, as an attentive reader and excellent statistician will immediately identify the crucial flaw in this statement: $\sigma_a$ indicates the \textit{variability} of the estimate in the ensemble of repeated experiments, and does not represent the same "hard" upper/lower bound that we are trying to achieve through interval estimations. Really, the values $a-\sigma_a, a+\sigma_a$ have no more significance than any others in the point estimate formulation. We will learn in this section that if the function that we are sampling is Normal, then the above interval really represents a 68.3\% confidence interval centered around the estimated value.
+Though you, as an attentive reader and excellent statistician will immediately identify the crucial flaw in this statement: $\sigma_a$ indicates the \textit{variability} of the estimate in the ensemble of repeated experiments, and does not represent the same "hard" upper/lower bound that we are trying to achieve through interval estimations. Really, the values $a-\sigma_a, a+\sigma_a$ have no more significance than any others in the point estimate formulation.
 
 \begin{example}
 	If we take a second, we can even find some edge case examples where the point estimate method breaks down, considering a Poisson \textit{pdf}. We know that the MLE is $\hat\mu=k$ with null bias and $\Var\left[\hat\mu\right] = \mu$. Therefore if I measure one count $k=1$ then I obtain the point estimate for $\mu = 1\pm1$. Only armed with this we would be tempted to say that we can't exclude $\mu\leq0$, even though we know that the counts can, by definition, only be positive.
@@ -135,6 +137,7 @@ The most common and simple choice is to use \textit{posterior ordering} $o(\thet
 We can see the power of this Bayesian case, and it's not hard to understand what an interval estimate looks like and means under this formulation. However, it is not always applicable, as the unknown parameters must admit \textit{pdf's} themselves.
 
 \section{The standard interval estimator}
+
 We once again move away from the Bayesian outlook, which remains intuitive and extremely descriptive, though limited by the assumption of a \textit{prior} $\pi(\theta)$.
 
 In the general case, in order to find an interval estimate for a certain parameter $\theta$ we will have to solve the following equation:
@@ -152,14 +155,13 @@ Basically, at its core, we can condense this entire equation into the most basic
 	g_{x_0}(\theta) - CL \geq 0
 	\]
 
-Namely: \textbf{a function of the parameters at a fixed observation whose positive domain describes an interval in the parameter space}.
 If we think about it, on the left side we have an integral in $\dd x$, and on the right a constant that we fix beforehand, namely the "confidence level" \textit{CL}\sidenote{Don't worry about these definitions, they will all get cleared up in the near future. This part aims to provide a general outlook on the math that we will be using, so just bear with us}. Fundamentally, the equation that describes the interval in $\theta$ is, justifiably so, an inequality dependent on the parameter that we must solve. Let's never forget this as it will always be the final step. 
 
-Now, what exactly is this $g_{x_0}(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want to construct an interval such that, over many repetitions of the experiment (different $x_0$), the probability that the resulting interval contains the true $\theta$ is at least \textit{CL}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
+Now, what exactly is this $f(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want that, with probability \textit{CL}, the interval defined by $o_{\theta}(x)$ contains $\theta$\todo{SOS: re-state better}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
 
-This integral in eq. \ref{eq:int_definition} is nothing more than the integral of the \textit{pdf} itself, which we know to be the cumulative of the density function\sidenote{\textit{CDF's} start the integration from $-\infty$, so our integral is actually the difference of two \textit{CDF's}}, calculated on upper and lower bounds that may, in general, depend on the parameter. 
+This integral in eq. \ref{eq:int_definition} is nothing more than the integral of the \textit{pdf} itself, which we know to be the cumulative of the density function\sidenote{\textit{CDF's} start the integration from $0$, as the lower bound is not necessarily $0$ this integral is, at most, the difference of two \textit{CDF's}}, calculated on upper and lower bounds that may, in general, depend on the parameter. 
 
-What this all means is that having fixed an observed $x_0$ (coming from \textit{pdf} $p(x;\theta)$), the ordering function describes a $\theta$-dependent interval for which the integral of the \textit{pdf} is greater than or equal to the \textit{CL}. Therefore, we can solve this expression (which we so naïvely wrote as $g_{x_0}(\theta) - CL \geq 0$) to find an interval in $\theta$, and that will be the estimate that we are looking for. 
+What this all means is that having fixed an observed $x_0$ (coming from \textit{pdf} $p(x;\theta)$), the ordering function describes a $\theta$-dependent interval for which the integral of the \textit{pdf} is greater than or equal to the \textit{CL}. Therefore, we can solve this expression (which we so naïvely wrote as $f(\theta) - CL \geq 0$) to find an interval in $\theta$, and that will be the estimate that we are looking for. 
 
 Solving this equation is rarely simple, and can be done when the \textit{pdf} assumes a closed form cumulative, or at least when the latter is tabled\todo{such as the ones in ref.}. The next sections will break down each part of the process, using examples and visual aids to try to better explain this difficult, yet fundamental concept.
 
@@ -223,7 +225,7 @@ We could start with setting $o_{\theta}(x)=p(x;\theta)$ (\textbf{probability ord
 
 Another natural choice would be to use $o_{\theta}(x)=\pm x$, as to start from the lowest value of $x$ and include higher values until the confidence level is reached (essentially finding the value for which the cumulative is equal to \textit{CL}), or vice versa. This is \textbf{lower/upper ordering} (which brings us superior/inferior bounds on the parameter).
 
-We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o_{\theta}(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance reigon repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
+We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o_{\theta}(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$, or alternatively repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
 
 The final ordering algorithm we will explore for now is one based on the \textbf{Likelihood Ratio} (some texts may call it "Feldman-Cousins ordering"). The idea is to use the Likelihood Ratio as the ordering function
 	\[
@@ -236,7 +238,7 @@ which means, in practice, to solve the following system of equations:
 		LR(x_1) = LR(x_2)
 	\end{cases}
 	\]
-This ordering function, for each fixed $\theta$, uses the ratio between the probability of $x$ under the current $\theta$ and the probability of $x$ assuming $\theta=\hat{\theta}_{MLE}$, essentially asking how much "worse" the current $\theta$ is than the best possible one. What this corresponds to is starting at the top of the $LR(x)$, and increasing the $x$ interval according to the $LR$\sidenote{It's kind of like probability ordering, where instead of ordering using $p(x)$ you order using $LR(x)$} until the interval defined through $LR$ corresponds to an integral of measure \textit{CL} in $p(x)$. This is where the above system comes from, we set a threshold on the Likelihood ratio such that the $x$ values of the intersection define the bounds of the confidence interval in $p$. This is favorable with respect to probability ordering, as the interval takes into consideration the information we have on $\theta$ (like its physical limits), and is guaranteed to contain the \textit{MLE}. We will expand on this case further in example \ref{ex:LR_vs_p_ordering}. 
+This ordering function, for each fixed $\theta$, uses the ratio between the probability of $x$ under the current $\theta$ and the probability of $x$ assuming $\theta=\hat{\theta}_{MLE}$, essentially asking how much "worse" the current $\theta$ is than the best possible one. What this corresponds to is starting at the top of the $LR(x)$, and increasing the $x$ interval according to the $LR$\sidenote{It's kind of like probability ordering, where instead of ordering using $p(x)$ you order using $LR(x)$} until the interval defined through $LR$ corresponds to an integral of measure \textit{CL} in $p(x)$. This is where the above system comes from, we set a threshold on the Likelihood ratio such that the $x$ values of the intersection define the bounds of the confidence interval in $p$. This is favorable with respect to probability ordering, as the interval takes into consideration the information we have on $\theta$ (like its physical limits), and is guaranteed to contain the \textit{MLE}, as well as bring the smallest possible interval in $\theta$. We will expand on this case further in example \ref{ex:LR_vs_p_ordering}. 
 
 \begin{figure}[H]
 	\centering
@@ -264,20 +266,7 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 
 \begin{example}
 \label{ex:LR_vs_p_ordering}
-	Let's build the Neyman band for a Normally distributed $x$ with unknown parameter $\mu$ (let's say $\sigma=1$ for simplicity). We choose, for the sake of this example, to use probability-ordering with $CL=0.95$.
-	
-	The goal is to solve:
-	
-	\[
-	\int_{\N(x;\mu,1)\geq q(CL)} \N(x;\mu,1) \dd x = 0.95
-	\]
-	
-	This is equivalent to asking which $x$ values (ordered centrally, which corresponds to probability ordering through symmetry in this case) do we need to integrate on to achieve a $95\%$ integral of a unitary variance Normal distribution? Luckily, as we can imagine, this is independent of $\mu$, and the Normal distribution tables\todo{ref and more precise than 1.96 pls} come to our rescue, as we can see that the interval in $x$ is:
-	
-	\[
-	x\in\left[\mu-1.96,\mu+1.96\right]
-	\]
-	
+	Let's build the Neyman band for a Normally distributed $x$ with unknown parameter $\mu$ (let's say $\sigma=1$ for simplicity). We choose, for the sake of this example, to use probability-ordering. We can't integrate the Normal distribution analytically, so we'll have to fall back on the tables found in \textcolor{red}{REF, also work out the example that z is like 1.95 for 0.95 CL}
 	
 	\begin{figure}[H]
 		\centering
@@ -302,11 +291,13 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
 
-These belts are of great didactic caliber, and are useful in visualizing what it is that we are actually doing under this whole mathematical abstraction. We will never really draw the belts out and explicitly intersect them to find intervals, rather we are visualizing for all $x$ the dependence of the interval on the measured data. By solving equation \ref{eq:int_definition} (numerically, or if we are lucky, analytically), we are actually finding the bounding functions of these intervals. \todo{This could be a good place for the code}
+These belts are of great didactic caliber, and are useful in visualizing what it is that we are actually doing under this whole mathematical abstraction. Numerically, we are representing the dependence of the $\dd x$ integral bounds in $\theta$, such that $\int_{}$
+
+Analytically, the goal would be to define a function, or set of functions, of the type $x_{max}(\theta)$, $x_{min}(\theta)$, or their inverses. Sometimes, based on the ordering algorithm, \textit{pdf}, and parameter we are trying to estimate, we are able to build the whole belt analytically and define an interval for $\theta$ for all observed values of $x$. 
 
 
 \begin{example}
-	Let's draw a Neyman belt for a case that can solved analytically. We will study the common example of an observable $x$ distributed following a uniform \textit{pdf} $p(x;m) = \frac{1}{m}$ for $0\leq x \leq m$ and $0$ outside of that support. We observe one $x$ and wish to build an interval estimate for $m$ with a $90\%$ \textit{CL}. 
+	Let's build a Neyman belt analytically! We will study the common case of an observable $x$ distributed following a uniform \textit{pdf} $p(x;m) = \frac{1}{m}$ for $0\leq x \leq m$ and $0$ outside of that support. We observe one $x$ and wish to build an interval estimate for $m$ with a $90\%$ \textit{CL}. 
 	
 	Let's start by finding a lower limit for $m$, which means using "upper ordering":
 	
@@ -404,6 +395,7 @@ What does this mean? If we express our density function through the pivotal quan
 We note that we have already explored an example of this kind, fig \ref{fig:neyman_gauss} shows the Neyman belt for a Normally distributed $x$ with unitary variance, which is exactly the belt that we would obtain for the pivot $z$\sidenote{We don't need for the observable to have unitary variance, we just use the pivot $z$ which corrects for whatever the variance is}. As we can see in that example, the belt is independent for $\mu$ and its width was found by consulting the tables for the central integral of a standard Gaussian.\todo{ref?}
 
 Other pivotal quantities exist, and when possible it is always a good idea to abuse their general properties.
+
 
 \subsection{Likelihood ratio theorem}
 
@@ -585,7 +577,7 @@ Now we know that this distribution was obtained through the sum of $\nu$ variabl
 
 \subsection[A unifying perspective]{A unifying perspective\protect\sidenotemark}
 \sidenotetext{The reader is warned that in the following we are going to talk about the core concepts in a mathematically loose way and in a more qualitative manner then previously done. The many imprecision (and possibly blunders) that we are going to make are to be intended as a genuine attempt at making the bigger picture clearer. If you think you already have a good grasp on the matter, you can skip what comes!}
-If you're as confused as I was when I first approached the topic of interval estimations, it could be helpful to make a real quick and general summary of the concepts introduced. We can exploit the example on the use of LLR on Poissonian (\ref{ex:llr_poissonian}) to sum up some concepts. To build the table we used three different approaches:
+If you're as confused as I was when I first approached the topic of interval estimations (frankly I'm still more than a bit confused :|), it could be helpful to make a real quick and general summary of the concepts introduced. We can exploit the example on the use of LLR on Poissonian (\ref{ex:llr_poissonian}) to sum up some concepts. To build the table we used three different approaches:
 \begin{itemize}
 	\item Wilks' method
 	\item Central interval (equal-tail)
@@ -657,6 +649,14 @@ All the interval estimation procedures discussed can be viewed as implementation
 	\item invert this construction to obtain a set of plausible parameter values
 \end{itemize}
 
+The difference lies in how this is achieved:
+\begin{itemize}
+	\item explicitly, by constructing the full Neyman belt (Feldman-Cousins);
+	\item implicitly, by exploiting pivotal quantities or approximations (central intervals, Wilks)
+\end{itemize}
+
+In all cases, the objective is to obtain intervals with the desired coverage. The choice of method is therefore guided by practical considerations such as computational cost, optimality criteria, and the validity of asymptotic approximations.
+\todo{This whole part is really an experiment and I'm not satisfied with the result. I'll try to refine it little by little, because I think that a qualitative overview of the subject can be hugely helpful.}
 The difference lies in how this is achieved:
 \begin{itemize}
 	\item explicitly, by constructing the full Neyman belt (Feldman-Cousins);
