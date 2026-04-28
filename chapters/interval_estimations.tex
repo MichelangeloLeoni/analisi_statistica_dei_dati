@@ -50,7 +50,7 @@ While a point estimate provides a single "best guess," an interval estimate offe
 As we have mentioned many times during this course, it is the job of the expert data analyst to know what tools to apply to a certain data set in the specific situation they might find themselves in. 
 
 \section{Bayesian interval estimation}
-We now consider the "fortunate" case in which the unknown parameter can be described by a probability density function, allowing us to perform inference using Bayes' theorem, as discussed in Section \ref{subsec:Inf_Bayes}. Starting from Eq.~(\ref{eq:posterior_dob}), we write the posterior distribution as
+We now consider the "fortunate" case in which the unknown parameter can be described by a probability density function, allowing us to perform inference using Bayes' theorem, as discussed in Section \ref{subsec:Inf_Bayes}. Starting from Eq. (\ref{eq:posterior_dob}), we write the posterior distribution as
 \[
 \pi_x(\theta) = \pi(\theta)\frac{L_x(\theta)}{p(x)}
 \]
@@ -65,6 +65,8 @@ where $0 < c < 1$ is a constant called the \textit{credibility}. The set $f(x)$ 
 P(\theta \in f(x)\mid x) = c
 \]
 
+The importance of this scripture cannot be overstated: we are finding an interval in the \textit{parameter space}, and this interval \textit{depends on the observed data}.
+
 The credibility $c$ quantifies the degree of belief that the true value of the parameter lies within the region $f(x)$. In practice, $c$ is chosen in advance, typically taking values between $0.9$ and $0.95$.
 
 As usual, the Bayesian formulation brings many nice properties such as respecting the Likelihood principle, obtaining clear, specific, and intuitive results. However, it depends on how we choose the prior, which can greatly influence the type of result we obtain. Also, we need $\theta$ to be able to admit a \textit{pdf} in the first place. \todo{Here we can talk about Jeffrey's prior, if it ever comes up, or reference priors.}
@@ -77,7 +79,7 @@ In this case, the equation becomes:
 	\int_{o(\theta)\geq q_c} \pi_x(\theta)\dd \theta = c
 	\]
 
-Where $q(c)$ is a constant that depends on the credibility $c$ in a way such as to satisfy the equation. Usually, this allows us to find one unique solution, given $c$ and the ordering function.
+Where $q(c)$ is a constant that depends on the credibility $c$ in a way such as to satisfy the equation. Usually, this allows us to find one unique solution, given $c$ and the ordering function. Essentially, we are finding an interval in $\theta$ where $o(\theta)\geq q_c$ and the above integral is equal to $c$.
 
 The most common and simple choice is to use \textit{posterior ordering} $o(\theta) =\pi_x(\theta)$, which outputs credible region with the smallest measure in $\dd\theta$. This is desirable, as it intuitively restricts the credible values of the parameters more than any other ordering function. We note that this is not invariant for variable changes in the parameter space. 
 
@@ -132,11 +134,39 @@ The most common and simple choice is to use \textit{posterior ordering} $o(\thet
 \todo{I think there is an error in the lower bound ordering case. The upper bound is set to 10, but to me it seems like a limit imposed in the python script, not the true results of the integration.}
 \todo{Add to the example the variable change stuff?} 
 
+We can see the power of this Bayesian case, and it's not hard to understand what an interval estimate looks like and means under this formulation. However, it is not always applicable, as the unknown parameters must admit \textit{pdf's} themselves.
+
 \section{The standard interval estimator}
 
 We once again move away from the Bayesian outlook, which remains intuitive and extremely descriptive, though limited by the assumption of a \textit{prior} $\pi(\theta)$.
 
-However, we adopt  many of the properties studied in that section, and we begin by defining the non-subjectivist version of credibility\sidenote{Well, more precisely, \textit{coverage}}:
+In the general case, in order to find an interval estimate for a certain parameter $\theta$ we will have to solve the following equation:
+
+\begin{equation}
+	\int_{o_{\theta}(x)\geq q(CL)} p(x;\theta)\dd x \geq CL
+	\label{eq:int_definition}
+\end{equation}
+
+Let's look at it generally with the idea to grasp the basic concept, then in the following sections we will elaborate on each part individually.
+
+Basically, at its core, we can condense this entire equation into the most basic form of:
+
+	\[
+	f(\theta) - CL \geq 0
+	\]
+
+If we think about it, on the left side we have an integral in $\dd x$, and on the right a constant that we fix beforehand, namely the "confidence level" \textit{CL}\sidenote{Don't worry about these definitions, they will all get cleared up in the near future. This part aims to provide a general outlook on the math that we will be using, so just bear with us}. Fundamentally, the equation that describes the interval in $\theta$ is, justifiably so, an inequality dependent on the parameter that we must solve. Let's never forget this as it will always be the final step. 
+
+Now, what exactly is this $f(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want that, with probability \textit{CL}, the interval defined by $o(x)$ contains $\theta$\todo{SOS: re-state better}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
+
+This integral in eq. \ref{eq:int_definition} is nothing more than the integral of the \textit{pdf} itself, which we know to be the cumulative of the density function\sidenote{\textit{CDF's} start the integration from $0$, as the lower bound is not necessarily $0$ this integral is, at most, the difference of two \textit{CDF's}}, calculated on upper and lower bounds that may, in general, depend on the parameter. 
+
+What this all means is that having fixed an observed $x_0$ (coming from \textit{pdf} $p(x;\theta)$), the ordering function describes a $\theta$-dependent interval for which the integral of the \textit{pdf} is greater than or equal to the \textit{CL}. Therefore, we can solve this expression (which we so naïvely wrote as $f(\theta) - CL \geq 0$) to find an interval in $\theta$, and that will be the estimate that we are looking for. 
+
+Solving this equation is rarely simple, and can be done when the \textit{pdf} assumes a closed form cumulative, or at least when the latter is tabled\todo{such as the ones in ref.}. The next sections will break down each part of the process, using examples and visual aids to try to better explain this difficult, yet fundamental concept.
+
+\subsection{Confidence levels and coverage}
+Let's begin our piece-by-piece breakdown of eq. \ref{eq:int_definition} by being more precise in our definition of \textit{confidence level}:
 
 \begin{definition}[Confidence level]
 	Given a \textit{pdf} $p(x;\theta)$ dependent on an unknown parameter $\theta\in A$, and an interval estimator $f(x): X\rightarrowtail \mathcal{P}(A)$, we define the \textit{confidence level} (\textit{CL}) of $f(x)$:
@@ -187,26 +217,21 @@ From this whole part we want to take away one very important concept: when we ob
 
 We have already talked about ordering algorithms up until this point, and justifiably so: they are imperative to implement when we want clear, unique solutions and to show the differences between the choices we can make. We'll expand on what we have already introduced and complete our arsenal of ordering functions with a few more neat algorithms.
 
-The idea is to study the different options we have for $o(x)$ in the function:
+The idea is to study the different options we have for $o(x)$ in the usual equation \ref{eq:int_definition}, with the goal of removing the ambiguity in the way we choose the interval that solves it. What the ordering function is really doing is, for each fixed $\theta$, "ranking" (well, \textit{ordering}) each possible $x$ according to the value of the ordering function $o(x)$. From this, we add $x$ values to the confidence region for that $\theta$ based on this ordering until the sum of probabilities reaches the \textit{CL} to create an interval in $x$ for a fixed $\theta$. We then repeat this for all $\theta$, and obtain the confidence interval for an observed $x_0$ as the set of all $\theta$ values whose acceptance regions contain $x_0$.
 
-\begin{equation}
-	\int_{o(x)\geq q(CL)} p(x;\theta)\dd x \geq CL
-	\label{eq:int_def}
-\end{equation}
+Basically, as we have said before, solving the ordering function equation $o(x)\geq q(CL)$ we are finding the $\theta$-dependent integral bounds that meet the desired confidence level, with the desired ordering. 
 
-With the goal of removing the ambiguity in the way we choose the interval that solves the equation. What the ordering function is really doing is, for each fixed $\theta$,  "ranking" (well, \textit{ordering}) each possible $x$. From this, we add $x$ values to the confidence region for that $\theta$ based on this ordering until the sum of probabilities reaches the \textit{CL} to create an interval in $x$ for a fixed $\theta$. We then repeat this for all $\theta$, and obtain the confidence interval for an observed $x_0$ as the set of all $\theta$ values whose acceptance regions contain $x_0$.
+We could start with setting $o(x)=p(x;\theta)$ (\textbf{probability ordering}), which is a universal choice that brings the smallest interval in $x$ (which does not necessarily translate to the smallest interval in $\theta$). This means that we are ordering using the \textit{pdf} itself, choosing the most probable values of $x$ in decreasing order.
 
-We could start with setting $o(x)=p(x;\theta)$ (\textbf{probability ordering}), which is a universal choice that brings the smallest interval in $x$ (which does not necessarily translate to the smallest interval in $\theta$). 
+Another natural choice would be to use $o(x)=\pm x$, as to start from the lowest value of $x$ and include higher values until the confidence level is reached (essentially finding the value for which the cumulative is equal to \textit{CL}), or vice versa. This is \textbf{lower/upper ordering} (which brings us superior/inferior bounds on the parameter).
 
-Another natural choice would be to use $o(x)=\pm x$, as to start from the lowest value of $x$ and include higher values until the confidence level is reached, or vice versa. This is \textbf{lower/upper ordering} (which brings us superior/inferior bounds on the parameter).
-
-We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$
+We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$, or alternatively repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
 
 The final ordering algorithm we will explore for now is one based on the \textbf{Likelihood Ratio} (some texts may call it "Feldman-Cousins ordering"). The idea is to use the Likelihood Ratio as the ordering function
 	\[
 	LR(x) = \frac{p(x|\theta)}{p(x|\hat{\theta}_{MLE})} = o(x)
 	\]
-which means to solve the following system of equations:
+which means, in practice, to solve the following system of equations:
 	\[
 	\begin{cases}
 		\int_{x_1}^{x_2} p(x;\theta)\dd x = CL \\
@@ -221,12 +246,11 @@ This ordering function, for each fixed $\theta$, uses the ratio between the prob
 	\caption{Visual representation of the Likelihood Ratio ordering algorithm. $x$ is distributed following a Normal distribution with unitary variance and unknown $\mu\geq 0$, where the case $\mu=0.5$ has been shown. The \textit{LR} and threshold have been translated upwards by $0.5$ for clarity, and the $95\%$ confidence region for $p(x)$ is shown.}
 	\label{fig:lr_ordering}
 \end{figure}
-\todo{Wouldn't it be better if the left y-axis is represented un-shifted, so that the zero of the LR corresponds to the bottom of the dashed line, without the need to report '+0.5' in the axis label?}
 
-Figure \ref{fig:lr_ordering} gives a visual representation of this method and how to use it to find the bounds in $x$ for a specific value of $\mu$. Within it, the condition that $\mu$ must be greater than zero is considered, which brings the asymmetric tail towards negative $x$ which probability ordering would not have accounted for. Naturally, this process must be repeated for all $\mu$, and then selecting the interval of $\mu$ that contain our measured value, which is the topic of the next section.
+Figure \ref{fig:lr_ordering} gives a visual representation of this method and how to use it to find the bounds in $x$ for a specific value of $\mu$. Within it, the condition that $\mu$ must be greater than zero is considered, which brings the asymmetric tail towards negative $x$ which probability ordering would not have accounted for. Naturally, this image is for a general fixed $\mu$, and the left and right bounds depend on this value.
 
 \subsubsection{Neyman Construction}
-A way to visualize the effect of these different ordering algorithms is through the construction of a "belt" that associates, given the ordering algorithm, each measured value of the observable to an interval estimate. This plot is namely the \textit{Neyman Construction}, is built by solving eq (\ref{eq:int_def}) for all fixed values of $\theta$. 
+A way to visualize the effect of these different ordering algorithms is through the construction of a "belt" that associates, given the ordering algorithm, each measured value of the observable to an interval estimate. This plot is namely the \textit{Neyman Construction}, is built by solving eq (\ref{eq:int_definition}) for all fixed values of $\theta$. 
 
 Given an observation of $x$, the interval in $\theta$ is found by intersecting the horizontal line $x=x_{obs}$ with the constructed belt, and taking the two points of intersection as the bounds for the parameter. The following image shows the three Neyman belts constructed from the previous example of $20$ extractions of a binomial with unknown success parameter $p$, using three different orderings. 
 
@@ -266,6 +290,8 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 	
 	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
+
+These belts are of great didactic caliber, and are useful in visualizing what it is that we are actually doing under this whole mathematical abstraction. Numerically, we are representing the dependence of the $\dd x$ integral bounds in $\theta$, such that $\int_{}
 
 Analytically, the goal would be to define a function, or set of functions, of the type $x_{max}(\theta)$, $x_{min}(\theta)$, or their inverses. Sometimes, based on the ordering algorithm, \textit{pdf}, and parameter we are trying to estimate, we are able to build the whole belt analytically and define an interval for $\theta$ for all observed values of $x$. 
 
