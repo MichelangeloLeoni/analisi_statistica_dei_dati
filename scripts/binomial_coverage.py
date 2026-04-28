@@ -14,111 +14,6 @@ N = 20
 ALPHA = 0.05
 CL = 1 - ALPHA
 
-# Acceptance rules for confidence belt construction
-def acceptance_p_ordering(p, x_vals, cl=CL):
-    '''Compute acceptance region following probability ordering.'''
-
-    probs = binom.pmf(x_vals, N, p)
-    order = np.argsort(probs)[::-1]
-
-    total = 0.0
-    acc = set()
-
-    for i in order:
-        acc.add(x_vals[i])
-        total += probs[i]
-        if total >= cl:
-            break
-
-    return acc
-
-def acceptance_upper(p, x_vals, cl=CL):
-    '''Compute acceptance region following upper ordering.'''
-
-    probs = binom.pmf(x_vals, N, p)
-
-    total = 0
-    acc = set()
-
-    for x in x_vals:
-        acc.add(x)
-        total += probs[x]
-        if total >= cl:
-            break
-
-    return acc
-
-def acceptance_lower(p, x_vals, cl=CL):
-    '''Compute acceptance region following lower ordering.'''
-
-    probs = binom.pmf(x_vals, N, p)
-
-    total = 0
-    acc = set()
-
-    for x in reversed(x_vals):
-        acc.add(x)
-        total += probs[x]
-        if total >= cl:
-            break
-
-    return acc
-
-def build_belt(acceptance_func, p_grid, cl=CL):
-    '''Compute Neyman confidence belt based on giveng acceptance function.'''
-
-    temp_x_low = []
-    temp_x_high = []
-
-    for p in p_grid:
-        acc = sorted(list(acceptance_func(p, x_values, cl=cl)))
-        temp_x_low.append(min(acc))
-        temp_x_high.append(max(acc))
-
-    return np.array(temp_x_low), np.array(temp_x_high)
-
-def invert_belt(acceptance_func, x_vals, p_grid, cl=CL):
-    '''
-    Compute confidence intervals for a given observed x based on
-    giveng acceptance function and probability grid.
-    '''
-
-    intervals = {}
-    for x_obs in x_vals:
-        good_p = []
-
-        for p in p_grid:
-            acc = acceptance_func(p, x_vals, cl=cl)
-            if x_obs in acc:
-                good_p.append(p)
-
-        if len(good_p) == 0:
-            intervals[x_obs] = (np.nan, np.nan)
-        else:
-            intervals[x_obs] = (min(good_p), max(good_p))
-
-    return intervals
-
-def coverage_curve(intervals, p_grid, x_vals):
-    '''
-    Compute coverage curve for given confidence intervals, 
-    probability grid and possible x values.
-    '''
-
-    cov = []
-
-    for p in p_grid:
-        total = 0.0
-
-        for x in x_vals:
-            lo, hi = intervals[x]
-            if lo <= p <= hi:
-                total += binom.pmf(x, N, p)
-
-        cov.append(total)
-
-    return np.array(cov)
-
 prob_grid = np.linspace(0, 1, 100)
 x_values = np.arange(N + 1)
 order = [
@@ -126,21 +21,29 @@ order = [
     ("Upper ordering", "upper"),
     ("Lower ordering", "lower")
 ]
+
 def binomial(x, p):
+    '''Wrapper for the binomial pmf'''
     return binom.pmf(x, N, p)
+
 estimator = asdinterval.IntervalEstimator(
     prob_func=binomial,
     cl=CL,
     mu_grid=prob_grid,
     x_range=x_values
 )
-int_p_ordering  = invert_belt(acceptance_p_ordering, x_values, prob_grid)
-int_upper       = invert_belt(acceptance_upper, x_values, prob_grid)
-int_lower       = invert_belt(acceptance_lower, x_values, prob_grid)
 
-cov_p_ordering  = coverage_curve(int_p_ordering, prob_grid, x_values)
-cov_upper       = coverage_curve(int_upper, prob_grid, x_values)
-cov_low         = coverage_curve(int_lower, prob_grid, x_values)
+int_p_ordering  = []
+int_upper = []
+int_lower = []
+for x_obs in x_values:
+    int_p_ordering.append(estimator.neyman.find_interval(x_obs, method="pdf", ordering_type="p"))
+    int_upper.append(estimator.neyman.find_interval(x_obs, method="pdf", ordering_type="upper"))
+    int_lower.append(estimator.neyman.find_interval(x_obs, method="pdf", ordering_type="lower"))
+
+cov_p_ordering  = estimator.coverage(int_p_ordering)
+cov_upper       = estimator.coverage(int_upper)
+cov_low         = estimator.coverage(int_lower)
 
 titles = [
     "Probability ordering",

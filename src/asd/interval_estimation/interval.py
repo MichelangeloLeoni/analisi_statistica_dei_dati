@@ -34,10 +34,22 @@ class IntervalEstimator:
 
     def pdf(self, mu):
         return self.prob_func(self.x_range, mu)
-    
-    def coverage():
-        pass
 
+    def coverage(self, intervals):
+
+        cov = []
+
+        for mu in self.mu_grid:
+            total = 0.0
+
+            for x in self.x_range:
+                lo, hi = intervals[x]
+                if lo <= mu <= hi:
+                    total += self.prob_func(x, mu)
+
+            cov.append(total)
+
+        return np.array(cov)
 
 def find_intervals_indices(mask):
     '''
