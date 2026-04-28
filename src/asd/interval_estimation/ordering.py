@@ -130,6 +130,63 @@ def lower_ordering(x_range, pdf, cl, dx):
             break
 
     return x_range >= threshold, threshold
+
+def central_ordering(x_range, pdf, cl, dx):
+    '''
+    Constructs a central (two-sided) confidence interval.
+
+    The acceptance region is defined by removing equal probability
+    mass from both tails (alpha/2 on each side), leaving the central
+    region with total probability equal to the confidence level.
+
+    Parameters:
+        x_range : array-like
+            Grid of observation values (assumed ordered).
+        pdf : array-like
+            Probability density (or mass) function on x_range.
+        cl : float
+            Confidence level (e.g. 0.95).
+        dx : float
+            Grid spacing used for numerical integration.
+
+    Output:
+        mask : array-like (bool)
+            Boolean mask selecting the central acceptance region.
+        thresholds : tuple (low, high)
+            Lower and upper bounds of the confidence interval.
+    '''
+
+    alpha = 1.0 - cl
+    tail = alpha / 2.0
+
+    # Lower threshold (left tail)
+    cum = 0.0
+    low = None
+
+    for i, x in enumerate(x_range):
+        cum += pdf[i] * dx
+
+        # Stop once left tail reaches alpha/2
+        if cum >= tail:
+            low = x
+            break
+
+    # Upper threshold (right tail)
+    cum = 0.0
+    high = None
+
+    for i in reversed(range(len(x_range))):
+        cum += pdf[i] * dx
+
+        # Stop once right tail reaches alpha/2
+        if cum >= tail:
+            high = x_range[i]
+            break
+
+    # Central acceptance region
+    mask = (x_range >= low) & (x_range <= high)
+
+    return mask, (low, high)
 # END SNIPPET
 
 if __name__ == "__main__":

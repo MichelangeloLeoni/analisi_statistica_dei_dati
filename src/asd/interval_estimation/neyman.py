@@ -91,6 +91,15 @@ class NeymanConstruction:
                 self.model.dx
             )
 
+        elif ordering_type == "central":
+            # One-sided lower confidence construction
+            mask, thr = ordering.central_ordering(
+                self.x_range,
+                pdf,
+                self.model.cl,
+                self.model.dx
+            )
+
         else:
             raise ValueError(ordering_type)
 
