@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from asd import utils
+from asd.interval_estimation import interval as asdinterval
 
 # Define parameters
 CL = 0.95
@@ -14,67 +15,24 @@ mu_grid = np.linspace(0.0, 3.0, 200)
 x_grid = np.linspace(-3.5, 5.0, 700)
 dx = x_grid[1] - x_grid[0]
 
-def acceptance_p_ordering(mu):
-    '''
-    Rank x by probability density f(x|mu).
-    '''
+def mu_hat(x):
+    '''Wrapper for the MLE function'''
+    return np.maximum(0.0, x)
 
-    dens = norm.pdf(x_grid, loc=mu, scale=1.0)
+estimator = asdinterval.IntervalEstimator(
+    prob_func=norm.pdf,
+    cl=CL,
+    mu_hat_func=mu_hat,
+    discrete=False,
+    x_range=x_grid,
+    mu_grid=mu_grid
+)
 
-    order = np.argsort(dens)[::-1]
+mask_list_p = estimator.neyman.build_belt(method="pdf", ordering_type="p")
+mask_list_lr = estimator.neyman.build_belt(method="fc", ordering_type="p")
 
-    total = 0.0
-    acc = set()
-
-    for i in order:
-        acc.add(i)
-        total += dens[i] * dx
-        if total >= CL:
-            break
-
-    return acc
-
-def acceptance_lr(mu):
-    '''
-    Rank x by likelihood ratio f(x|mu) / f(x|mu_hat),
-    where mu_hat is the MLE of mu given x.
-    '''
-
-    num = norm.pdf(x_grid, loc=mu, scale=1.0)
-
-    mu_hat = np.maximum(0.0, x_grid)
-    den = norm.pdf(x_grid, loc=mu_hat, scale=1.0)
-
-    r = np.divide(num, den, out=np.zeros_like(num), where=den > 0)
-
-    order = np.argsort(r)[::-1]
-
-    total = 0.0
-    acc = set()
-
-    for i in order:
-        acc.add(i)
-        total += num[i] * dx
-        if total >= CL:
-            break
-
-    return acc
-
-def build_belt(acceptance_func):
-    '''Build the confidence belt for a given acceptance function.'''
-
-    x_low = []
-    x_high = []
-
-    for mu in mu_grid:
-        acc = sorted(list(acceptance_func(mu)))
-        x_low.append(x_grid[min(acc)])
-        x_high.append(x_grid[max(acc)])
-
-    return np.array(x_low), np.array(x_high)
-
-xlow_p, xhigh_p = build_belt(acceptance_p_ordering)
-xlow_lr, xhigh_lr = build_belt(acceptance_lr)
+xlow_p, xhigh_p = estimator.masks_to_bounds(mask_list_p)
+xlow_lr, xhigh_lr = estimator.masks_to_bounds(mask_list_lr)
 
 # Generate plot
 fig, axes = utils.pgf_generator(nrows=1, ncols=2, figsize=(5.5, 3.5), sharey=True)
@@ -100,18 +58,7 @@ for ax, (title, low, high) in zip(axes, plots):
     if len(mu_over) > 0:
         ax.plot(mu_over, -2.5 * np.ones(len(mu_over)), color="red", ls="-", lw=1.0)
 
-        starts = []
-        ends = []
-        for ind in range(1, len(mask)):
-            if not mask[ind-1] and mask[ind]:
-                starts.append(ind)
-            if mask[ind-1] and not mask[ind]:
-                ends.append(ind-1)
-        if mask[0]:
-            starts.insert(0, 0)
-        if mask[-1]:
-            ends.append(len(mask)-1)
-
+        starts, ends = asdinterval.find_intervals_indices(mask)
         for idx in starts + ends:
             ax.scatter(mu_grid[idx], -2.5, color="red", s=10)
 

@@ -51,6 +51,22 @@ class IntervalEstimator:
 
         return np.array(cov)
 
+    def masks_to_bounds(self, mask_list):
+        x_low = []
+        x_high = []
+
+        for mask in mask_list:
+            idx = np.where(mask)[0]
+
+            if len(idx) == 0:
+                x_low.append(np.nan)
+                x_high.append(np.nan)
+            else:
+                x_low.append(self.x_range[idx[0]])
+                x_high.append(self.x_range[idx[-1]])
+
+        return np.array(x_low), np.array(x_high)
+
 def find_intervals_indices(mask):
     '''
     Find the start and end indices of contiguous True values in a boolean array.
