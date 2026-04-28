@@ -214,6 +214,7 @@ Quindi M.L. e J.O. hanno entrambi ragione: stanno guardando lo stesso oggetto ma
 '''
 
 '''
-Useful link:
+Useful links:
 https://www.statisticshowto.com/clopper-pearson-exact-method/
+https://www.statisticshowto.com/binomial-confidence-interval/
 '''
