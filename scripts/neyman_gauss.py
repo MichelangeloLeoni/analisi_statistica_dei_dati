@@ -6,15 +6,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 from asd import utils
+from asd.interval_estimation import interval as asdinterval
 
 # Define parameters
 CL = 0.95
 
 mu_grid = np.linspace(-3.0, 3.0, 400)
-z = norm.ppf((1 + CL)/2)
+xx = np.linspace(-8.0, 8.0, 2000)
 
-x_low = mu_grid - z
-x_high = mu_grid + z
+def gauss(x, mu):
+    '''Wrapper for the gauss pdf'''
+    return norm.pdf(x, loc=mu, scale=1)
+
+estimator = asdinterval.IntervalEstimator(
+    prob_func=gauss,
+    cl=CL,
+    mu_grid=mu_grid,
+    x_range=xx,
+    discrete=False
+)
+
+mask_list = estimator.neyman.build_belt(method="pdf", ordering_type="p")
+x_low, x_high = estimator.masks_to_bounds(mask_list)
 
 # Generate plot
 fig, ax = utils.pgf_generator(figsize=(5.5,3.5))
