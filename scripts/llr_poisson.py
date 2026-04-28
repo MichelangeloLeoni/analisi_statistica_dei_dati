@@ -69,25 +69,13 @@ def calculate_central_interval_mu(n_obs, cl=0.95):
 
     return (low, high)
 
-def coverage_error(mu, n_test, intervals):
-    '''Calculate the coverage error for a given true mean mu.'''
-
-    prob_covered = 0.0
-    for n, (low, high) in zip(n_test, intervals):
-        if low <= mu <= high:
-            prob_covered += poisson.pmf(n, mu)
-
-    return 1 - prob_covered
-
 # Compute coverage error
 mu_axis = np.linspace(0.001, 17, 1000)
 mu_span = np.linspace(0.0001, 100, 1000)
-n_grid = np.arange(0, 51)
-intervals_cache = calculate_llr_intervals(n_grid)
-errors = np.array([coverage_error(m, n_grid, intervals_cache) for m in mu_axis])
 
 # Compute intervals for the table
 n_table = np.concatenate([np.arange(0, 10), [50]])
+
 estimator = asdinterval.IntervalEstimator(
     x_range=np.arange(0, 300),
     mu_grid=mu_span,
@@ -96,6 +84,19 @@ estimator = asdinterval.IntervalEstimator(
     cl=0.95,
     discrete=True
 )
+cov_estimator = asdinterval.IntervalEstimator(
+    x_range=np.arange(0, 51),
+    mu_grid=mu_axis,
+    mu_hat_func=lambda x: x,
+    prob_func=poisson.pmf,
+    cl=0.95,
+    discrete=True
+)
+
+n_grid = cov_estimator.x_range
+intervals_cache = calculate_llr_intervals(n_grid)
+coverage = cov_estimator.coverage(intervals_cache)
+errors = 1 - coverage
 
 lr_intervals = {n:
                 estimator.neyman.find_interval(
