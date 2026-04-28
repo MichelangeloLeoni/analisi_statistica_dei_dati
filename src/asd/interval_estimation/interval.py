@@ -34,6 +34,9 @@ class IntervalEstimator:
 
     def pdf(self, mu):
         return self.prob_func(self.x_range, mu)
+    
+    def coverage():
+        pass
 
 
 def find_intervals_indices(mask):
