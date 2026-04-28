@@ -32,7 +32,7 @@ LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR
 all: py
 
 check-dirs:
-	@$(foreach dir,$(REQUIRED_DIRS),$(call MKDIR,$(dir)) &&) true
+	@$(foreach dir,$(REQUIRED_DIRS),$(call MKDIR,$(dir));)
 
 production: check-dirs $(PY_STAMPS) $(SRC_STAMPS)
 	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
