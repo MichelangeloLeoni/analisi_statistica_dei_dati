@@ -155,13 +155,14 @@ Basically, at its core, we can condense this entire equation into the most basic
 	g_{x_0}(\theta) - CL \geq 0
 	\]
 
+Namely: \textbf{a function of the parameters at a fixed observation whose positive domain describes an interval in the parameter space}.
 If we think about it, on the left side we have an integral in $\dd x$, and on the right a constant that we fix beforehand, namely the "confidence level" \textit{CL}\sidenote{Don't worry about these definitions, they will all get cleared up in the near future. This part aims to provide a general outlook on the math that we will be using, so just bear with us}. Fundamentally, the equation that describes the interval in $\theta$ is, justifiably so, an inequality dependent on the parameter that we must solve. Let's never forget this as it will always be the final step. 
 
-Now, what exactly is this $f(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want that, with probability \textit{CL}, the interval defined by $o_{\theta}(x)$ contains $\theta$\todo{SOS: re-state better}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
+Now, what exactly is this $g_{x_0}(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want to construct an interval such that, over many repetitions of the experiment (different $x_0$), the probability that the resulting interval contains the true $\theta$ is at least \textit{CL}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
 
-This integral in eq. \ref{eq:int_definition} is nothing more than the integral of the \textit{pdf} itself, which we know to be the cumulative of the density function\sidenote{\textit{CDF's} start the integration from $0$, as the lower bound is not necessarily $0$ this integral is, at most, the difference of two \textit{CDF's}}, calculated on upper and lower bounds that may, in general, depend on the parameter. 
+This integral in eq. \ref{eq:int_definition} is nothing more than the integral of the \textit{pdf} itself, which we know to be the cumulative of the density function\sidenote{\textit{CDF's} start the integration from $-\infty$, so our integral is actually the difference of two \textit{CDF's}}, calculated on upper and lower bounds that may, in general, depend on the parameter. 
 
-What this all means is that having fixed an observed $x_0$ (coming from \textit{pdf} $p(x;\theta)$), the ordering function describes a $\theta$-dependent interval for which the integral of the \textit{pdf} is greater than or equal to the \textit{CL}. Therefore, we can solve this expression (which we so naïvely wrote as $f(\theta) - CL \geq 0$) to find an interval in $\theta$, and that will be the estimate that we are looking for. 
+What this all means is that having fixed an observed $x_0$ (coming from \textit{pdf} $p(x;\theta)$), the ordering function describes a $\theta$-dependent interval for which the integral of the \textit{pdf} is greater than or equal to the \textit{CL}. Therefore, we can solve this expression (which we so naïvely wrote as $g_{x_0}(\theta) - CL \geq 0$) to find an interval in $\theta$, and that will be the estimate that we are looking for. 
 
 Solving this equation is rarely simple, and can be done when the \textit{pdf} assumes a closed form cumulative, or at least when the latter is tabled\todo{such as the ones in ref.}. The next sections will break down each part of the process, using examples and visual aids to try to better explain this difficult, yet fundamental concept.
 
@@ -225,7 +226,7 @@ We could start with setting $o_{\theta}(x)=p(x;\theta)$ (\textbf{probability ord
 
 Another natural choice would be to use $o_{\theta}(x)=\pm x$, as to start from the lowest value of $x$ and include higher values until the confidence level is reached (essentially finding the value for which the cumulative is equal to \textit{CL}), or vice versa. This is \textbf{lower/upper ordering} (which brings us superior/inferior bounds on the parameter).
 
-We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o_{\theta}(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$, or alternatively repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
+We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o_{\theta}(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance reigon repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
 
 The final ordering algorithm we will explore for now is one based on the \textbf{Likelihood Ratio} (some texts may call it "Feldman-Cousins ordering"). The idea is to use the Likelihood Ratio as the ordering function
 	\[
@@ -238,7 +239,7 @@ which means, in practice, to solve the following system of equations:
 		LR(x_1) = LR(x_2)
 	\end{cases}
 	\]
-This ordering function, for each fixed $\theta$, uses the ratio between the probability of $x$ under the current $\theta$ and the probability of $x$ assuming $\theta=\hat{\theta}_{MLE}$, essentially asking how much "worse" the current $\theta$ is than the best possible one. What this corresponds to is starting at the top of the $LR(x)$, and increasing the $x$ interval according to the $LR$\sidenote{It's kind of like probability ordering, where instead of ordering using $p(x)$ you order using $LR(x)$} until the interval defined through $LR$ corresponds to an integral of measure \textit{CL} in $p(x)$. This is where the above system comes from, we set a threshold on the Likelihood ratio such that the $x$ values of the intersection define the bounds of the confidence interval in $p$. This is favorable with respect to probability ordering, as the interval takes into consideration the information we have on $\theta$ (like its physical limits), and is guaranteed to contain the \textit{MLE}, as well as bring the smallest possible interval in $\theta$. We will expand on this case further in example \ref{ex:LR_vs_p_ordering}. 
+This ordering function, for each fixed $\theta$, uses the ratio between the probability of $x$ under the current $\theta$ and the probability of $x$ assuming $\theta=\hat{\theta}_{MLE}$, essentially asking how much "worse" the current $\theta$ is than the best possible one. What this corresponds to is starting at the top of the $LR(x)$, and increasing the $x$ interval according to the $LR$\sidenote{It's kind of like probability ordering, where instead of ordering using $p(x)$ you order using $LR(x)$} until the interval defined through $LR$ corresponds to an integral of measure \textit{CL} in $p(x)$. This is where the above system comes from, we set a threshold on the Likelihood ratio such that the $x$ values of the intersection define the bounds of the confidence interval in $p$. This is favorable with respect to probability ordering, as the interval takes into consideration the information we have on $\theta$ (like its physical limits), and is guaranteed to contain the \textit{MLE}. We will expand on this case further in example \ref{ex:LR_vs_p_ordering}. 
 
 \begin{figure}[H]
 	\centering
@@ -266,7 +267,20 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 
 \begin{example}
 \label{ex:LR_vs_p_ordering}
-	Let's build the Neyman band for a Normally distributed $x$ with unknown parameter $\mu$ (let's say $\sigma=1$ for simplicity). We choose, for the sake of this example, to use probability-ordering. We can't integrate the Normal distribution analytically, so we'll have to fall back on the tables found in \textcolor{red}{REF, also work out the example that z is like 1.95 for 0.95 CL}
+	Let's build the Neyman band for a Normally distributed $x$ with unknown parameter $\mu$ (let's say $\sigma=1$ for simplicity). We choose, for the sake of this example, to use probability-ordering with $CL=0.95$.
+	
+	The goal is to solve:
+	
+	\[
+	\int_{\N(x;\mu,1)\geq q(CL)} \N(x;\mu,1) \dd x = 0.95
+	\]
+	
+	This is equivalent to asking which $x$ values (ordered centrally, which corresponds to probability ordering through symmetry in this case) do we need to integrate on to achieve a $95\%$ integral of a unitary variance Normal distribution? Luckily, as we can imagine, this is independent of $\mu$, and the Normal distribution tables\todo{ref and more precise than 1.96 pls} come to our rescue, as we can see that the interval in $x$ is:
+	
+	\[
+	x\in\left[\mu-1.96,\mu+1.96\right]
+	\]
+	
 	
 	\begin{figure}[H]
 		\centering
@@ -291,13 +305,11 @@ For any outcome $x\in\{0,1,2,\dots,20\}$ we can draw a horizontal line in any of
 	We can also see that the interval in $x$ defined for $\mu=0.5$ corresponds to what we have shown in figure \ref{fig:lr_ordering}.
 \end{example}
 
-These belts are of great didactic caliber, and are useful in visualizing what it is that we are actually doing under this whole mathematical abstraction. Numerically, we are representing the dependence of the $\dd x$ integral bounds in $\theta$, such that $\int_{}$
-
-Analytically, the goal would be to define a function, or set of functions, of the type $x_{max}(\theta)$, $x_{min}(\theta)$, or their inverses. Sometimes, based on the ordering algorithm, \textit{pdf}, and parameter we are trying to estimate, we are able to build the whole belt analytically and define an interval for $\theta$ for all observed values of $x$. 
+These belts are of great didactic caliber, and are useful in visualizing what it is that we are actually doing under this whole mathematical abstraction. We will never really draw the belts out and explicitly intersect them to find intervals, rather we are visualizing for all $x$ the dependence of the interval on the measured data. By solving equation \ref{eq:int_definition} (numerically, or if we are lucky, analytically), we are actually finding the bounding functions of these intervals. \todo{This could be a good place for the code}
 
 
 \begin{example}
-	Let's build a Neyman belt analytically! We will study the common case of an observable $x$ distributed following a uniform \textit{pdf} $p(x;m) = \frac{1}{m}$ for $0\leq x \leq m$ and $0$ outside of that support. We observe one $x$ and wish to build an interval estimate for $m$ with a $90\%$ \textit{CL}. 
+	Let's draw a Neyman belt for a case that can solved analytically. We will study the common example of an observable $x$ distributed following a uniform \textit{pdf} $p(x;m) = \frac{1}{m}$ for $0\leq x \leq m$ and $0$ outside of that support. We observe one $x$ and wish to build an interval estimate for $m$ with a $90\%$ \textit{CL}. 
 	
 	Let's start by finding a lower limit for $m$, which means using "upper ordering":
 	
