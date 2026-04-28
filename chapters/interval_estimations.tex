@@ -152,12 +152,12 @@ Let's look at it generally with the idea to grasp the basic concept, then in the
 Basically, at its core, we can condense this entire equation into the most basic form of:
 
 	\[
-	f(\theta) - CL \geq 0
+	g_{x_0}(\theta) - CL \geq 0
 	\]
 
 If we think about it, on the left side we have an integral in $\dd x$, and on the right a constant that we fix beforehand, namely the "confidence level" \textit{CL}\sidenote{Don't worry about these definitions, they will all get cleared up in the near future. This part aims to provide a general outlook on the math that we will be using, so just bear with us}. Fundamentally, the equation that describes the interval in $\theta$ is, justifiably so, an inequality dependent on the parameter that we must solve. Let's never forget this as it will always be the final step. 
 
-Now, what exactly is this $f(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want that, with probability \textit{CL}, the interval defined by $o(x)$ contains $\theta$\todo{SOS: re-state better}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
+Now, what exactly is this $f(\theta)$? Well, since we are not in the Bayesian case and cannot directly say that the parameter admits a \textit{pdf}, we can only talk about the distribution of the observable: we want that, with probability \textit{CL}, the interval defined by $o_{\theta}(x)$ contains $\theta$\todo{SOS: re-state better}. As we will see, infinite such intervals exist for each fixed $\theta$ (there are infinite ways to integrate a normalized function such that its integral is equal to, say, $0.95$), and $o_{\theta}(x)$ serves as an "ordering function" with the aim of unambiguously defining one such interval by describing which $x$'s to include. 
 
 This integral in eq. \ref{eq:int_definition} is nothing more than the integral of the \textit{pdf} itself, which we know to be the cumulative of the density function\sidenote{\textit{CDF's} start the integration from $0$, as the lower bound is not necessarily $0$ this integral is, at most, the difference of two \textit{CDF's}}, calculated on upper and lower bounds that may, in general, depend on the parameter. 
 
@@ -217,19 +217,19 @@ From this whole part we want to take away one very important concept: when we ob
 
 We have already talked about ordering algorithms up until this point, and justifiably so: they are imperative to implement when we want clear, unique solutions and to show the differences between the choices we can make. We'll expand on what we have already introduced and complete our arsenal of ordering functions with a few more neat algorithms.
 
-The idea is to study the different options we have for $o(x)$ in the usual equation \ref{eq:int_definition}, with the goal of removing the ambiguity in the way we choose the interval that solves it. What the ordering function is really doing is, for each fixed $\theta$, "ranking" (well, \textit{ordering}) each possible $x$ according to the value of the ordering function $o(x)$. From this, we add $x$ values to the confidence region for that $\theta$ based on this ordering until the sum of probabilities reaches the \textit{CL} to create an interval in $x$ for a fixed $\theta$. We then repeat this for all $\theta$, and obtain the confidence interval for an observed $x_0$ as the set of all $\theta$ values whose acceptance regions contain $x_0$.
+The idea is to study the different options we have for $o_{\theta}(x)$ in the usual equation \ref{eq:int_definition}, with the goal of removing the ambiguity in the way we choose the interval that solves it. What the ordering function is really doing is, for each fixed $\theta$, "ranking" (well, \textit{ordering}) each possible $x$ according to the value of the ordering function $o_{\theta}(x)$. From this, we add $x$ values to the confidence region for that $\theta$ based on this ordering until the sum of probabilities reaches the \textit{CL} to create an interval in $x$ for a fixed $\theta$. We then repeat this for all $\theta$, and obtain the confidence interval for an observed $x_0$ as the set of all $\theta$ values whose acceptance regions contain $x_0$.
 
-Basically, as we have said before, solving the ordering function equation $o(x)\geq q(CL)$ we are finding the $\theta$-dependent integral bounds that meet the desired confidence level, with the desired ordering. 
+Basically, as we have said before, solving the ordering function equation $o_{\theta}(x)\geq q(CL)$ we are finding the $\theta$-dependent integral bounds that meet the desired confidence level, with the desired ordering. 
 
-We could start with setting $o(x)=p(x;\theta)$ (\textbf{probability ordering}), which is a universal choice that brings the smallest interval in $x$ (which does not necessarily translate to the smallest interval in $\theta$). This means that we are ordering using the \textit{pdf} itself, choosing the most probable values of $x$ in decreasing order.
+We could start with setting $o_{\theta}(x)=p(x;\theta)$ (\textbf{probability ordering}), which is a universal choice that brings the smallest interval in $x$ (which does not necessarily translate to the smallest interval in $\theta$). This means that we are ordering using the \textit{pdf} itself, choosing the most probable values of $x$ in decreasing order.
 
-Another natural choice would be to use $o(x)=\pm x$, as to start from the lowest value of $x$ and include higher values until the confidence level is reached (essentially finding the value for which the cumulative is equal to \textit{CL}), or vice versa. This is \textbf{lower/upper ordering} (which brings us superior/inferior bounds on the parameter).
+Another natural choice would be to use $o_{\theta}(x)=\pm x$, as to start from the lowest value of $x$ and include higher values until the confidence level is reached (essentially finding the value for which the cumulative is equal to \textit{CL}), or vice versa. This is \textbf{lower/upper ordering} (which brings us superior/inferior bounds on the parameter).
 
-We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$, or alternatively repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
+We could also think to take the central band (\textbf{central ordering}), as to exclude $\frac{1-CL}{2}$ from the top and bottom. The ordering function $o_{\theta}(x)$ is defined implicitly by the tails of the distribution. We include $x$ values in our acceptance set starting from the median and expanding outwards until the probability excluded in each tail separately does not exceed $\frac{1-CL}{2}$, or alternatively repeating the upper/lower ordering simultaneously on the tails until half of \textit{CL} is reached. 
 
 The final ordering algorithm we will explore for now is one based on the \textbf{Likelihood Ratio} (some texts may call it "Feldman-Cousins ordering"). The idea is to use the Likelihood Ratio as the ordering function
 	\[
-	LR(x) = \frac{p(x|\theta)}{p(x|\hat{\theta}_{MLE})} = o(x)
+	LR(x) = \frac{p(x|\theta)}{p(x|\hat{\theta}_{MLE})} = o_{\theta}(x)
 	\]
 which means, in practice, to solve the following system of equations:
 	\[
