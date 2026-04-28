@@ -14,6 +14,7 @@ endif
 
 MAIN = analisi_statistica_dei_dati
 PY_DIR = scripts
+REQUIRED_DIRS = images code tables
 OUT_DIR = .build
 STAMP_DIR = .stamps
 
@@ -30,7 +31,12 @@ LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR
 
 all: py
 
-production: $(PY_STAMPS) $(SRC_STAMPS)
+check-dirs:
+	@$(foreach dir,$(REQUIRED_DIRS), \
+		$(call MKDIR, $(dir)) \
+	)
+
+production: check-dirs $(PY_STAMPS) $(SRC_STAMPS)
 	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
 		-pdflatex='pdflatex %O "\def\draft{0}\input{%S}"' \
 		$(MAIN).tex
@@ -48,7 +54,7 @@ $(STAMP_DIR)/%.stamp: $(SRC_DIR)/%.py
 	$(PYTHON) $<
 	@echo "Executed $<" > $@
 
-py: $(PY_STAMPS) $(SRC_STAMPS)
+py: check-dirs $(PY_STAMPS) $(SRC_STAMPS)
 	$(MAKE) build
 
 clean:
