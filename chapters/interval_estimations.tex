@@ -399,8 +399,8 @@ Asymptotically in the degrees of freedom, this distribution approaches a Gaussia
 
 The proof of Wilks' theorem will not be discussed in this write-up, though those who are interested can take a look at the following example to see how we conclude that $\lambda$ is distributed like a $\chi^2$, and how it approaches a Gaussian for high degrees of freedom:
 
-\begin{example}
-	Let's derive the asymptotic distribution of the $LLR$, using the fact that Wilks' theorem guarantees its generality. Therefore, we are free to start with whatever distribution we wish, and we decide to use $N$ samples of a Normally distributed variable. We write the log Likelihood:
+\subsubsection{Derivation of the asymptotic distribution}
+Let's derive the asymptotic distribution of the $LLR$, using the fact that Wilks' theorem guarantees its generality. Therefore, we are free to start with whatever distribution we wish, and we decide to use $N$ samples of a Normally distributed variable. We write the log Likelihood:
 	
 	\begin{align*}
 		\lambda(x,\mu) &= 2\ln\left(Ce^{-\sum_i\frac{(x_i-\bar{x})^2}{2\sigma^2}}\right) - 2\ln\left(C e^{-\sum_i \frac{(x_i-\mu)^2}{2\sigma^2}}\right)\\
@@ -412,18 +412,18 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 		&= \frac{\left(\bar{x} - \mu \right)^2}{\sigma^2(\bar{x})} = \left(\frac{\bar{x}-\mu}{\sigma(\bar{x})}\right)^2
 	\end{align*}
 	
-	As we can see, $\lambda$ is a pivot for all $N$, distributed like the square of a standard Gaussian variable. We can see that for an $n-$dimensional Gaussian with mean $\vec{\mu}$, we would have the sum of $n$ equal terms like the one above, one for each of the components of $\mu_i$. These universal distributions are called the \textbf{chi squared with $n$ degrees of freedom $\left(\chi^2_n\right)$}.
+As we can see, $\lambda$ is a pivot for all $N$, distributed like the square of a standard Gaussian variable. We can see that for an $n-$dimensional Gaussian with mean $\vec{\mu}$, we would have the sum of $n$ equal terms like the one above, one for each of the components of $\mu_i$. These universal distributions are called the \textbf{chi squared with $n$ degrees of freedom $\left(\chi^2_n\right)$}.
 	
-	Let's start by writing $\chi^2_1$, which we get through squaring a Normally distributed $x$ and finding the \textit{pdf} of this new variable:
+Let's start by writing $\chi^2_1$, which we get through squaring a Normally distributed $x$ and finding the \textit{pdf} of this new variable:
 	
 	\begin{align*}
 		p_y(y) &= \sum_i^{N_{sol}} p(x) \left|\frac{\dd x}{\dd y}\right| = 2\cdot\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{y}{2}}\cdot\frac{\sigma}{2\sqrt{y}}\\
 		&\Rightarrow p(\chi_1^2) = \frac{1}{\sqrt{2\pi}} \cdot \frac{1}{\sqrt{\chi^2}}e^{-\frac{\chi^2}{2}}
 	\end{align*} 
 	
-	We note that this diverges for $\chi^2=0$, and that the sum over the solutions gave $2$ for the positive and negative square root. 
+We note that this diverges for $\chi^2=0$, and that the sum over the solutions gave $2$ for the positive and negative square root. 
 	
-	We now extend the result to $\nu$ degrees of freedom, using the characteristic function $\phi$:
+We now extend the result to $\nu$ degrees of freedom, using the characteristic function $\phi$:
 	
 	\begin{align*}
 		\phi_{x^2}(t) &= \E_x\left[e^{itx^2}\right] = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{+\infty}e^{itx^2}\cdot e^{-\frac{x^2}{2}}\dd x\\
@@ -432,25 +432,25 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 		\Rightarrow \phi_{x^2} &=\sigma\underbrace{\int_{-\infty}^{+\infty}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{x^2}{2\sigma^2}}\dd x}_{1} = \sigma
 	\end{align*}
 	
-	Therefore, we get:
+Therefore, we get:
 	
 	\[
 	\phi_{\chi_1^2}(t) = \left(1-2it\right)^{-\frac{1}{2}}
 	\]
 	
-	Knowing that the distribution of the sum  is the product of the characteristic functions, we can pass to $\nu$ degrees of freedom by elevating to the power of $\nu$.
+Knowing that the distribution of the sum  is the product of the characteristic functions, we can pass to $\nu$ degrees of freedom by elevating to the power of $\nu$.
 	
 	\[
 	\phi_{\chi_\nu^2}(t) = \left(1-2it\right)^{-\frac{\nu}{2}}
 	\]
 	
-	We use the inverse transformation to calculate the \textit{pdf} of $\chi_\nu^2$:
+We use the inverse transformation to calculate the \textit{pdf} of $\chi_\nu^2$:
 	
 	\[
 	p_\nu(\chi^2) = \frac{1}{2\pi}\int_{-\infty}^{+\infty}\phi(t)e^{-itx}\dd t
 	\]
 	
-	We introduce the Gamma function defined as:
+We introduce the Gamma function defined as:
 	
 	\[
 	\Gamma(\zeta+1) = \int_0^{+\infty}x^\zeta e^{-x} dx
@@ -459,25 +459,24 @@ The proof of Wilks' theorem will not be discussed in this write-up, though those
 	\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}, \quad \Gamma\left(1\right) = 1, \quad \Gamma\left(n+1\right) = n\Gamma(n)
 	\]
 	
-	From which, through a change of variable, we get equation (\ref{eq:chi_squared}):
+From which, through a change of variable, we get equation (\ref{eq:chi_squared}):
 	
 	\[
 	p_\nu(\lambda) = \frac{1}{2^{\frac{\nu}{2}} \Gamma(\frac{\nu}{2})}\lambda^{\frac{\nu}{2}-1}e^{-\frac{\lambda}{2}}
 	\]
 	
-	From the derivatives of the characteristic functions we get the moments of this distribution, most notably:
+From the derivatives of the characteristic functions we get the moments of this distribution, most notably:
 	
 	\[
 	\E\left[\chi_\nu^2\right] =\nu\quad \Var\left[\chi_\nu^2\right] = 2\nu
 	\]
 	
-	Now we know that this distribution was obtained through the sum of $\nu$ variables with finite variance, and from the CLT we can deduce that
+Now we know that this distribution was obtained through the sum of $\nu$ variables with finite variance, and from the CLT we can deduce that
 	
 	\[
 	\lim_{\nu \to \infty} \chi_\nu^2 = \N(\nu,2\nu)
 	\]
-\end{example}
-\todo{Are you sure that presenting the entire derivation of the $\chi^2$ distribution as an example is a good idea? imho this part deserves to be a main topic to be placed outside the example.}
+
 
 \begin{example}\label{ex:llr_poissonian}
 	We have already shown how to compute confidence intervals numerically in the Poisson case. We now derive an approximate solution using the log-likelihood ratio (LLR) method.
