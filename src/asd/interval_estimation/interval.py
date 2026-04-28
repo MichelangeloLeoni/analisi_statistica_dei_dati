@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from typing import Callable
 import numpy as np
 from asd.interval_estimation import neyman
+from asd import utils
 
 @dataclass
 class IntervalEstimator:
@@ -84,6 +85,7 @@ class IntervalEstimator:
         '''
         return self.prob_func(self.x_range, mu)
 
+    # START SNIPPET
     def coverage(self, intervals):
         '''
         Compute coverage of confidence intervals over the parameter grid.
@@ -116,6 +118,7 @@ class IntervalEstimator:
             cov.append(total)
 
         return np.array(cov)
+    # END SNIPPET
 
     def masks_to_bounds(self, mask_list):
         '''
@@ -193,3 +196,11 @@ def find_intervals_indices(mask):
         ends.append(len(mask) - 1)
 
     return starts, ends
+
+if __name__ == "__main__":
+    utils.code_snippet_generator(
+        start_tag="# START SNIPPET",
+        end_tag="# END SNIPPET",
+        output_file_name="coverage_code.tex",
+        file=__file__
+    )
