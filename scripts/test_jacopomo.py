@@ -84,7 +84,7 @@ estimator = asdinterval.IntervalEstimator(
     prob_func=binomial,
     cl=CL,
     x_range=np.arange(0, N + 1),
-    mu_grid=np.linspace(0, 1, 200)
+    mu_grid=np.linspace(0, 1, 1000)
 )
 
 
@@ -150,7 +150,7 @@ plt.title("Binomial central intervals: explicit vs implicit")
 plt.legend()
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+#plt.show()
 
 '''
 Deepseek take on the matter:
