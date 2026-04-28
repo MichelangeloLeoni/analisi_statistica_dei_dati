@@ -17,7 +17,7 @@ We also define a \textit{Test statistic}, that takes our data and maps it to a h
 	T(x) : x\mapsto H_i; \quad H_i\in \mathcal{P}(A)\,\forall i \in \{0,\dots,n\}
 	\]
 
-For example, a hypothesis may be "the parameter is equal to $0$", while an alternative may be "the parameter is not equal to $0$".\sidenote{This means that we could write a statistic of $x$ that instead or mapping to a hypothesis maps to a natural number $i$ that is the index of which alternative hypothesis the Test points to.} It's important that all hypotheses be disjoined, so we impose that
+For example, a hypothesis may be "the parameter is equal to $0$", while an alternative may be "the parameter is not equal to $0$".\sidenote{This means that we could write a statistic of $x$ that instead of mapping to a hypothesis maps to a natural number $i$ that is the index of which alternative hypothesis the Test points to.} It's important that all hypotheses be disjoined, so we impose that
 
 	\[
 	H_i\cap H_j = \emptyset \quad \forall i\neq j
@@ -61,11 +61,104 @@ The other type is the \textit{composite hypothesis}:
 \begin{definition}[Composite hypothesis]
 	A \textit{composite hypothesis} is one that does not uniquely specify the distribution. Instead, it states that the parameters lie within a certain range or subset of the parameter space:
 	\[
-	p(x) \equiv p(x; H_i, \theta) \quad \theta \in \Theta_i
+	p(x) \equiv p(x; H_i, \theta) \quad \theta \in A
 	\]
 \end{definition}
 
 In this case, the distribution remains dependent on one or more parameters that are not strictly fixed. For example, the hypothesis that $x$ follows a Normal distribution with mean $\mu > 10$ is composite, as it encompasses an infinite set of possible distributions (one for every possible value of $\mu$ greater than 10).
+
+We also take a moment to define the different errors\sidenote{Error in the sense of mistake} we may obtain:
+
+\begin{definition}[Type I error]
+	An error of the fist type is one such that:
+	\[
+	\alpha = P(x\in \mathcal{C};H_0)
+	\]
+	for simple hypotheses and 
+	\[
+	\alpha =\sup_\nu P(x\in \mathcal{C};H_0,\nu)
+	\]
+	for composite ones. 
+	Namely, this represents the probability of erroneously rejecting the null hypothesis, of which we take the \textit{sup} ("worst-case") for composite hypotheses. Essentially, it is the probability of finding our measurement in the critical region though it belongs to $H_0$.
+\end{definition}
+
+\begin{definition}[Type II error]
+	An error of the second type is one such that:
+	\[
+	\beta = P(x\in \mathcal{A};H_i)
+	\]
+	for simple hypotheses and 
+	\[
+	\beta =\sup_\nu P(x\in \mathcal{A};H_i,\nu)
+	\]
+	for composite ones. 
+	Namely, this represents the probability of not rejecting the null hypothesis though the measurement belongs to the alternative, of which we once again take the \textit{sup} ("worst-case") for composite hypotheses. 
+\end{definition}
+
+\todo{INSERT graph with two peaks and the vertival bar where it says left accept right critical and the shadings with alpha and beta}
+
+We frequently use Test statistics of the type $T(x):\mathcal{C}\equiv\{x:T(x)>q_\alpha\}$ with
+	
+	\[
+	\alpha = P(x\in \mathcal{C};H_0) = \int_{q_\alpha}^{\infty}p(T(x);H_0)\dd T
+	\]
+
+of which we take the \textit{sup} for composite hypotheses. We choose a small $\alpha$ beforehand ("significance level") and we use it to find $q_\alpha$. For example, typical values may be $\alpha = 0.05, 3\sigma, 5\sigma,\dots$
+
+We also calculate the second type of error:
+
+	\[
+	\beta_\alpha(i) = P(x\in \mathcal{A};H_i) = \int_{-\infty}^{q_\alpha}p(T(x);H_i)\dd T
+	\]
+
+This is calculated after $\alpha$, and naturally depends on it, as well as being different for each alternative hypothesis $H_i$. We prefer small values for it, and will be useful in defining the \textbf{power of a test}: 
+
+	\[
+	\text{pow}_T(i) \equiv 1- \beta_\alpha(i)
+	\tag{Power of a Test}
+	\]
+
+\todo{INSERT power of a Test graph}
+We can see how the power reduces to $\alpha$ for $i=0$. This metric will be the one that we will use to build our statistical Tests, and we want it to be as close to $1$ as possible, which happens for $H_0$ "far away" from the alternative hypotheses. Also, we can request certain favorable conditions from these Tests:
+
+The first condition that is necessarily and silently assumed for any valid Test is that it be \textbf{unbiased}. Namely, we require that:
+
+	\[
+	\forall i: \text{pow}_T(i) \geq \alpha
+	\tag{Unbiasedness condition}
+	\]
+
+We also wish for our Test to be \textbf{consistent}:
+
+	\[
+	\forall i: \lim_{N \to \infty}\text{pow}_T(i) = 1
+	\tag{Consistency condition}
+	\]
+
+We note that being $\alpha\leq1$, consistency implies asymptotic unbiasedness. 
+
+These two conditions are so important that they are rarely sacrificed, and any Test used in the following will silently satisfy these two conditions.
+
+We can then, in order of "strength", define three different properties of Tests:
+
+A Test on a simple hypothesis can be \textbf{maximally powerful} (MP) for some certain $\tilde{i}$:
+
+	\[
+	\text{pow}_T(\hat{i})\geq\text{pow}_{T^\prime}(i)\quad \forall T^\prime
+	\tag{MP Test}
+	\]
+
+This means that we have chosen the most powerful Test possible for this specific alternate hypothesis. In fact, MP Tests only work on simple hypotheses, as we are comparing one specific $H_{\hat{i}}$ with $H_0$. A powerful Lemma we will talk about in the future will prove the existence of such a test. 
+
+For composite hypotheses, a Test can be \textbf{locally maximally powerful} (LMP) if there exists an interval of $H_0$, $I(H_0)$ such that:
+
+	\[
+	\forall i\in I(H_0): \text{pow}_T(i) \geq \text{pow}_{T^\prime}(i) \forall T^\prime
+	\]
+
+Essentially, for a composite hypothesis we want our Test to be the most powerful one in a region near the null hypothesis. For example, if $H_0: \theta= \theta_0$ and $H_i: \theta\geq\theta_0$ the LMP is the most powerful Test near the most plausible values of $\theta$, namely the ones near (but greater than) $\theta_0$.
+
+Aaand then there's the UMP which I will finish...
 
 
 
