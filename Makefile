@@ -28,7 +28,7 @@ LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR
 
 # ------------------------
 
-all: build
+all: py
 
 production: $(PY_STAMPS) $(SRC_STAMPS)
 	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
