@@ -20,15 +20,13 @@
 
 \vspace{2cm}
 
-In our eternal fight to try to infer something about the unknown parameters that govern the observables we measure, we introduce a new type of inference: the interval estimation. 
-
-We are looking for a way to express, up to a certain degree of \textit{confidence}\sidenote{We'll define what confidence really is in a moment, so just bear with us} what interval the parameter that we are trying to estimate falls within. We take a second to note that while it may seem that we have already achieved something similar, this request is fundamentally different than anything our point estimate theory can provide. A naïve reader may say:
+Up until now, several methods for estimating properties of \textit{pdf's} have been discussed along with techniques for obtaining the variance of these estimators. One such method was the point estimate of a parameter, where we discussed, along with the value obtained by the estimate itself, its variance. Essentially, we looked at \textit{how widely} the estimates would be distributed if the experiment would be repeated many times in the same way. What the title of this chapter suggests is that we are now looking for a way to express, up to a certain degree of confidence what interval the parameter that we are trying to estimate falls within. We take a second to note that while it may seem that we have already achieved something similar, this request is fundamentally different than anything our point estimate theory can provide. A naïve reader may say:
 
 	\[
 	\hat\theta = a \pm \sigma_a \Rightarrow \hat\theta \in \left[a-\sigma_a, a+\sigma_a\right]
 	\]
 
-Though you, as an attentive reader and excellent statistician will immediately identify the crucial flaw in this statement: $\sigma_a$ indicates the \textit{variability} of the estimate in the ensemble of repeated experiments, and does not represent the same "hard" upper/lower bound that we are trying to achieve through interval estimations. Really, the values $a-\sigma_a, a+\sigma_a$ have no more significance than any others in the point estimate formulation.
+Though you, as an attentive reader and excellent statistician will immediately identify the crucial flaw in this statement: $\sigma_a$ indicates the \textit{variability} of the estimate in the ensemble of repeated experiments, and does not represent the same "hard" upper/lower bound that we are trying to achieve through interval estimations. Really, the values $a-\sigma_a, a+\sigma_a$ have no more significance than any others in the point estimate formulation. We will learn in this section that if the function that we are sampling is Normal, then the above interval really represents a 68.3\% confidence interval centered around the estimated value.
 
 \begin{example}
 	If we take a second, we can even find some edge case examples where the point estimate method breaks down, considering a Poisson \textit{pdf}. We know that the MLE is $\hat\mu=k$ with null bias and $\Var\left[\hat\mu\right] = \mu$. Therefore if I measure one count $k=1$ then I obtain the point estimate for $\mu = 1\pm1$. Only armed with this we would be tempted to say that we can't exclude $\mu\leq0$, even though we know that the counts can, by definition, only be positive.
@@ -137,7 +135,6 @@ The most common and simple choice is to use \textit{posterior ordering} $o(\thet
 We can see the power of this Bayesian case, and it's not hard to understand what an interval estimate looks like and means under this formulation. However, it is not always applicable, as the unknown parameters must admit \textit{pdf's} themselves.
 
 \section{The standard interval estimator}
-
 We once again move away from the Bayesian outlook, which remains intuitive and extremely descriptive, though limited by the assumption of a \textit{prior} $\pi(\theta)$.
 
 In the general case, in order to find an interval estimate for a certain parameter $\theta$ we will have to solve the following equation:
