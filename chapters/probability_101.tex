@@ -429,12 +429,24 @@ taken with a "$-1$" before if $f$ is monotonically decreasing. The reader can re
 \begin{example}
 	Consider an observable $x\in \mathbb{R}$ that follows a \emph{pdf} $p_x(x)$. Consider now a statistic $y=x^2$. We want to find $p_y(y)$.
 	
-	Using \ref{def:pdf_var_change} we get:
+	Clearly $x(y)=\pm \sqrt{y}$, then we have two part of the original \textit{pdf} mapped to the newer (see \ref{fig:variable_change}), thus we have to sum the probabilities. 
+
 	\begin{figure}[H]
 		\centering
 		\input{images/variable_change.pgf}
 		\caption{Should we add a caption and a label to this image?}
+		\label{fig:variable_change}
 	\end{figure}
+	
+	Using \ref{def:pdf_var_change} we get:
+	\begin{align*}
+		p_y(y)&=
+		p_x(\sqrt{y})\left|\frac{\dd (\sqrt{y})}{\dd y}\right|
+		+
+		p_x({\scriptstyle -}\sqrt{y})\left|\frac{\dd ({\scriptstyle -}\sqrt{y})}{\dd y}\right|\\
+		&=\frac{p_x(\sqrt{y})+p_x({\scriptstyle -}\sqrt{y})}{2\sqrt{y}}
+	\end{align*}
+
 \end{example}
 
 
