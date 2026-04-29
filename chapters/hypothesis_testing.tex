@@ -159,7 +159,42 @@ For composite hypotheses, a Test can be \textbf{locally maximally powerful} (LMP
 
 Essentially, for a composite hypothesis we want our Test to be the most powerful one in a region near the null hypothesis. For example, if $H_0: \theta= \theta_0$ and $H_i: \theta\geq\theta_0$ the LMP is the most powerful Test near the most plausible values of $\theta$, namely the ones near (but greater than) $\theta_0$.
 
-Aaand then there's the UMP which I will finish...
+The final, and most powerful property we can request of our Test is for it to be the \textbf{uniformly most powerful} (UMP), which essentially means that out of all of the Tests it is the "best" one:
 
+	\[
+	\forall i: \text{pow}_T(i) \geq \text{pow}_{T^\prime}(i) \forall T^\prime
+	\]
 
+Having composite hypotheses, the concept of most powerful Test it difficult to define, in general, as the MP Test for some alternatives may be different than for others. This is why we restrict ourselves to local general solutions (LMP) or, when possible, find a uniform solution that works for all alternatives. If such a Test exists, it naturally follows that we choose it as the "best" option.
 
+\todo{LR ratio "nested hypothesis" test can go here?}
+
+We will expand on all of these different types one by one in the following sections:
+
+\subsection{Neyman-Pearson Test}
+
+When we talk about simple hypotheses, it's fundamental to also talk about the \textit{Neyman-Pearson} (NP) Test, and the associated theorem:
+
+\begin{theorem}[Neyman-Pearson]
+	Given two simple hypotheses $H_0,H_1$, corresponding to the \textit{pdf's} $p_0(x),p_1(x)$, and let $T_{NP}$ be a Test based on the statistic $T(x) = \frac{p_0}{p_1}$, with critical region $\mathcal{C}\equiv \{x: T(x)<q\}$ and significance level $P_0(\mathcal{C})=\alpha$.
+	
+	Let $T^\prime$ be another Test with critical region $\mathcal{C}^\prime$ and significance $\alpha^\prime\leq\alpha$ 
+	
+	It follows that 
+	
+	\[
+	\text{pow}(T^\prime) \leq \text{pow}(T) \quad (\beta^\prime \geq \beta)
+	\]
+\end{theorem}
+
+Namely, it gives us a way to explicitly write the most powerful Test in the case of simple hypotheses. Let's prove the theorem:
+
+\begin{align*}
+	blablabla
+\end{align*}
+
+\subsection{LMP}
+
+\subsection{UMP}
+
+\section{LR test}
