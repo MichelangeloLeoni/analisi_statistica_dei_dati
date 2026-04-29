@@ -4,19 +4,16 @@ ifeq ($(OS),Windows_NT)
     FIXPATH = $(subst /,\,$1)
     MKDIR = if not exist $(subst /,\,$1) mkdir $(subst /,\,$1)
 	SRC_DIR = src\asd\interval_estimation
-	CP = copy /Y
 else
     RM = rm -f
     PYTHON = python3
     FIXPATH = $1
     MKDIR = mkdir -p $1
 	SRC_DIR = src/asd/interval_estimation
-	CP = cp
 endif
 
 MAIN = analisi_statistica_dei_dati
 PY_DIR = scripts
-REQUIRED_DIRS = images code tables
 OUT_DIR = .build
 STAMP_DIR = .stamps
 
@@ -27,25 +24,19 @@ SRC_STAMPS = $(patsubst $(SRC_DIR)/%.py, $(STAMP_DIR)/%.stamp, $(SRC_SOURCES))
 
 DRAFT_NAME = draft_analisi_statistica_dei_dati
 PRODUCTION_NAME = production_analisi_statistica_dei_dati
-LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -shell-escape -outdir=$(OUT_DIR) -silent
+LATEXMK = latexmk -pdf -interaction=nonstopmode -halt-on-error -auxdir=$(OUT_DIR) -silent
+
 # ------------------------
 
 all: py
 
-check-dirs:
-	@$(call MKDIR,images)
-	@$(call MKDIR,code)
-	@$(call MKDIR,tables)
-
-production: check-dirs $(PY_STAMPS) $(SRC_STAMPS)
+production: $(PY_STAMPS) $(SRC_STAMPS)
 	$(LATEXMK) -jobname=$(PRODUCTION_NAME) \
 		-pdflatex='pdflatex %O "\def\draft{0}\input{%S}"' \
 		$(MAIN).tex
-	@$(CP) $(OUT_DIR)$(if $(filter Windows_NT,$(OS)),\,/)$(PRODUCTION_NAME).pdf .
 
 build:
 	$(LATEXMK) -jobname=$(MAIN) $(MAIN).tex
-	@$(CP) $(OUT_DIR)$(if $(filter Windows_NT,$(OS)),\,/)$(MAIN).pdf .
 
 $(STAMP_DIR)/%.stamp: $(PY_DIR)/%.py
 	@$(call MKDIR, $(STAMP_DIR))
@@ -57,7 +48,7 @@ $(STAMP_DIR)/%.stamp: $(SRC_DIR)/%.py
 	$(PYTHON) $<
 	@echo "Executed $<" > $@
 
-py: check-dirs $(PY_STAMPS) $(SRC_STAMPS)
+py: $(PY_STAMPS) $(SRC_STAMPS)
 	$(MAKE) build
 
 clean:
