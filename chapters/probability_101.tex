@@ -427,28 +427,59 @@ taken with a "$-1$" before if $f$ is monotonically decreasing. The reader can re
 \end{example}
 
 \begin{example}
-	Consider an observable $x\in \mathbb{R}$ that follows a \emph{pdf} $p_x(x)$. Consider now a statistic $y=x^2$. We want to find $p_y(y)$.
-	
-	Clearly $x(y)=\pm \sqrt{y}$, then we have two part of the original \textit{pdf} mapped to the newer (see \ref{fig:variable_change}), thus we have to sum the probabilities. 
+	Consider an observable $x \in \mathbb{R}$ with probability density function (pdf) $p_x(x)$. Define the statistic $y = x^2$. We want to determine the pdf $p_y(y)$.
 
+	Since the transformation is not one-to-one, we have $x(y) = \pm \sqrt{y}$. Therefore, two points in the original space map to the same value of $y$ (see Fig.~\ref{fig:variable_change}), and we must sum their contributions.
+	
 	\begin{figure}[H]
 		\centering
 		\input{images/variable_change.pgf}
-		\caption{Should we add a caption and a label to this image?}
+		\caption{Illustration of the variable transformation $y = x^2$ when $x \sim \mathcal{N}(0, 1)$.}
 		\label{fig:variable_change}
 	\end{figure}
 	
-	Using \ref{def:pdf_var_change} we get:
+	Using Definition~\ref{def:pdf_var_change}, we obtain:
 	\begin{align*}
 		p_y(y)&=
 		p_x(\sqrt{y})\left|\frac{\dd (\sqrt{y})}{\dd y}\right|
 		+
 		p_x({\scriptstyle -}\sqrt{y})\left|\frac{\dd ({\scriptstyle -}\sqrt{y})}{\dd y}\right|\\
-		&=\frac{p_x(\sqrt{y})+p_x({\scriptstyle -}\sqrt{y})}{2\sqrt{y}}
+		&=\frac{p_x(\sqrt{y})+p_x({\scriptstyle -}\sqrt{y})}{2\sqrt{y}} \qquad y \ge 0
 	\end{align*}
+	
+	\paragraph{Uniform distribution}
+	
+	Assume now that $x$ follows a uniform distribution on $[-1,1]$:
+	\[
+	p_x(x)=
+	\begin{cases}
+		\frac{1}{2} & x \in [-1,1],\\
+		0 & \text{otherwise}
+	\end{cases}
+	\]
+	Then:
+	\[
+	p_y(y)=
+	\begin{cases}
+		\frac{1}{2\sqrt{y}} & 0 < y \le 1,\\
+		0 & \text{otherwise}
+	\end{cases}
+	\]
+	which the reader can easily verify is correctly normalized.
+	
+	\paragraph{Gaussian distribution}
+	Now let $x$ follow a standard normal distribution (as in Fig.~\ref{fig:variable_change}):
+	\[
+	p_x(x)=\frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}}
+	\]
+	Then:
+	\begin{align*}
+		p_y(y)&=\frac{1}{\sqrt{2\pi}}\frac{e^{-\frac{(\sqrt{y})^2}{2}}+e^{-\frac{({\scriptstyle -}\sqrt{y})^2}{2}}}{2 \sqrt{y}}\\
+		&=\frac{1}{\sqrt{2\pi}}\frac{e^{-\frac{y}{2}}}{\sqrt{y}} \qquad y \ge 0
+	\end{align*}
+	This is a $\chi^2$ distribution with one degree of freedom. We will encounter it frequently in the rest of these notes.
 
 \end{example}
-
 
 \subsubsection{Expected value of a statistic}
 Another important operator is the expected value. We defined it for a random variable in Def \ref{def:mean}, and we now look to generalize it to statistics.
