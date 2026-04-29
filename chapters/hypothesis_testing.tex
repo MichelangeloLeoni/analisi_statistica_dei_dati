@@ -31,19 +31,19 @@ Remember, the only significant output of a Test is the rejection of a hypothesis
 \end{align*}
 
 
-We then define a \textbf{critical (rejection) region} $\mathcal{C}$ such that:
+We then define a \textbf{critical (rejection) region} $\C$ such that:
 
 	\[
-	\mathcal{C} \equiv \{x: T(x)\neq H_0\}
+	\C \equiv \{x: T(x)\neq H_0\}
 	\]
 
 The complement of this region goes under the name of "acceptance region"\sidenote{Important: we never accept hypotheses! Acceptance region, in this case, should more properly be called "failure to reject region"}, and can naturally be written as:
 
 	\[
-	\mathcal{A}\equiv\bar{\mathcal{C}} = \{x: T(x) = H_0\}
+	\mathcal{A}\equiv\bar{\C} = \{x: T(x) = H_0\}
 	\]
 
-Under this notation: if our data falls within the rejection region $\mathcal{C}$, the test $T(x)$ maps to an alternative hypothesis $H_i$ (where $i \neq 0$), leading us to reject the null hypothesis.
+Under this notation: if our data falls within the rejection region $\C$, the test $T(x)$ maps to an alternative hypothesis $H_i$ (where $i \neq 0$), leading us to reject the null hypothesis.
 
 \section{The standard hypothesis test}
 We will be looking at two main types of hypotheses, depending on what we can infer on $\theta$. The first is the \textit{simple hypothesis}:
@@ -72,11 +72,11 @@ We also take a moment to define the different errors\sidenote{Error in the sense
 \begin{definition}[Type I error]
 	An error of the fist type is one such that:
 	\[
-	\alpha = P(x\in \mathcal{C};H_0)
+	\alpha = P(x\in \C;H_0)
 	\]
 	for simple hypotheses and 
 	\[
-	\alpha =\sup_\nu P(x\in \mathcal{C};H_0,\nu)
+	\alpha =\sup_\nu P(x\in \C;H_0,\nu)
 	\]
 	for composite ones. 
 	Namely, this represents the probability of erroneously rejecting the null hypothesis, of which we take the \textit{sup} ("worst-case") for composite hypotheses. Essentially, it is the probability of finding our measurement in the critical region though it belongs to $H_0$.
@@ -97,13 +97,13 @@ We also take a moment to define the different errors\sidenote{Error in the sense
 
 \todo{INSERT graph with two peaks and the vertival bar where it says left accept right critical and the shadings with alpha and beta}
 
-We frequently use Test statistics of the type $T(x):\mathcal{C}\equiv\{x:T(x)>q_\alpha\}$ with
+We frequently use Test statistics of the type $T(x):\C\equiv\{x:T(x)>q_\alpha\}$ with
 	
 	\[
-	\alpha = P(x\in \mathcal{C};H_0) = \int_{q_\alpha}^{\infty}p(T(x);H_0)\dd T
+	\alpha = P(x\in \C;H_0) = \int_{q_\alpha}^{\infty}p(T(x);H_0)\dd T
 	\]
 
-of which we take the \textit{sup} for composite hypotheses. We choose a small $\alpha$ beforehand ("significance level") and we use it to find $q_\alpha$. For example, typical values may be $\alpha = 0.05, 3\sigma, 5\sigma,\dots$
+of which we take the \textit{sup} for composite hypotheses. We choose a small $\alpha$ beforehand ("significance level") and we use it to find $q_\alpha$, (the \textit{cut-off}). For example, typical values may be $\alpha = 0.05, 3\sigma, 5\sigma,\dots$
 
 We also calculate the second type of error:
 
@@ -155,6 +155,7 @@ For composite hypotheses, a Test can be \textbf{locally maximally powerful} (LMP
 
 	\[
 	\forall i\in I(H_0): \text{pow}_T(i) \geq \text{pow}_{T^\prime}(i) \forall T^\prime
+	\tag{LMP Test}
 	\]
 
 Essentially, for a composite hypothesis we want our Test to be the most powerful one in a region near the null hypothesis. For example, if $H_0: \theta= \theta_0$ and $H_i: \theta\geq\theta_0$ the LMP is the most powerful Test near the most plausible values of $\theta$, namely the ones near (but greater than) $\theta_0$.
@@ -163,11 +164,10 @@ The final, and most powerful property we can request of our Test is for it to be
 
 	\[
 	\forall i: \text{pow}_T(i) \geq \text{pow}_{T^\prime}(i) \forall T^\prime
+	\tag{UMP Test}
 	\]
 
 Having composite hypotheses, the concept of most powerful Test it difficult to define, in general, as the MP Test for some alternatives may be different than for others. This is why we restrict ourselves to local general solutions (LMP) or, when possible, find a uniform solution that works for all alternatives. If such a Test exists, it naturally follows that we choose it as the "best" option.
-
-\todo{LR ratio "nested hypothesis" test can go here?}
 
 We will expand on all of these different types one by one in the following sections:
 
@@ -176,9 +176,9 @@ We will expand on all of these different types one by one in the following secti
 When we talk about simple hypotheses, it's fundamental to also talk about the \textit{Neyman-Pearson} (NP) Test, and the associated theorem:
 
 \begin{theorem}[Neyman-Pearson]
-	Given two simple hypotheses $H_0,H_1$, corresponding to the \textit{pdf's} $p_0(x),p_1(x)$, and let $T_{NP}$ be a Test based on the statistic $T(x) = \frac{p_0}{p_1}$, with critical region $\mathcal{C}\equiv \{x: T(x)<q\}$ and significance level $P_0(\mathcal{C})=\alpha$.
+	Given two simple hypotheses $H_0,H_1$, corresponding to the \textit{pdf's} $p_0(x),p_1(x)$, and let $T_{NP}$ be a Test based on the statistic $T(x) = \frac{p_0}{p_1}$, with critical region $\C\equiv \{x: T(x)<q\}$ and significance level $P_0(\C)=\alpha$.
 	
-	Let $T^\prime$ be another Test with critical region $\mathcal{C}^\prime$ and significance $\alpha^\prime\leq\alpha$ 
+	Let $T^\prime$ be another Test with critical region $\C^\prime$ and significance $\alpha^\prime\leq\alpha$ 
 	
 	It follows that 
 	
@@ -190,11 +190,151 @@ When we talk about simple hypotheses, it's fundamental to also talk about the \t
 Namely, it gives us a way to explicitly write the most powerful Test in the case of simple hypotheses. Let's prove the theorem:
 
 \begin{align*}
-	blablabla
+	&\text{pow}\left(T_{NP}\right) - \text{pow}\left(T^\prime\right) = P_1\left(\C\right) - P_1\left(\C^\prime\right)\\
+	&= \left(P_1\left(\C\cap\C^\prime\right) + P_1\left(\C\cap\bar{\C^\prime}\right)\right) - \left(P_1\left(\C^\prime\cap\C\right) + P_1\left(\C^\prime\cap\bar{\C}\right)\right)\\
+	&= P_1\left(\C\cap\bar{\C^\prime}\right) - P_1\left(\C^\prime\cap\bar{\C}\right) = \int_{\C\cap\bar{\C^\prime}} p_1(x)\dd x - P_1\left(\C^\prime\cap\bar{\C}\right)
 \end{align*}
 
-\subsection{LMP}
+In all $\C$, we have that $p_0(x) \leq qp_1(x)$ by definition, and so:
+	
+	\[
+	\int_{\C\cap\bar{\C^\prime}} p_1(x)\dd x - P_1\left(\C^\prime\cap\bar{\C}\right) \geq \int_{\C\cap\bar{\C^\prime}} \frac{p_0(x)}{q}\dd x - P_1\left(\C^\prime\cap\bar{\C}\right)
+	\]
 
-\subsection{UMP}
+This means that 
 
-\section{LR test}
+	\begin{equation}
+	\text{pow}\left(T_{NP}\right) - \text{pow}\left(T^\prime\right) \geq \frac{P_0\left(\C\cap\bar{\C^\prime}\right)}{q} - P_1\left(\C^\prime\cap\bar{\C}\right)
+	\label{eq:NP_dim_step}
+	\end{equation}
+	
+Let's put this to the side for now and consider the identity
+
+	\[
+	A \cup B = A \cup \left(B \cap \bar{A} \right)
+	\]
+
+which transforms the union of two sets into the union of two disjoined sets. Applying it to our $\C$ and $\C^\prime$:
+
+	\[
+	\C \cup \C^\prime = \C \cup \left(\C^\prime \cap \bar{\C}\right) = \left(\C \cap \bar{\C^\prime}\right) \cup \C^\prime
+	\]
+	
+Taking the probability of the second and third terms we get:
+
+	\[
+	P(\C) + P\left(\C^\prime \cap \bar{\C}\right) = P\left(\C \cap \bar{\C^\prime}\right) + P(\C^\prime)
+	\]
+	
+From this identity we can solve for $P\left(\C \cap \bar{\C^\prime}\right)$ and insert it in equation (\ref{eq:NP_dim_step}) to get:
+
+\begin{align*}
+	\text{pow}\left(T_{NP}\right) - \text{pow}\left(T^\prime\right) &\geq \frac{1}{q}\left[P_0\left(\C^\prime \cap \bar{\C}\right) + P_0(\C) -P_0(\C^\prime)\right] - P_1\left(\C^\prime\cap\bar{\C}\right)\\
+	&\geq \frac{1}{q}\left[P_0\left(\C^\prime \cap \bar{\C}\right) + \underbrace{\left(\alpha-\alpha^\prime\right)}_{\geq 0}\right] - P_1\left(\C^\prime\cap\bar{\C}\right)\\
+	&\geq \frac{1}{q} P_0\left(\C^\prime \cap \bar{\C}\right)- P_1\left(\C^\prime\cap\bar{\C}\right)\\
+	&\geq \int_{\C^\prime\cap\bar{\C}} \frac{p_0(x)}{q}\dd x - P_1\left(\C^\prime\cap\bar{\C}\right)
+\end{align*}
+
+We know that in all $\bar{\C}$ we have that  $p_0(x) \geq qp_1(x)$ by definition, and so:
+
+\begin{align*}
+	\text{pow}\left(T_{NP}\right) - \text{pow}\left(T^\prime\right) &\geq \int_{\C^\prime\cap\bar{\C}} p_1(x) \dd x - P_1\left(\C^\prime\cap\bar{\C}\right)\\
+	&\geq P_1\left(\C^\prime\cap\bar{\C}\right) - P_1\left(\C^\prime\cap\bar{\C}\right)\\
+\end{align*}
+
+Which means that
+	\[
+	\text{pow}\left(T_{NP}\right) - \text{pow}\left(T^\prime\right) \geq 0
+	\]
+We have proven that there exists no Test more powerful than the Neyman-Pearson for simple hypotheses, and so it will be our go-to test when we wish to compare two hypotheses of this type.
+
+\subsection{LMP Test}
+In the case of composite hypotheses we can start by maximizing the power near a certain interval, specifically the one where the most plausible or interesting alternatives lie. More specifically, it can be informative to test the alternatives near $H_0$, as they are, by definition, the most difficult to distinguish, and where the power of a Test may make the difference between being able to reject the null hypothesis or not. 
+
+If the hypotheses are characterized by a continuous parameter $\theta$, and the Likelihood\sidenote{You were getting worried, right? Too much time without talking about the Likelihood!} is differentiable in a neighborhood of $\theta_0$ (which characterizes $H_0$), then it can by proven that if we use the Fisher Score (def \ref{def:Fisher_S}) as a Test statistic:
+
+	\[
+	T(x) = S(x;\theta_0) = \frac{\partial \ln p(x;\theta)}{\partial \theta}\bigg\rvert_{\theta=\theta_0}
+	\]
+
+Then we have a maximally powerful universal (as in, with a pivotal asymptotic distribution) Test in a one-sided local interval of $H_0$.
+
+The proof will not be considered in this write-up, but it follows the fact that the above Test locally approximates the N-P Test.
+
+The asymptotic distribution of the Score, we remember, is a Normal distribution with null mean and $I_n(\theta_0)$ variance, as seen in eq (\ref{eq:Score_asymp}). We are dealing with a pivotal quantity, and therefore to find the cut-off $q_\alpha$ we only need to look at known integration tables.
+
+We fall back upon this case when a more general universal maximally powerful test does not exist (which we will look at in the following section), and in the case of high statistics.
+
+\subsection{UMP Test}
+In the case where we have more than two hypotheses, and so the N-P test is not applicable, we aim to find a Test that is the most powerful one for every single alternative simultaneously. That is the idea behind UMP Tests, which are the best choice to use when they exist. The following theorem gives the conditions for when they do:
+
+\begin{theorem}
+	Let $p(x;\theta)$ be the \textit{pdf} of $x\in\R^N$ dependent on a real-valued parameter $\theta$. We consider the null hypothesis $H_0: \theta= \theta_0$ to be tested against the alternative composite hypothesis $H_\theta : \theta > \theta_0$.
+	
+	A uniform maximally powerful (UMP) Test exists if we can write:
+	
+	\[
+	p(x;\theta) = \prod_{i=1}^N F(x_i)G(\theta)\cdot e^{\left[A(x_i)B(\theta)\right]}
+	\] 
+	
+	With $B(\theta)$ a monotonously increasing function of $\theta$.
+	
+	The UMP Test statistic, in this case, is:
+	
+	\[
+	T(x) = \sum_{i=1}^NA(x_i)
+	\]
+\end{theorem}
+
+The idea is that if we can separate the \textit{pdf} into a product of functions that depend only on $x$ or $\theta$ in that exponential form, then we know that a UMP Test exists and what it is. Hawk-eyed readers will notice that $T(x)$ is really the sufficient statistic for $p(x;\theta)$, as we have written our \textit{pdf} in the exponential form equivalent to the one used in the factorization theorem \ref{th:factorization}. It's natural after all, we are looking for a Test independent of $\theta$, and the most powerful as well. We know that the way to represent the data independently of parameters with no information loss is through sufficient statistics, and so it seems natural for them to resurface here.\sidenote{Careful: every distribution that allows for a UMP test admits a sufficient statistic, but not vice versa!}
+
+To prove this theorem, we start by fixing a certain $\theta>\theta_0$ and writing the N-P Test\sidenote{Well, actually the reciprocal of the N-P Test, which is a convention that simply makes the calculations slightly more intuitive, as well as resembling the Likelihood Ratio Test we will talk about in the future. This brings no conceptual change.} for this specific simple hypothesis alternative $H_\theta$:
+
+\begin{align*}
+	LR(x) &= \frac{p(x;\theta)}{p(x;\theta_0)} = \prod_{i=1}^N \frac{G(\theta)}{G(\theta_0)}\cdot \frac{e^{\left[A(x_i)B(\theta)\right]}}{e^{\left[A(x_i)B(\theta_0)\right]}}\\
+	&=\left[\frac{G(\theta)}{G(\theta_0)}\right]^N\cdot e^{\left(\sum_{i=1}^N A(x_i)\right)\cdot\left(B(\theta)-B(\theta_0)\right)}
+\end{align*}
+
+We have mentioned that $B(\theta)$ is a monotonously increasing function of $\theta$, and so the final subtraction is positive since we are fixing $\theta>\theta_0$. Also, $G$ is a positive function and therefore $LR(x)$ is an increasing function of the statistic $T(x) = \sum_{i=1}^NA(x_i)$. 
+
+Because $LR(x)$ is a strictly increasing function of $T(x)$, there exists a one-to-one mapping between their values such that the inequality $LR(x) > q$ holds if and only if $T(x) > q^\prime$. Thus, the test's power is determined entirely by the distribution of $T(x)$ under $H_0$ and $H_\theta$. Having the same critical regions they can be considered as equivalent Test statistics. 
+
+The important point is that $T(x)$ does not depend on the parameter $\theta$, and so the N-P statistic ends up being the same for all $\theta$, and therefore is a UMP Test. 
+
+\subsection{LR Test}
+Let's look at a more general type of situation than the ones we have previously studied. Up until now we have talked about simple hypotheses or composite hypotheses of the type $\theta>\theta_0$. Now, let's study the case of "nested" hypotheses of the type:
+
+	\[
+	H_0: p(x;\theta_0,\nu) \quad H_\theta: p(x;\theta, \nu), \quad \text{with }\theta,\nu\in\R^N
+	\]
+
+In this case, the null hypothesis fixes \textit{some} values of the parameter and leaves some other values as free alternatives. We could think to still use the \textit{LR} statistic as we have done in the UMP Test, as it generalizes to the NP Test\sidenote{Once again, its inverse, though it does not change much} for simple hypotheses, which we know has the property of maximal power. Therefore, we write:
+
+	\[
+	\lambda(x) = 2\ln \frac{\sup_{\theta,\nu}p(x;\theta,\nu)}{\sup_{\nu}p(x;\theta_0,\nu)}
+	\]
+
+Which we can more intuitively write by substituting the "sup's" with the \textit{MLE} for the specific parameter:
+
+	\[
+	\lambda(x) = 2\ln \frac{p(x;\hat{\theta_{\text{MLE}}},\hat{\nu_{\text{MLE}}})}{p(x;\theta_0,\hat{\nu_{\text{MLE}}})}
+	\]
+
+This can be seen as a N-P Test done on $H_0$ and the alternative hypotheses obtained by using the \textit{MLE} of the free parameters. We also note that if there exists a sufficient statistic, $\lambda(x)$ depends only on it.
+
+We can't prove general properties on the power of this statistic, we can appreciate its simplicity, and use an extension of the aforementioned Wilks' theorem to derive a helpful property:
+
+\begin{theorem}
+	The statistic $\lambda(x)$ has (under the null hypothesis $H_0$), the asymptotic distribution of a $\chi^2_d$ where $d$ is the dimension of $\nu$.
+\end{theorem}
+
+Once again, we have an asymptotically pivotal quantity, and we can find the critical region for the test using the usual $\chi^2$ tables. We also enjoy the property that this Test is asymptotically unbiased.
+
+\subsection{Where hypothesis tests fail}
+Example of the two peaks where we need to actually do a GOF not hypothesis test:
+I leave this to M.L (if he wants) as it was an instructive example when I first worked it out (and because I want to go on to new things at this moment!)
+
+
+In general, I am not so sure about the sectioning in this chapter, though I think when we start adding graphs and examples the subsections will be long enough for them to warrant being subsections and not anything smaller. 
+
+That being said, I believe that each subsection requires $\geq1$ example, to be filled in as they come to mind, possibly coming from exams that we try.

@@ -218,6 +218,7 @@ We have already talked about statistics, which are functions of random variables
 	s \text{ sufficient}\iff p(x;\theta) = f(x)\cdot g(s(x),\theta) \quad \text{with } f,g\geq0
 	\]
 	Important note: the domain of $x$ must be \textit{independent of} $\theta$ (see \ref{ex:uniform_sufficient_statistics})
+\label{th:factorization}
 \end{theorem}
 
 \begin{example}[Proof that factorization implies sufficiency, factorization theorem $\Leftarrow$]
@@ -372,7 +373,11 @@ This means that under sufficient regularity (and if the domain of the observable
 	\]
 \end{definition}
 
-Under the same principles of sufficient regularity, given that the expected value of the Fisher score is zero, then the Fisher Information will be equal to the variance of the score. 
+Under the same principles of sufficient regularity, given that the expected value of the Fisher score is zero, then \textbf{the Fisher Information will be equal to the variance of the score}. 
+
+	\[
+	\Var\left[S_x(\theta)\right] = I(\theta)
+	\]
 
 Generalizing to more parameters, we have the \textit{Fisher Information matrix} defined as:
 	\[
@@ -419,3 +424,20 @@ which tells us that:
 Thus implying that an invertible transformation does not change the Information.
 
 All of these are properties that we would expect of a function that symbolizes the information of an observable/statistic, and if I cannot find a sufficient statistic for my observable a good idea might be to find a statistic that minimizes the Fisher Information loss.
+
+\subsubsection{Asymptotic distribution}
+
+While we have established that the Fisher score is a statistic with zero mean and variance equal to the Fisher Information, its true power in inference is revealed as the sample size $n$ becomes large. Since the log-likelihood of a sample of $n$ independent and identically distributed (i.i.d.) observations is the sum of the individual log-likelihoods, the Fisher score $S_n(\theta)$ is likewise a sum of i.i.d. random variables:
+
+	\[
+	S_n(\theta) = \sum_{i=1}^n \frac{\partial \ln p(x_i; \theta)}{\partial \theta}
+	\]
+
+By invoking the Central Limit Theorem, we can characterize the limiting behavior of this sum. For a fixed $\theta$, as $n \to \infty$, the distribution of the Score function scaled by $1/\sqrt{n}$ converges to a normal distribution with variance equal to the unit Fisher Information. In practical terms, for a large sample, we say that the total score is asymptotically normal:
+
+\begin{equation}
+	S_n(\theta) \sim \N\left(0, I_n(\theta)\right)
+	\label{eq:Score_asymp}
+\end{equation}
+
+ This will be an important result that we use in the following chapters, and once again stabilizes why the 

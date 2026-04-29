@@ -1,2 +1,60 @@
 \chapter{Goodness of Fit}
-GOF Tests start here
+
+Congrats, you've made it this far, and not much more separates you from the back cover of this book. We wrap up our general review of inferences with this final type that differs from all the others in an important way: we want to test if the \textit{pdf} we assume the data to be extracted from is actually the "correct one". Well, without getting ahead of ourselves we want to quantify, in some statistically correct way, \textbf{how much the observed data is in accord with the assumed distribution}. 
+
+Up until now we have assumed that the observed data come from a known \textit{pdf} (or class of \textit{pdf's}) depending on some parameter, and we have worked long and hard to try to say \textit{something} about that parameter. Well, now we must zoom out a step, and justify why we are assuming that distribution in the first place. Without this initial justification, whatever we end up discovering about the parameters that govern $p(x)$ must be thrown directly in the bin, as if we have failed to convince ourselves that $x$ is distributed following $p$ in the first place then all our work is for naught.
+
+Naturally, this being the last chapter does not mean that it is the last thing we wish to verify during our analysis. Quite the contrary, it can be wise to first verify how well our data is in accord with the assumed \textit{pdf}, and to then analyse it, as to not waste precious resources and time.
+
+Convinced? Let's get into it:
+
+GOF tests are in many ways similar to hypothesis tests, and once again we choose a Test statistic $T(x)$ and find a threshold $T(x)>q_\alpha$ such that the Test has a significance of $\alpha$ (chosen \textit{a priori}).
+
+In this case, however, only the null hypothesis is specified (simple or composite as it may be), and the alternative is simply "anything else". By anything we really do mean it, as an alternative could be that the data does not even follow a \textit{pdf} (the phenomenon is \textit{non-probabilistic}). Therefore, the alternative space is not defined, and we can't define a power function, much less talk about UMP Tests.
+
+Having said this, we can still talk about Tests that are more "powerful" (in quotes) than others, as this non-definition will include subjective decisions on which Test to prefer.
+
+We struggle even to define the concept of \textit{consistency} in this case, and typically fall upon guaranteeing that the GOF Test be at least \textit{unbiased} on the alternatives that we are able to think of.
+
+Not having defined alternatives, we can't talk about \textit{priors} (there may not even be a \textit{pdf} that follows the data), which is a problem for the Bayesian school, meaning that the very concept of GOF Tests are, at their core, frequentist. To round things out, it also strongly violates the Likelihood principle, as the Likelihood gives no useful information in this formulation.
+
+\section{p-values}
+
+The statistic at the core of almost every GOF Test is the famous (or infamous, if you were not a fan of the Lab courses) \textbf{p-value} statistic.
+
+Perhaps one of the most commonly misunderstood concepts in data analysis, we give this formal, and simple definition:
+
+\begin{definition}[p-value]
+	A \textit{p-value} is a statistic $p(x)$ such that $p\sim U[0,1]$ under $H_0$
+\end{definition}
+\todo{Admittedly, that was neither clear nor simple... Fix up?}
+
+The goodness of fit Test, in this case, corresponds to the critical region $p<\alpha$ ($P(p<\alpha)=\alpha\forall\alpha)$
+
+We also wish for the GOF test to give unbiased results, and so we need for this statistic $p(x)$ to move towards lower values in every hypothesis in which $H_0$ is not verified. Synthetically:
+
+	\[
+	F_{\bar{H_0}}(p) \geq F_{H_0}(p)
+	\]
+
+This gives the $p$-value the interpretation of "probability" (under $H_0$) that the experiment give a result that deviates further from $H_0$ that what was observed. 
+
+Note: it's common to erroneously call the $p$-value "significance", though we know that to be the name given to $\alpha$, which has been priorly fixed.  
+
+\todo{Examples for when ONLY using GOF tests is badddddd! Also maybe Look elsewhere effect?}
+
+\subsubsection{Combination of p-values}
+
+\section{GOF Tests from the LR statistic}
+Also application to histograms (can be a subsection or example)
+
+
+Also application to gaussian fit with known/unknown var (can be a subsection or example)
+
+\section{Student's t}
+
+\section{Continuous distributions}
+
+\section{1-d}
+
+Of course all of this has been randomly sectioned, we can touch up on that as we write. 
