@@ -1,16 +1,7 @@
-ifeq ($(OS),Windows_NT)
-    RM = del /Q /F
-    PYTHON = python
-    FIXPATH = $(subst /,\,$1)
-    MKDIR = if not exist $(subst /,\,$1) mkdir $(subst /,\,$1)
-	SRC_DIR = src\asd\interval_estimation
-else
-    RM = rm -f
-    PYTHON = python3
-    FIXPATH = $1
-    MKDIR = mkdir -p $1
-	SRC_DIR = src/asd/interval_estimation
-endif
+RM = rm -f
+PYTHON = python3
+MKDIR = mkdir -p
+SRC_DIR = src/asd/interval_estimation
 
 MAIN = analisi_statistica_dei_dati
 PY_DIR = scripts
@@ -39,12 +30,12 @@ build:
 	$(LATEXMK) -jobname=$(MAIN) $(MAIN).tex
 
 $(STAMP_DIR)/%.stamp: $(PY_DIR)/%.py
-	@$(call MKDIR, $(STAMP_DIR))
+	@$(MKDIR) $(STAMP_DIR)
 	$(PYTHON) $<
 	@echo "Executed $<" > $@
 
 $(STAMP_DIR)/%.stamp: $(SRC_DIR)/%.py
-	@$(call MKDIR, $(STAMP_DIR))
+	@$(MKDIR) $(STAMP_DIR)
 	$(PYTHON) $<
 	@echo "Executed $<" > $@
 
@@ -54,7 +45,7 @@ py: $(PY_STAMPS) $(SRC_STAMPS)
 clean:
 	$(LATEXMK) -c
 	-$(RM) *.out *.toc *.fls *.log *.fdb_latexmk *.aux *.synctex.gz
-	-$(if $(filter Windows_NT,$(OS)), rmdir /S /Q $(STAMP_DIR), rm -rf $(STAMP_DIR))
+	-rm -rf $(STAMP_DIR)
 
 cleanall: clean
 	$(LATEXMK) -C
