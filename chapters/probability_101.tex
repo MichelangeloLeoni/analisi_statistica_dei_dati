@@ -137,62 +137,77 @@ It is important to remember that independence is not correlation, and the former
 \end{theorem}	
 
 \begin{example}
-	A good way to demonstrate the concepts we've encountered until now is to solve the famous \textbf{Monty Hall Problem} (You've \emph{probably} heard about it at least one in your life).
+	A good way to illustrate the concepts we have encountered so far is to solve the famous \textbf{Monty Hall problem} (you have \emph{probably} heard of it at least once in your life).
 	
-	Image you are trasported from the desk where you are reading this to the studios of a famous game show. The conductor, Mr. Monty, explain you the rules of the game: the are three closed doors behind you. One conteins a brand new sports car, the other two a goat. You choose one door to open, you win the prize behind it. Obviously Mr. Monty knows behind which door is hidden the car.
+	Imagine you are suddenly transported from where you're reading this text to the studio of a famous game show. The host, Mr.~Monty, explains the rules of the game: there are three closed doors in front of you. Behind one there is a brand new sports car, behind the other two there are goats. You choose one door; if you pick the right one, you win the prize behind it. Of course, Mr.~Monty knows where the car is hidden.
 	
-	You have read what comes before this example, so you know that every door has the same probability of $\frac{1}{3}$ of conteining the car. So you choose, say, the first door (it doesn't really matter which door you choose for what comes).
+	From what we discussed before, you know that each door has the same probability $\frac{1}{3}$ of hiding the car. So you pick, say, door number one (it does not really matter which door you choose for what follows).
 	
-	Now Monty want to spice up things for the audience watching and, after you choose door one, opens door three revealing a goat behind it (to be clear: Mr. Monty cannot open the door you choose, in this case door number one, and cannot open the door hiding the car, the host revealing the car location is not a great spectacle, isn't it?).
-	Now he want you to make a decision: do you wish to stick with the choice of door number one or do you change your choice and switch to door number two?
-	This seems just a mind game, ultimately you have the same one third of chance to get the car anyways. But the reality, as usual when working with probability, is far more complex and could seem almost paradoxical. So you should take a moment to think, take out of pocket your hand sketchbook in front of the crowd and do some math.
+	Now Monty wants to spice things up for the audience. After your choice, he opens door number three, revealing a goat (to be clear: he cannot open the door you chose, nor the one hiding the car, revealing the prize immediately would not make for a great show, would it?).
 	
-	We can tackle the problem highlighting six different events:
+	At this point, he asks you to decide: do you want to stick with door number one, or switch to door number two?
+	At first glance, this may seem like a pointless mind game: you might think you still have the same one-third chance of winning. But reality, as often happens in probability, is a bit more subtle and can even feel paradoxical. So take a moment, pull out your sketchbook in front of the crowd, and do some math.
+	
+	We can tackle the problem introducing the following different events:
 	\begin{itemize}
-		\item $C_i$, the car is behind door number $i$
-		\item $A_i$, Mr. Monty opens door $i$ revealing a goat
+		\item $C_i$: the car is behind door $i$
+		\item $A_i$: Mr.~Monty opens door $i$, revealing a goat
 	\end{itemize}
-	with $i \in (1,2,3)$.
-	To have the best chance of winning the car you want to find:
-	\[
-		P(C_1|A_3)\lesseqqgtr P(C_2|A_3)
-	\]
-	in other words: if Monty opened the third door revealing a goat, you have better chance sticking with door one or switching to door two?
+	with $i \in \{1,2,3\}$.
 	
-	As you correctly first guessed the probability of finding the car behind door $i$ is:
+	To maximize your chances of winning, you want to compare
 	\[
-		P(C_i)=\frac{1}{3}
+	P(C_1|A_3)\lesseqqgtr P(C_2|A_3),
 	\]
-	We can make use of the Bayes' theorem \ref{th:Bayes} to find the probability of the car being behind door number one given Mr. Monty opened door number three:
+	that is: given that Monty opened door three, is it better to stick with door one or switch to door two?
+	
+	Using Bayes' theorem (Theorem~\ref{th:Bayes}), we can compute
 	\[
-		P(C_1|A_3)=\frac{P(A_3|C_1)P(C_1)}{P(A_3)}
+	P(C_1|A_3)=\frac{P(A_3|C_1)\,P(C_1)}{P(A_3)}
 	\]
-	now we only have to compute each term.
-	We already know that $P(C_1)=\frac{1}{3}$. The first term of the numerator represent the probability of Mr. Monty opening the third door given the car is behind the first door. Now, since he knows that we pick the right one, he can only open doors two or three, each hiding a goat. Thus the probability that he will opening the second or third door is the same:
+	As expected, the prior probabilities are
 	\[
-		P(A_3|C_1)=\frac{1}{2}
+	P(C_i)=\frac{1}{3}
 	\]
-	Now we need to compute the overall probability of Mr. Monty opening the third door, revealing a goat, $A_3$. We can use the total probability law \ref{th:total_prob_law}:
+	
+	The term $P(A_3|C_1)$ is the probability that Monty opens door three given that the car is behind door one. Since in this case both doors two and three hide goats, and Monty can choose either, we have
+	\[
+	P(A_3|C_1)=\frac{1}{2}
+	\]
+	Next, we compute the total probability of the event $A_3$ using the law of total probability (Theorem~\ref{th:total_prob_law}):
 	\begin{align*}
-		P(A_3)&=\sum_i P(A_3|C_i)P(C_i)\\
-		&=P(A_3|C_1)P(C_1)+ P(A_3|C_2)P(C_2)+ P(A_3|C_3)P(C_3)\\
-		&=\frac{1}{3}(P(A_3|C_1)+P(A_3|C_2)+P(A_3|C_3))
+		P(A_3)
+		&=\sum_i P(A_3|C_i)P(C_i)\\
+		&=P(A_3|C_1)P(C_1)+P(A_3|C_2)P(C_2)+P(A_3|C_3)P(C_3)
 	\end{align*}
-	We already know the value of the first term. The second term represent the probability of Mr. Monty opening the third door given the car is behind the second door. Since he cannot open the first door, that we choose, and the second door, that hide the car, his only choice is to open the third. Thus the second term is equal to 1. The third therm represent the probability of Mr. Monty opening the third door giveng the car is behind the door itself. We know that he cannot open the door conceiling the car, thus the third term is equal to 0. Substituiting the correct values, we get:
+	
+	We already know the first term. The second term corresponds to the case in which the car is behind door two: Monty cannot open door one (your choice) nor door two (it hides the car), so he must open door three. Hence
 	\[
-		P(A_3)=\frac{1}{3}\left(\frac{1}{2}+1\right)=\frac{1}{2}
+	P(A_3|C_2)=1
 	\]
-	Thus:
+	
+	The third term corresponds to the case in which the car is behind door three. Since Monty cannot reveal the car, he will never open door three, so
 	\[
-		P(C_1|A_3)=\frac{\frac{1}{2}\frac{1}{3}}{\frac{1}{2}}=\frac{1}{3}
+	P(A_3|C_3)=0
 	\]
-	Leaving us with:
+	
+	Substituting everything, we obtain
 	\[
-		P(C_2|A_3)=1-P(C_1|A_3)=\frac{2}{3}
+	P(A_3)=\frac{1}{3}\left(\frac{1}{2}+1+0\right)=\frac{1}{2}
 	\]
-	This means that switching door and choosing door number two doubles your probability of winning the car!
-	This is huge, and seems too good to be true. The results comes from the fact that Mr. Monty doesn't behave casually, because he knows where the car is hidden, and it's choice is conditioned by this knowledge. Him revealing the position of one of the goat changes our posterior probability.
-	So you should put back the sketchbook and switch door, every time, and come back to where you were studying riding your new sport car (at least probably :) ).
+	
+	Therefore,
+	\[
+	P(C_1|A_3)=\frac{\frac{1}{2}\cdot\frac{1}{3}}{\frac{1}{2}}=\frac{1}{3}
+	\]
+	and consequently
+	\[
+	P(C_2|A_3)=1-P(C_1|A_3)=\frac{2}{3}
+	\]
+	
+	This means that switching doors doubles your probability of winning the car!
+	This result may seem surprising at first. The key point is that Mr.~Monty does not act randomly: he knows where the car is, and his choice is conditioned on that knowledge. By revealing a goat, he is giving you information, which updates your posterior probabilities.
+	So go ahead: close your sketchbook, switch doors every time, and head back to where you were studying driving your brand new sports car (well... with double the probability, at least).
 \end{example}
 
 The last expression takes the name of \textbf{Bayes' theorem}. Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief, which we will briefly introduce in this next section.
