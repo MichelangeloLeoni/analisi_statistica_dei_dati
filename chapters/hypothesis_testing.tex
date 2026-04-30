@@ -7,11 +7,11 @@ We start by defining what a hypothesis is in our case:
 	H_\alpha/H_1&:\text{ "Alternative hypothesis"}	
 	\end{align*}
 
-In general, we assume the null hypothesis holds unless there is statistical evidence that suggests we should reject it. This right here is a key concept: we can never \textit{prove} that a hypothesis is the "correct" one; we can only \textit{reject} or fail to reject it.
+In general, we assume the null hypothesis holds unless there is statistical evidence that suggests we should reject it. This right here is a key concept: we can never \emph{prove} that a hypothesis is the "correct" one; we can only \emph{reject} or fail to reject it.
 
 
 
-We also define a \textit{Test statistic}, that takes our data and maps it to a hypothesis. We look at the data, and the Test tells us which hypothesis it belongs to, out of the alternatives (which are subsets of the parameter space). More formally:
+We also define a \emph{Test statistic}, that takes our data and maps it to a hypothesis. We look at the data, and the Test tells us which hypothesis it belongs to, out of the alternatives (which are subsets of the parameter space). More formally:
 
 	\[
 	T(x) : x\mapsto H_i; \quad H_i\in \mathcal{P}(A)\,\forall i \in \{0,\dots,n\}
@@ -46,10 +46,10 @@ The complement of this region goes under the name of "acceptance region"\sidenot
 Under this notation: if our data falls within the rejection region $\C$, the test $T(x)$ maps to an alternative hypothesis $H_i$ (where $i \neq 0$), leading us to reject the null hypothesis.
 
 \section{The standard hypothesis test}
-We will be looking at two main types of hypotheses, depending on what we can infer on $\theta$. The first is the \textit{simple hypothesis}:
+We will be looking at two main types of hypotheses, depending on what we can infer on $\theta$. The first is the \emph{simple hypothesis}:
 
 \begin{definition}[Simple hypothesis]
-	A \textit{simple hypothesis} is one that uniquely specifies the distribution of the population. In this case, all parameters are fixed to specific values:
+	A \emph{simple hypothesis} is one that uniquely specifies the distribution of the population. In this case, all parameters are fixed to specific values:
 	\[
 	p(x) \equiv p(x; H_i)
 	\]
@@ -57,9 +57,9 @@ We will be looking at two main types of hypotheses, depending on what we can inf
 
 For example, a hypothesis stating that $x$ follows a Normal distribution with a specific mean $\mu=10$ and variance $\sigma^2=1$ is simple.
 
-The other type is the \textit{composite hypothesis}:
+The other type is the \emph{composite hypothesis}:
 \begin{definition}[Composite hypothesis]
-	A \textit{composite hypothesis} is one that does not uniquely specify the distribution. Instead, it states that the parameters lie within a certain range or subset of the parameter space:
+	A \emph{composite hypothesis} is one that does not uniquely specify the distribution. Instead, it states that the parameters lie within a certain range or subset of the parameter space:
 	\[
 	p(x) \equiv p(x; H_i, \theta) \quad \theta \in A
 	\]
@@ -79,7 +79,7 @@ We also take a moment to define the different errors\sidenote{Error in the sense
 	\alpha =\sup_\nu P(x\in \C;H_0,\nu)
 	\]
 	for composite ones. 
-	Namely, this represents the probability of erroneously rejecting the null hypothesis, of which we take the \textit{sup} ("worst-case") for composite hypotheses. Essentially, it is the probability of finding our measurement in the critical region though it belongs to $H_0$.
+	Namely, this represents the probability of erroneously rejecting the null hypothesis, of which we take the \emph{sup} ("worst-case") for composite hypotheses. Essentially, it is the probability of finding our measurement in the critical region though it belongs to $H_0$.
 \end{definition}
 
 \begin{definition}[Type II error]
@@ -92,7 +92,7 @@ We also take a moment to define the different errors\sidenote{Error in the sense
 	\beta =\sup_\nu P(x\in \mathcal{A};H_i,\nu)
 	\]
 	for composite ones. 
-	Namely, this represents the probability of not rejecting the null hypothesis though the measurement belongs to the alternative, of which we once again take the \textit{sup} ("worst-case") for composite hypotheses. 
+	Namely, this represents the probability of not rejecting the null hypothesis though the measurement belongs to the alternative, of which we once again take the \emph{sup} ("worst-case") for composite hypotheses. 
 \end{definition}
 
 \todo{INSERT graph with two peaks and the vertival bar where it says left accept right critical and the shadings with alpha and beta}
@@ -103,7 +103,7 @@ We frequently use Test statistics of the type $T(x):\C\equiv\{x:T(x)>q_\alpha\}$
 	\alpha = P(x\in \C;H_0) = \int_{q_\alpha}^{\infty}p(T(x);H_0)\dd T
 	\]
 
-of which we take the \textit{sup} for composite hypotheses. We choose a small $\alpha$ beforehand ("significance level") and we use it to find $q_\alpha$, (the \textit{cut-off}). For example, typical values may be $\alpha = 0.05, 3\sigma, 5\sigma,\dots$
+of which we take the \emph{sup} for composite hypotheses. We choose a small $\alpha$ beforehand ("significance level") and we use it to find $q_\alpha$, (the \emph{cut-off}). For example, typical values may be $\alpha = 0.05, 3\sigma, 5\sigma,\dots$
 
 We also calculate the second type of error:
 
@@ -173,10 +173,10 @@ We will expand on all of these different types one by one in the following secti
 
 \subsection{Neyman-Pearson Test}
 
-When we talk about simple hypotheses, it's fundamental to also talk about the \textit{Neyman-Pearson} (NP) Test, and the associated theorem:
+When we talk about simple hypotheses, it's fundamental to also talk about the \emph{Neyman-Pearson} (NP) Test, and the associated theorem:
 
 \begin{theorem}[Neyman-Pearson]
-	Given two simple hypotheses $H_0,H_1$, corresponding to the \textit{pdf's} $p_0(x),p_1(x)$, and let $T_{NP}$ be a Test based on the statistic $T(x) = \frac{p_0}{p_1}$, with critical region $\C\equiv \{x: T(x)<q\}$ and significance level $P_0(\C)=\alpha$.
+	Given two simple hypotheses $H_0,H_1$, corresponding to the \emph{pdf's} $p_0(x),p_1(x)$, and let $T_{NP}$ be a Test based on the statistic $T(x) = \frac{p_0}{p_1}$, with critical region $\C\equiv \{x: T(x)<q\}$ and significance level $P_0(\C)=\alpha$.
 	
 	Let $T^\prime$ be another Test with critical region $\C^\prime$ and significance $\alpha^\prime\leq\alpha$ 
 	
@@ -269,7 +269,7 @@ We fall back upon this case when a more general universal maximally powerful tes
 In the case where we have more than two hypotheses, and so the N-P test is not applicable, we aim to find a Test that is the most powerful one for every single alternative simultaneously. That is the idea behind UMP Tests, which are the best choice to use when they exist. The following theorem gives the conditions for when they do:
 
 \begin{theorem}
-	Let $p(x;\theta)$ be the \textit{pdf} of $x\in\R^N$ dependent on a real-valued parameter $\theta$. We consider the null hypothesis $H_0: \theta= \theta_0$ to be tested against the alternative composite hypothesis $H_\theta : \theta > \theta_0$.
+	Let $p(x;\theta)$ be the \emph{pdf} of $x\in\R^N$ dependent on a real-valued parameter $\theta$. We consider the null hypothesis $H_0: \theta= \theta_0$ to be tested against the alternative composite hypothesis $H_\theta : \theta > \theta_0$.
 	
 	A uniform maximally powerful (UMP) Test exists if we can write:
 	
@@ -286,7 +286,7 @@ In the case where we have more than two hypotheses, and so the N-P test is not a
 	\]
 \end{theorem}
 
-The idea is that if we can separate the \textit{pdf} into a product of functions that depend only on $x$ or $\theta$ in that exponential form, then we know that a UMP Test exists and what it is. Hawk-eyed readers will notice that $T(x)$ is really the sufficient statistic for $p(x;\theta)$, as we have written our \textit{pdf} in the exponential form equivalent to the one used in the factorization theorem \ref{th:factorization}. It's natural after all, we are looking for a Test independent of $\theta$, and the most powerful as well. We know that the way to represent the data independently of parameters with no information loss is through sufficient statistics, and so it seems natural for them to resurface here.\sidenote{Careful: every distribution that allows for a UMP test admits a sufficient statistic, but not vice versa!}
+The idea is that if we can separate the \emph{pdf} into a product of functions that depend only on $x$ or $\theta$ in that exponential form, then we know that a UMP Test exists and what it is. Hawk-eyed readers will notice that $T(x)$ is really the sufficient statistic for $p(x;\theta)$, as we have written our \emph{pdf} in the exponential form equivalent to the one used in the factorization theorem \ref{th:factorization}. It's natural after all, we are looking for a Test independent of $\theta$, and the most powerful as well. We know that the way to represent the data independently of parameters with no information loss is through sufficient statistics, and so it seems natural for them to resurface here.\sidenote{Careful: every distribution that allows for a UMP test admits a sufficient statistic, but not vice versa!}
 
 To prove this theorem, we start by fixing a certain $\theta>\theta_0$ and writing the N-P Test\sidenote{Well, actually the reciprocal of the N-P Test, which is a convention that simply makes the calculations slightly more intuitive, as well as resembling the Likelihood Ratio Test we will talk about in the future. This brings no conceptual change.} for this specific simple hypothesis alternative $H_\theta$:
 
@@ -308,19 +308,19 @@ Let's look at a more general type of situation than the ones we have previously 
 	H_0: p(x;\theta_0,\nu) \quad H_\theta: p(x;\theta, \nu), \quad \text{with }\theta,\nu\in\R^N
 	\]
 
-In this case, the null hypothesis fixes \textit{some} values of the parameter and leaves some other values as free alternatives. We could think to still use the \textit{LR} statistic as we have done in the UMP Test, as it generalizes to the NP Test\sidenote{Once again, its inverse, though it does not change much} for simple hypotheses, which we know has the property of maximal power. Therefore, we write:
+In this case, the null hypothesis fixes \emph{some} values of the parameter and leaves some other values as free alternatives. We could think to still use the \emph{LR} statistic as we have done in the UMP Test, as it generalizes to the NP Test\sidenote{Once again, its inverse, though it does not change much} for simple hypotheses, which we know has the property of maximal power. Therefore, we write:
 
 	\[
 	\lambda(x) = 2\ln \frac{\sup_{\theta,\nu}p(x;\theta,\nu)}{\sup_{\nu}p(x;\theta_0,\nu)}
 	\]
 
-Which we can more intuitively write by substituting the "sup's" with the \textit{MLE} for the specific parameter:
+Which we can more intuitively write by substituting the "sup's" with the \emph{MLE} for the specific parameter:
 
 	\[
 	\lambda(x) = 2\ln \frac{p(x;\hat{\theta_{\text{MLE}}},\hat{\nu_{\text{MLE}}})}{p(x;\theta_0,\hat{\nu_{\text{MLE}}})}
 	\]
 
-This can be seen as a N-P Test done on $H_0$ and the alternative hypotheses obtained by using the \textit{MLE} of the free parameters. We also note that if there exists a sufficient statistic, $\lambda(x)$ depends only on it.
+This can be seen as a N-P Test done on $H_0$ and the alternative hypotheses obtained by using the \emph{MLE} of the free parameters. We also note that if there exists a sufficient statistic, $\lambda(x)$ depends only on it.
 
 We can't prove general properties on the power of this statistic, we can appreciate its simplicity, and use an extension of the aforementioned Wilks' theorem to derive a helpful property:
 

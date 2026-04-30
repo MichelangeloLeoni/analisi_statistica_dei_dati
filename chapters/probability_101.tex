@@ -24,16 +24,16 @@
 \vspace{2cm}
 
 
-Throughout this course we will proceed with a physical interpretation of Probability, as we approach this complex field through the eyes of experimental physicists who want to \textit{measure something}. In nature, there exists some measurable quantities whose value depends (in some way) from unknown parameters. Observing these observables $x\in X$ we can make inferences on the nature of these unknown parameters $\theta\in A$. 
+Throughout this course we will proceed with a physical interpretation of Probability, as we approach this complex field through the eyes of experimental physicists who want to \emph{measure something}. In nature, there exists some measurable quantities whose value depends (in some way) from unknown parameters. Observing these observables $x\in X$ we can make inferences on the nature of these unknown parameters $\theta\in A$. 
 
-In this first treatment we have introduced the notation that will follow us for the rest of the course - observable quantities will be denoted with the Latin letters \textit{x, y, z}, while unknown parameters will be denoted with the Greek letters \textit{$\theta, \mu, \nu, \sigma$}. The important subtlety that this hopes to highlight is that these quantities live in different spaces, and that observables are quantities that we can measure while the parameters are not directly measurable, and the best we can hope to do is make an inference based on a measurement. Let's never forget this, as it will be a fundamental to not mix the two quantities in the future. 
+In this first treatment we have introduced the notation that will follow us for the rest of the course - observable quantities will be denoted with the Latin letters \emph{x, y, z}, while unknown parameters will be denoted with the Greek letters \emph{$\theta, \mu, \nu, \sigma$}. The important subtlety that this hopes to highlight is that these quantities live in different spaces, and that observables are quantities that we can measure while the parameters are not directly measurable, and the best we can hope to do is make an inference based on a measurement. Let's never forget this, as it will be a fundamental to not mix the two quantities in the future. 
 
 
 
 \section{Operative definition of Probability}
 \label{sec:prob_def}
 
-We shall start with an operative definition of Probability, consistent with a physical quantity. Given an experimental procedure that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \textit{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentist sense is defined as:
+We shall start with an operative definition of Probability, consistent with a physical quantity. Given an experimental procedure that is infinitely replicable, each repetition will correspond to an observable quantity $x\in X$. We shall call \emph{event} $E$ the subset of possible outcomes of $x$, $E\subset X$. The \textbf{probability of event E} in the frequentist sense is defined as:
 	\[
 	P(E) = \lim_{N\to\infty} \frac{n(E)}{N}
 	\]
@@ -136,8 +136,10 @@ It is important to remember that independence is not correlation, and the former
 \label{th:Bayes}
 \end{theorem}	
 
+The last expression takes the name of \textbf{Bayes' theorem}. Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief, which we will briefly introduce in the next section.
+
 \begin{example}
-	A good way to illustrate the concepts we have encountered so far is to solve the famous \textbf{Monty Hall problem} (you have \emph{probably} heard of it at least once in your life).
+	Before moving on, let's illustrate the concepts we have encountered so far by solving the famous \textbf{Monty Hall problem} (you have \emph{probably} heard of it at least once in your life).
 	
 	Imagine you are suddenly transported from where you're reading this text to the studio of a famous game show. The host, Mr.~Monty, explains the rules of the game: there are three closed doors in front of you. Behind one there is a brand new sports car, behind the other two there are goats. You choose one door; if you pick the right one, you win the prize behind it. Of course, Mr.~Monty knows where the car is hidden.
 	
@@ -146,7 +148,7 @@ It is important to remember that independence is not correlation, and the former
 	Now Monty wants to spice things up for the audience. After your choice, he opens door number three, revealing a goat (to be clear: he cannot open the door you chose, nor the one hiding the car, revealing the prize immediately would not make for a great show, would it?).
 	
 	At this point, he asks you to decide: do you want to stick with door number one, or switch to door number two?
-	At first glance, this may seem like a pointless mind game: you might think you still have the same one-third chance of winning. But reality, as often happens in probability, is a bit more subtle and can even feel paradoxical. So take a moment, pull out your sketchbook in front of the crowd, and do some math.
+	At first glance, this may seem like a pointless mind game: you might think you still have the same one-third chance of winning. But reality, as often happens in probability, is a bit more subtle and can even feel paradoxical. So you take a moment, pull out your sketchbook in front of the crowd, and do some math.
 	
 	We can tackle the problem introducing the following different events:
 	\begin{itemize}
@@ -210,12 +212,11 @@ It is important to remember that independence is not correlation, and the former
 	So go ahead: close your sketchbook, switch doors every time, and head back to where you were studying driving your brand new sports car (well... with double the probability, at least).
 \end{example}
 
-The last expression takes the name of \textbf{Bayes' theorem}. Interestingly enough, it is not what characterizes Bayesian statistics, and we remind that we are still in the Kolmogorov frequentist approach, though the theorem generalizes to the Bayesian approach if the probabilities are replaced with degrees of belief, which we will briefly introduce in this next section.
 
 \subsubsection{Spoiler: Bayesian probability}
 \label{subsubsec:Bayes}
 
-The Bayesian school uses a concept of probability different than the von Mises concept. To try to minimize the natural confusion that will follow this chapter, we will baptize this concept with a different name: \textit{"degree of belief"} $\pi(x)$. The idea of this subjective reasoning is that events of which we have similar information are by definition equally probable. This concept, differently than the frequentist definition we have studied already, can be applied to whatever quantity, even if the latter is not observable. It does not depend on the ensemble, but on the subject itself, and Bayesian d.o.b (degree of belief) has been shown to satisfy the Kolmogorov axioms. We will be returning on this concept in various chapters\todo{Maybe add which ones through a ref, and perhaps elaborate further once we understand better} and it will be crucial to not confuse it with the frequentist definition of probability. 
+The Bayesian school uses a concept of probability different than the von Mises concept. To try to minimize the natural confusion that will follow this chapter, we will baptize this concept with a different name: \emph{"degree of belief"} $\pi(x)$. The idea of this subjective reasoning is that events of which we have similar information are by definition equally probable. This concept, differently than the frequentist definition we have studied already, can be applied to whatever quantity, even if the latter is not observable. It does not depend on the ensemble, but on the subject itself, and Bayesian d.o.b (degree of belief) has been shown to satisfy the Kolmogorov axioms. We will be returning on this concept in various chapters\todo{Maybe add which ones through a ref, and perhaps elaborate further once we understand better} and it will be crucial to not confuse it with the frequentist definition of probability. 
 
 \subsection{Events as physical observables}
 \label{subsec:observables}
@@ -265,53 +266,53 @@ This may all sound scary right now, but hopefully the following example will cla
 	Since "Heads" is a valid element of our event space $\Sigma$, the probability $P(X^{-1}(\{1\}))$ is well-defined (e.g., $0.5$). The function $X$ has successfully translated a physical piece of metal landing on a table into a number we can use in an equation.
 \end{example}
 
-Since we are looking to do \textit{something} with these random variables, it will surely be helpful to note that any function of a random variable is a random variable itself, and more importantly if a random variable assumes a probability distribution, each function of that variable will as well. Since we will be using "functions of random variables" quite often, let's give them a name: \textbf{statistics}.
+Since we are looking to do \emph{something} with these random variables, it will surely be helpful to note that any function of a random variable is a random variable itself, and more importantly if a random variable assumes a probability distribution, each function of that variable will as well. Since we will be using "functions of random variables" quite often, let's give them a name: \textbf{statistics}.
 \begin{definition}[Statistic]
 	A statistic (singular) is a function of random variables $s(x,y,\dots)$, that depends only on the values themselves, not on unknown parameters. 
 \end{definition}
 
-The second part of this definition is important - a statistic only depends on \textit{measurable quantities} and is therefore also a measurable quantity. A nice, simple example of an important statistic is the mean of a set of data. This concept of statistic will follow us closely throughout the whole course, and while it's a good idea to introduce them now this will certainly not be the last time we update our definition.
+The second part of this definition is important - a statistic only depends on \emph{measurable quantities} and is therefore also a measurable quantity. A nice, simple example of an important statistic is the mean of a set of data. This concept of statistic will follow us closely throughout the whole course, and while it's a good idea to introduce them now this will certainly not be the last time we update our definition.
 
 \subsubsection{Probability distributions}
 \label{subsubsec:pdf}
 
-We have already thrown out this term \textit{probability distribution} in the previous section, and we won't get very far without giving it the proper definition it deserves. 
+We have already thrown out this term \emph{probability distribution} in the previous section, and we won't get very far without giving it the proper definition it deserves. 
 
-\begin{definition}[Probability mass function \textit{pmf}]
+\begin{definition}[Probability mass function \emph{pmf}]
 	For a discrete random variable X
 	\[
 	pmf(x)\equiv P(E:X=x)
 	\]
 \end{definition}
 
-Often this gets (somewhat improperly) condensed in literature to be written as $P(X)$, which we will adopt from now on without too much hesitation. Probability mass functions are additive and satisfy our lovely Kolmogorov axioms\sidenote{They are defined positive and less than $1$, the sum of the total possibility space is $1$, and they are additive. The sum operation naturally changes definition based on the dimension of the outcome space.}, and so we can truly call them "probabilities". A simple example of a \textit{pmf} would be the case of the outcome of a fair six-sided die roll
+Often this gets (somewhat improperly) condensed in literature to be written as $P(X)$, which we will adopt from now on without too much hesitation. Probability mass functions are additive and satisfy our lovely Kolmogorov axioms\sidenote{They are defined positive and less than $1$, the sum of the total possibility space is $1$, and they are additive. The sum operation naturally changes definition based on the dimension of the outcome space.}, and so we can truly call them "probabilities". A simple example of a \emph{pmf} would be the case of the outcome of a fair six-sided die roll
 	\[
 	pmf(x) = \begin{cases} \frac{1}{6} & \text{if } x \in \{1,2,3,4,5,6\} \\ 0 &  \text{otherwise} \end{cases}
 	\]
 
 
-So much for discrete random variables, let's talk about the interesting stuff and generalize this formalism to continuous\sidenote{Naturally, we will never have a continuous result from an experiment as everything at some scale gets discretized or binned in some way, though we are sure the readers will have no problem with forgiving this abstraction.} observables. The probability mass function, as we have defined it, will be identically zero for each value in a continuous space such as $\Re$, so we will need a new definition, and much like we are used to in physics, the concept of \textit{mass} gets translated to \textit{density}.
+So much for discrete random variables, let's talk about the interesting stuff and generalize this formalism to continuous\sidenote{Naturally, we will never have a continuous result from an experiment as everything at some scale gets discretized or binned in some way, though we are sure the readers will have no problem with forgiving this abstraction.} observables. The probability mass function, as we have defined it, will be identically zero for each value in a continuous space such as $\Re$, so we will need a new definition, and much like we are used to in physics, the concept of \emph{mass} gets translated to \emph{density}.
 
-\begin{definition}[Probability density function \textit{pdf}]
+\begin{definition}[Probability density function \emph{pdf}]
 	For a continuous random variable x
 	\[
 	P(x:x\in A)= \int_{A} p_X(x)\dd x
 	\]
-	where $p_X(x)$ is the \textit{probability density function} of $x$ 
+	where $p_X(x)$ is the \emph{probability density function} of $x$ 
 \end{definition}\todo{If we find a better definition, let's be sure to put it here. This one works, but it's not satisfying}
 
 \todo{Maybe we should include here a brief discussion of pdf's properties, e.g. how they add up, ecc.}
 
-We use the term "function", but if we intend the integral in the Lebesgue sense we can extend the definition to \textit{pdf's} that are not functions but rather distributions. In general, this allows us a series of liberties that functions formally would not allow, such as mixing discrete and continuous variables. It's not guaranteed that a \textit{pdf} satisfies the Kolmogorov axioms, and the following example shows that while $p(x)\geq 0$ not necessarily $p(x) < 1$.
+We use the term "function", but if we intend the integral in the Lebesgue sense we can extend the definition to \emph{pdf's} that are not functions but rather distributions. In general, this allows us a series of liberties that functions formally would not allow, such as mixing discrete and continuous variables. It's not guaranteed that a \emph{pdf} satisfies the Kolmogorov axioms, and the following example shows that while $p(x)\geq 0$ not necessarily $p(x) < 1$.
 
 	\[
 	p(x) = \begin{cases} 2 & \text{if } x \in [0,\frac{1}{2}] \\ 0 &  \text{otherwise} \end{cases}
 	\]
 
 
-However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the \textit{pdf} is \textit{normalized}), and one can verify that the example above satisfies this.\sidenote{Interesting to note as well that while probabilities in the Kolmogorov sense are pure dimensionless numbers, \textit{pdf's} have the dimensions of $[x]^{-N}$ where $N$ is the dimension of the space. This has natural parallels to the concept of mass and density in physics.} This normalization also brings us to define the \textbf{cumulative density function} of a distribution, as assures us that it is a monotonically increasing function of $x$ from $0$ to $1$.
+However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the \emph{pdf} is \emph{normalized}), and one can verify that the example above satisfies this.\sidenote{Interesting to note as well that while probabilities in the Kolmogorov sense are pure dimensionless numbers, \emph{pdf's} have the dimensions of $[x]^{-N}$ where $N$ is the dimension of the space. This has natural parallels to the concept of mass and density in physics.} This normalization also brings us to define the \textbf{cumulative density function} of a distribution, as assures us that it is a monotonically increasing function of $x$ from $0$ to $1$.
 
-\begin{definition}[Cumulative density function \textit{cdf}]
+\begin{definition}[Cumulative density function \emph{cdf}]
 	For a continuous random variable x
 	\[
 	F_X(x)\equiv P\left(X\in \left(-\infty, x\right]\right) = \int_{-\infty}^{x}p_X(x^\prime)\dd x^\prime
@@ -320,7 +321,7 @@ However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the 
 
 The fundamental theorem of calculus also tells us that $\dv{F}{x}=p(x)$. We will find the cumulative easier to calculate than the density function itself in many cases. 
 
-An interesting and somewhat unexpected result can be reached when talking about \textit{CDF's}: the \textbf{probability integral transform} (also known as the \textit{universality of the uniform}\sidenote{If you haven't done so already, take a moment to brush up on what a Uniform distribution is, by heading over to the appendix \textcolor{red}{ref}}).
+An interesting and somewhat unexpected result can be reached when talking about \emph{CDF's}: the \textbf{probability integral transform} (also known as the \emph{universality of the uniform}\sidenote{If you haven't done so already, take a moment to brush up on what a Uniform distribution is, by heading over to the appendix \textcolor{red}{ref}}).
 
 \begin{theorem}[Probability integral transform]
 	Suppose that a random variable $X$ has a continuous distribution for which the cumulative distribution function (CDF) is $F_X$. Then the random variable $Y$ defined as $Y \equiv F_X(X)$ follows a standard uniform distribution
@@ -332,7 +333,7 @@ An interesting and somewhat unexpected result can be reached when talking about 
 \todo{This is my ref: https://www.jstor.org/stable/2332638?seq=1}
 
 Let's prove this theorem:
-Given a random continuous variable $X$, and $Y$ defined as above ($Y \equiv F_X(X)$) where $F_X$ is the \textit{cdf} of $X$. Given $y\in[0,1]$
+Given a random continuous variable $X$, and $Y$ defined as above ($Y \equiv F_X(X)$) where $F_X$ is the \emph{cdf} of $X$. Given $y\in[0,1]$
 
 \begin{align*}
 	F_Y(y) &= P\left(Y\leq y\right) = P\left(F_X(X)\leq y\right) = P\left(X\leq F_X^{-1}(y)\right)\\
@@ -366,20 +367,20 @@ Finally, to end our parallels with Kolmogorov probability we consider a partitio
 	P_X(x) = \sum_i P_{XY}(x,y_i)=\sum_i P_X(x|y_i)\cdot P_Y(y_i)
 	\]
 	
-where astute readers will have identified the total probability law. This process is called \textit{marginalizing}, and $P_X(x)$ is the \textit{marginalized} distribution of $P_{XY}(x,y)$ with respect to $y$. This concept, although easy, has been known to be a "surprise question" at the exams that students tend to overlook.\sidenote{One of the authors speaks from experience.}
+where astute readers will have identified the total probability law. This process is called \emph{marginalizing}, and $P_X(x)$ is the \emph{marginalized} distribution of $P_{XY}(x,y)$ with respect to $y$. This concept, although easy, has been known to be a "surprise question" at the exams that students tend to overlook.\sidenote{One of the authors speaks from experience.}
 
 \subsection{The law of large numbers}
 \label{subsec:LLN}
 The law of large numbers (LLN) is one of the most fundamental and well-known theorems of this field. Let's start with a few definitions:
 \begin{definition}[Arithmetic mean]
-	Given a random variable $X$, we define \textbf{arithmetic mean} (or \textit{sample mean on N}) the statistic:
+	Given a random variable $X$, we define \textbf{arithmetic mean} (or \emph{sample mean on N}) the statistic:
 	\[
 	\bar{x}_N = \frac{1}{N}S_N = \frac{1}{N}\sum_i^N x_i
 	\]
 \end{definition}
 
 \begin{definition}[Mean]
-	If $p_X(x)$ is the \textit{pdf} of $X$, we call the \textit{mean} of the distribution (or the expected value of $X$) the integral (Lebesgue):
+	If $p_X(x)$ is the \emph{pdf} of $X$, we call the \emph{mean} of the distribution (or the expected value of $X$) the integral (Lebesgue):
 	\[
 	\langle x\rangle\equiv \E[x] \equiv \int_{O_X} x\cdot p_X(x)\dd x
 	\]
@@ -387,7 +388,7 @@ The law of large numbers (LLN) is one of the most fundamental and well-known the
 \end{definition}
 
 \begin{theorem}[Law of large numbers (LLN)]
-	Let $X$ be a real-valued observable, and $p(x)$ its \textit{pdf}. Let's suppose that the mean of $X$ exists and is finite:
+	Let $X$ be a real-valued observable, and $p(x)$ its \emph{pdf}. Let's suppose that the mean of $X$ exists and is finite:
 	\begin{equation}
 	\mu = \E[x]=\int_{O_X} x\cdot p_X(x)\dd x
 	\label{eq:LLN_mean}
@@ -405,7 +406,7 @@ Within this theorem we have defined an interesting property "under the rug", whi
 If we had to write the law of large numbers in words, it would read: "the sample mean of an observable converges in probability to its expected value whenever the latter exists and is finite". \todo{Here, the professor adds some considerations that I don't think I fully understand. Let's discuss if we want to include them.}\sidenote{For those of you who are not on their first read of these notes, or have some prior knowledge on point estimators, we can say that "the arithmetic mean is a consistent estimator of the mean $\E[x]$ of the distribution."}
 
 \begin{example}[Proof of the LLN]
-	The most general proof of the LLN is beyond the scope of this course and therefore this write-up, however we will look at a more limiting but still instructive example. Let's suppose that also the following integral exists (\textit{variance of} $X$):
+	The most general proof of the LLN is beyond the scope of this course and therefore this write-up, however we will look at a more limiting but still instructive example. Let's suppose that also the following integral exists (\emph{variance of} $X$):
 	\[
 	\sigma^2 \equiv \Var[X] \equiv \int_{O_X}\left( x-\E[x]\right)^2p_X(x)\dd x
 	\] 
@@ -443,7 +444,7 @@ If we had to write the law of large numbers in words, it would read: "the sample
 	\qed
 \end{example}
 
-Now we can get to proving the LLN, armed with the Čebyšëv inequality. We notice that the \textit{pdf} of the vectorial observable $\{x_i\}_N$ can be written as the product of the \textit{pdf's} of the single observables, assuming that the observations are all independent: $p(x_N)=\prod_i^N p_X(x_i)$. 
+Now we can get to proving the LLN, armed with the Čebyšëv inequality. We notice that the \emph{pdf} of the vectorial observable $\{x_i\}_N$ can be written as the product of the \emph{pdf's} of the single observables, assuming that the observations are all independent: $p(x_N)=\prod_i^N p_X(x_i)$. 
 
 Therefore, we have that
 \begin{align*}
@@ -486,10 +487,10 @@ At first glance, this looks identical to what we have previously stated, but the
 \section{Operations on statistics}
 \label{sec:stat-operations}
 
-We have, in the previous sections, talked about operators such as the distribution, expected value, and variance of random variables. It is now time to generalize these definitions to statistics, which we remind are \textit{functions} of the random variables themselves. 
+We have, in the previous sections, talked about operators such as the distribution, expected value, and variance of random variables. It is now time to generalize these definitions to statistics, which we remind are \emph{functions} of the random variables themselves. 
 
 \subsubsection{Probability distribution of a statistic}
-Let's begin with the most pressing one: how do we define the \textit{distribution} of a \textit{statistic}? Well, if I know the discrete \textit{pmf} of $x$ then the \textit{pmf} of the statistic $f(x)$ is easily written as $pmf\left(x(f)\right)$, no surprises there. 
+Let's begin with the most pressing one: how do we define the \emph{distribution} of a \emph{statistic}? Well, if I know the discrete \emph{pmf} of $x$ then the \emph{pmf} of the statistic $f(x)$ is easily written as $pmf\left(x(f)\right)$, no surprises there. 
 
 Things get more interesting in the continuous case, where the interval in the variable space is does not necessarily have the same measure as its image in the statistic space. As we well know, we must multiply by the derivative of the statistic with respect to the random variable. To be more precise:
 \begin{definition}[Distribution of a statistic]
@@ -507,7 +508,7 @@ This simplifies considerably if we consider a monotonically increasing $f$, in w
 taken with a "$-1$" before if $f$ is monotonically decreasing. The reader can readily verify that deriving the above expression one finds the one written in definition \ref{def:pdf_var_change}
 
 \begin{example}
-	Suppose we start from a known distribution in $x$, and want to find the \textit{function} $f$ that brings us to a known distribution $p_f(f)$. The, inverting \ref{def:pdf_var_change} we arrive at:
+	Suppose we start from a known distribution in $x$, and want to find the \emph{function} $f$ that brings us to a known distribution $p_f(f)$. The, inverting \ref{def:pdf_var_change} we arrive at:
 	\[
 	\left| \dv{x}{f} \right| = \frac{p_f(f)}{p_x(x(f))}
 	\]
@@ -606,7 +607,7 @@ We physicists are actually quite used to this type of trick, we are not saying a
 \begin{example}
 	Let's suppose we have a gas whose particles have a velocity that follow a certain probability density function on an interval $p_v(v)$. Our goal is to find the average kinetic energy of the gas. 
 	
-	For simplicity, we'll assume that the velocity of the gas follows the following distribution (which we will later learn to be the very important \textit{uniform distribution})
+	For simplicity, we'll assume that the velocity of the gas follows the following distribution (which we will later learn to be the very important \emph{uniform distribution})
 	\[
 	p(v) = \begin{cases} \frac{1}{v_{max}} & \text{if } v \in [0,v_{max}] \\ 0 &  \text{otherwise} \end{cases}
 	\]
@@ -665,7 +666,7 @@ However, because $x^3$ is an odd function, its expected value over a symmetric i
 \subsubsection{Moments of a statistic}
 \label{subsec:moments}
 We can further generalize the concept of mean and variance by introducing the \textbf{moments of a distribution}.
-\begin{definition}[$n$\textit{-th} order moment of a distribution]
+\begin{definition}[$n$\emph{-th} order moment of a distribution]
 	\[
 	\mu_n(x_0) = \E\left[ (x-x_0)^n\right]
 	\]
@@ -744,7 +745,7 @@ Which for uncorrelated $x$ (diagonal covariance matrix) simplifies to:
 We recognize this as our familiar \textbf{formula for the propagation of errors}. Interesting to note that this formula comes from a Taylor approximation.\todo{I tried to rewrite this part to make it clearer. I don't know if I accomplished the goal}
 	
 \begin{definition}[Moment generating function]
-	We define \textit{moment generating function} for a distribution 
+	We define \emph{moment generating function} for a distribution 
 	\[
 	M(t) = \E[e^{tx}]
 	\]
@@ -759,7 +760,7 @@ We recognize this as our familiar \textbf{formula for the propagation of errors}
 	So the partial derivatives of this generating function are the moments themselves (about the central)
 \end{definition}
 	
-$M(t)$ has the nice property that for $x=x_1+x_2$ (with $x_1,x_2$ \textit{independent}) $M(t)=M_1(t)M_2(t)$. We see this right away if we explicitly write 
+$M(t)$ has the nice property that for $x=x_1+x_2$ (with $x_1,x_2$ \emph{independent}) $M(t)=M_1(t)M_2(t)$. We see this right away if we explicitly write 
 	\[
 	M(t) = \E\left[ e^{t(x_1+x_2)}\right] = \E\left[ e^{tx_1}\right]\E\left[ e^{tx_2}\right] = M_1(t)M_2(t)
 	\]
@@ -832,7 +833,7 @@ The integrand is a holomorphic function with no poles\sidenote{whatever that mea
 	&=\frac{1}{\sqrt{2\pi}\sigma}\exp\left(-\frac{x^2}{2\sigma^2}\right) \equiv \N(x; 0, \sigma^2)
 	\end{align*}
 
-This is the Gaussian (or normal) \textit{pdf}, and the way we derived it highlights its fundamental importance in statistics. It is important to emphasize that the shape of this limit distribution does not depend on the original distribution of $x$.\\
+This is the Gaussian (or normal) \emph{pdf}, and the way we derived it highlights its fundamental importance in statistics. It is important to emphasize that the shape of this limit distribution does not depend on the original distribution of $x$.\\
 One can easily verify that the expected value and variance of the Gaussian coincide with those computed for $y_n$ at the beginning of the demonstration. \\
 In passing, we note that the sum of Gaussian distributions it is still a Gaussian. We will not go into detail about the properties of Gaussian distributions now, since we will encounter this important distribution many times throughout the rest of these notes.
 

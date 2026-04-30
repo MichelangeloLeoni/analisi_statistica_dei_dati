@@ -5,14 +5,14 @@ We now pivot to something entirely different, and our aim will be, starting from
 	\[
 	\theta = \hat{\theta} \pm e
 	\]
-Where $\hat{\theta}$ is the \textit{point estimation} of the parameter $\theta$. The idea is that this point estimation gives us the "best estimate" for the parameter $\theta$, whatever that means. 
+Where $\hat{\theta}$ is the \emph{point estimation} of the parameter $\theta$. The idea is that this point estimation gives us the "best estimate" for the parameter $\theta$, whatever that means. 
 
-Remember, we can't measure parameters, so usually when we read that a parameter (let's say, the lifetime of the muon) was \textit{measured}, it really means that it was \textit{estimated through a point estimation} and the value of that estimation is provided, usually with an associated statistic uncertainty. 
+Remember, we can't measure parameters, so usually when we read that a parameter (let's say, the lifetime of the muon) was \emph{measured}, it really means that it was \emph{estimated through a point estimation} and the value of that estimation is provided, usually with an associated statistic uncertainty. 
 
-Our job during this chapter will be to explore the different kinds of point estimators and to understand their properties so that we can decide, in the course of our data analyst careers, which tool is right for which job. Unfortunately, there is no "best way" that fits all of the situations we might find ourselves in, and the expert analyst is the one that knows how to justify their choice in a convincing matter.\sidenote{Note: not the one who makes the \textit{best} choice, as often it's unclear which properties we can afford to abandon in favor of others.}
+Our job during this chapter will be to explore the different kinds of point estimators and to understand their properties so that we can decide, in the course of our data analyst careers, which tool is right for which job. Unfortunately, there is no "best way" that fits all of the situations we might find ourselves in, and the expert analyst is the one that knows how to justify their choice in a convincing matter.\sidenote{Note: not the one who makes the \emph{best} choice, as often it's unclear which properties we can afford to abandon in favor of others.}
 
 \section{Bayesian point estimator}
-Let's, as we have done before, discuss the Bayesian case first, where our parameter $\theta$ follows a \textit{pdf}. In this case, it's natural to start from the posterior as described in (\ref{def:posterior}), $p(\theta|x_0)$, and take its maximum as the estimator $\hat{\theta}$ for $\theta$. 
+Let's, as we have done before, discuss the Bayesian case first, where our parameter $\theta$ follows a \emph{pdf}. In this case, it's natural to start from the posterior as described in (\ref{def:posterior}), $p(\theta|x_0)$, and take its maximum as the estimator $\hat{\theta}$ for $\theta$. 
 
 This is a natural yet unsatisfying approach - I know everything I could ever hope to know about $\theta$ through the full knowledge of the posterior and I waste the whole shape of the distribution only considering the maximum? We can definitely do better than that, and often when we are fortunate enough to find ourselves in this situation we can choose to abandon point estimates entirely in favor of other techniques that fully use the information contained in the posterior. 
 
@@ -28,29 +28,29 @@ To be honest, this formalism will not be looked further upon, and is rarer to fi
 
 \section{The classic point estimator}
 
-What is an "estimate of $\theta$"? Well, really any statistic $s(x)$ can be an estimate of $\theta$, we will baptize it \textit{estimator} and denote it with the symbol $\hat{\theta}$. What we will try to answer in this section is how \textit{good} a certain estimator $\hat{\theta}$ is.
+What is an "estimate of $\theta$"? Well, really any statistic $s(x)$ can be an estimate of $\theta$, we will baptize it \emph{estimator} and denote it with the symbol $\hat{\theta}$. What we will try to answer in this section is how \emph{good} a certain estimator $\hat{\theta}$ is.
 
 For example, I can choose $\hat{\theta}=42$\sidenote{It is the answer to the life, the universe, and everything after all!}. We can imagine that this estimator will not be particularly good nor interesting, and it's not unreasonable to request that the estimator for $\theta$ have something to do with $\theta$ itself.
 
 Let's take a look at the situation we find ourselves in. Differently from the Bayesian case, we want to estimate a parameter that is not governed by a probability function, much less defined on a metric, and try to build a formalism that quantitatively tells us how "close" we are to estimating the parameter itself.\sidenote{Naturally, we can't talk about the "probability of guessing" $\theta$, as the phrase itself is not well defined, and we can't attribute a "real" value to the parameter any better than we can estimate it.} So how do we approach this daunting task?
 
-The answer lies in the fact that, much like the measurements, the estimate can be repeated an infinite number of times. Therefore, there exists the \textit{pdf} of $s(x)$ (and the estimator of $N$ measurements can be generally written as $s_N(\{x_i\})$). 
+The answer lies in the fact that, much like the measurements, the estimate can be repeated an infinite number of times. Therefore, there exists the \emph{pdf} of $s(x)$ (and the estimator of $N$ measurements can be generally written as $s_N(\{x_i\})$). 
 \begin{definition}[Consistent estimator]
-	The estimator $s_N(\{x_i\})$ is a \textit{consistent} estimator of $\theta$ if
+	The estimator $s_N(\{x_i\})$ is a \emph{consistent} estimator of $\theta$ if
 	\[
 	\forall \varepsilon > 0: \lim_{N\to\infty} P(|s_N(x)-\theta|>\varepsilon)=0
 	\]
-	which, we hope you remember, means that $s_N$ \textit{converges in probability to} $\theta$.
+	which, we hope you remember, means that $s_N$ \emph{converges in probability to} $\theta$.
 \label{def:consistent_estimator}
 \end{definition}
 
-Generally, we believe it's more clear to denote the estimator for $\theta$ as $\hat{\theta}$, and so from now on we'll use this notation, remembering that $\hat{\theta}$ is a statistic (and so is a function of the data) that admits \textit{pdf}.
+Generally, we believe it's more clear to denote the estimator for $\theta$ as $\hat{\theta}$, and so from now on we'll use this notation, remembering that $\hat{\theta}$ is a statistic (and so is a function of the data) that admits \emph{pdf}.
 
 This property is so important that if $\hat{\theta}$ is not at least consistent for $\theta$ then  it is not even considered an estimator to begin with; frankly, it's non-negotiable that an estimator be at least consistent. For this reason, if we ever talk about any sort of estimator, this property is silently assumed. 
 
 With this property we can re-state the LLN \ref{subsec:LLN} as "the arithmetic mean is a consistent estimator of the mean $\E[x]$ of the distribution." We have already stated this, but it's helpful to remember if things get confusing; when we need a concrete example of an estimator let's think of the sample mean as a (consistent) estimator for the mean of a distribution.
 
-At this point, it becomes interesting to consider the variance of the estimator\sidenote{Remember, $\hat{\theta}$ admits a \textit{pdf}, so talking about the variance makes sense}, and since we know that it converges to the parameter at high statistics, we want to quantify "how precisely" it does so. In fact, when we write 
+At this point, it becomes interesting to consider the variance of the estimator\sidenote{Remember, $\hat{\theta}$ admits a \emph{pdf}, so talking about the variance makes sense}, and since we know that it converges to the parameter at high statistics, we want to quantify "how precisely" it does so. In fact, when we write 
 	\[
 	\theta = \hat{\theta} \pm e
 	\]
@@ -106,15 +106,15 @@ where we explicitly write that $\hat{\theta}$ depends on the observations $x_0$ 
 \end{example}
 
 
-In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \textit{bias}.
+In general, estimators with lower variance are naturally considered to be "better" (or at least low variance is a favorable property). However, the tale does not end here, and we define another property of point estimators: their \emph{bias}.
 \begin{definition}[Bias of an estimator]
-	Given an estimator $\hat{\theta}(x)$ of $\theta$ we define the \textit{bias function} as:
+	Given an estimator $\hat{\theta}(x)$ of $\theta$ we define the \emph{bias function} as:
 	\[
 	b_\theta\left[\hat\theta\right]=\E\left[\hat{\theta}\right]-\theta
 	\]
 \end{definition}
 
-While we talk about the bias of an \textit{estimator} $\hat\theta$, it's important to remember the dependency on the \textit{parameter} $\theta$. An unbiased estimator is one that has identically null bias for \textit{all} values of $\theta$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\theta$ it's at least favorable that the bias be much smaller than the variance. When we write
+While we talk about the bias of an \emph{estimator} $\hat\theta$, it's important to remember the dependency on the \emph{parameter} $\theta$. An unbiased estimator is one that has identically null bias for \emph{all} values of $\theta$\sidenote{For example, the sample mean is always unbiased (LLN) while a constant value has zero bias if you "guess" the parameter but biased in all other cases, and is therefore biased.}, and if this condition cannot be met for all $\theta$ it's at least favorable that the bias be much smaller than the variance. When we write
 	\[
 	\theta = \hat{\theta}(x_0) \pm \sqrt{\Var\left[\hat{\theta}\right]}
 	\] 
@@ -131,13 +131,13 @@ We can in general try to reduce the bias of an estimator "artificially": for exa
 	\hat\theta^\prime = \hat\theta - b_\theta\left[\hat\theta\right]
 	\]
 
-We note that $\hat\theta^\prime$ is only a statistic if $\frac{\partial b}{\partial \theta} = 0$, as the bias of $\hat\theta$ can depend on $\theta$ itself (not constant bias). Well, we can go one step deeper and find an \textit{estimator for the bias}, and newly define:
+We note that $\hat\theta^\prime$ is only a statistic if $\frac{\partial b}{\partial \theta} = 0$, as the bias of $\hat\theta$ can depend on $\theta$ itself (not constant bias). Well, we can go one step deeper and find an \emph{estimator for the bias}, and newly define:
 
 	\[
 	\hat\theta^\prime = \hat\theta - \hat{b} 
 	\]
 
-What exactly is $\hat{b}$? We can, like we usually do for estimators, build it \textit{ad hoc} using experience to find a good estimator, but two possible candidates are $\hat{b}_\theta\left[\hat\theta\right]_{\theta=\hat{\theta}}$ or even $\hat{b}_\theta\left[\hat\theta\right]_{\theta=\hat{\theta}^\prime}$, where essentially we get rid of the problem of having $\theta$ by explicitly estimating it with different types of estimators (the example that follows should make this clearer).
+What exactly is $\hat{b}$? We can, like we usually do for estimators, build it \emph{ad hoc} using experience to find a good estimator, but two possible candidates are $\hat{b}_\theta\left[\hat\theta\right]_{\theta=\hat{\theta}}$ or even $\hat{b}_\theta\left[\hat\theta\right]_{\theta=\hat{\theta}^\prime}$, where essentially we get rid of the problem of having $\theta$ by explicitly estimating it with different types of estimators (the example that follows should make this clearer).
 The new bias will be:
 
 	\[
@@ -150,7 +150,7 @@ The new estimator is unbiased when the last difference is equal to zero:
 	\E\left[\hat{b}\right] - b_\theta\left[\hat\theta\right] = 0 
 	\]
 
-If you squint hard enough at this expression you can convince yourself that it means nothing more than \textit{the estimator for the bias is unbiased itself}.
+If you squint hard enough at this expression you can convince yourself that it means nothing more than \emph{the estimator for the bias is unbiased itself}.
 
 Unfortunately, as things often are, reducing the bias of an estimator in this way is often matched with increasing its variance (the explanation for this will be clearer in the next section).
 
@@ -226,7 +226,7 @@ Question: can we arbitrarily reduce the variance and bias of an estimator or is 
 	\[
 	\Var\left[\hat\theta\right]\cdot I_{\hat\theta} = \E\left[\left(\hat\theta-\E\left[\hat\theta\right]\right)^2\right]\cdot\E\left[\left(\frac{\partial\ln p(\hat\theta;\theta)}{\partial\theta}\right)^2\right]
 	\]
-	Where $I_{\hat\theta}$ is the Fisher Information contained in the estimator $\hat\theta$ (which we remember to be, \textit{in primis}, a statistic).
+	Where $I_{\hat\theta}$ is the Fisher Information contained in the estimator $\hat\theta$ (which we remember to be, \emph{in primis}, a statistic).
 	
 	From the Schwartz inequality: 
 	\[
@@ -265,7 +265,7 @@ Question: can we arbitrarily reduce the variance and bias of an estimator or is 
 	&\Rightarrow p(\hat\theta;\theta) = \exp\left[\alpha(\theta)\hat\theta+\beta(\theta)+c(\hat\theta)\right]
 	\end{align*}
 	
-	Which means that to satisfy the first inequality we must be able to express the \textit{pdf} in the exponential form written above which means that statistics that satisfy Darmois \ref{th:darmois} have minimum variance. We also note that this statistic is unbiased for $\E\left[\hat\theta\right]$, and not necessarily unbiased for $\theta$. Unfortunately, to remove the bias in $\theta$ we will have to sacrifice the minimum variance. 
+	Which means that to satisfy the first inequality we must be able to express the \emph{pdf} in the exponential form written above which means that statistics that satisfy Darmois \ref{th:darmois} have minimum variance. We also note that this statistic is unbiased for $\E\left[\hat\theta\right]$, and not necessarily unbiased for $\theta$. Unfortunately, to remove the bias in $\theta$ we will have to sacrifice the minimum variance. 
 	
 	The other inequality is satisfied for sufficient statistics. 
 \label{def:CR}
@@ -280,7 +280,7 @@ This is awesome, we have an elegant expression that ties together so many concep
 	\varepsilon_{\hat\theta}(\theta) = \left(1+\frac{\partial b}{\partial \theta}\right)^2 I_x^{-1}\Var^{-1}\left[\hat\theta\right]
 	\]
 
-which is defined between zero and one, and when maximal allows us to say that the estimator is \textit{efficient}.
+which is defined between zero and one, and when maximal allows us to say that the estimator is \emph{efficient}.
 
 \begin{corollary}
 	If the Fisher Information is linear in $N$, then
@@ -304,9 +304,9 @@ Where by "$\geq$" we intend that the difference between the left and right hand 
 
 \subsection{Point estimates with moments}
 
-What do we do in the unfortunate case that we cannot express our \textit{pdf} as an exponential function? Well then, we don't have the \textit{MV} guaranteed, nor a sufficient statistic. How do we find a decent estimator for $\theta$ in the most general case? Well, we have one estimator for free in general, and the LLN comes to the rescue. Recall that we have stated that the arithmetic mean is a consistent estimator for $\E[x]$, and so in the worst case we can just use the good old arithmetic mean if the expected value is the parameter we are trying to estimate (as long as the latter exists and $x$ has finite variance). 
+What do we do in the unfortunate case that we cannot express our \emph{pdf} as an exponential function? Well then, we don't have the \emph{MV} guaranteed, nor a sufficient statistic. How do we find a decent estimator for $\theta$ in the most general case? Well, we have one estimator for free in general, and the LLN comes to the rescue. Recall that we have stated that the arithmetic mean is a consistent estimator for $\E[x]$, and so in the worst case we can just use the good old arithmetic mean if the expected value is the parameter we are trying to estimate (as long as the latter exists and $x$ has finite variance). 
 
-And in the other cases? Let's explore a general and powerful technique, recalling the \textit{moments} that we have talked about in section \ref{subsec:moments}. For our point estimation problem, it's natural to consider the statistics of the following kind:
+And in the other cases? Let's explore a general and powerful technique, recalling the \emph{moments} that we have talked about in section \ref{subsec:moments}. For our point estimation problem, it's natural to consider the statistics of the following kind:
 
 	\[
 	m_i = \frac{1}{N} \sum_{k=1}^{N}x_k^i
@@ -318,7 +318,7 @@ with, if you recall,
 	m_0 = 1,\quad m_1=\bar{x}, \quad m_2 = \bar{x^2}
 	\]
 	
-It's not hard to imagine why we'd call these the \textit{sample moments}, and they satisfy the following relation (by definition of the moments of a distribution centered at $0$):
+It's not hard to imagine why we'd call these the \emph{sample moments}, and they satisfy the following relation (by definition of the moments of a distribution centered at $0$):
 
 	\[
 	\E\left[m_i\right] = \mu_i^\prime
@@ -380,7 +380,7 @@ Where we have indicated with a $P$ the convergence in probability for high stati
 	 	
 \end{definition}
 
-Let's take a step back and look at what we are dealing with. Before this section we talked about (without really giving them a name) \textit{explicit estimators}, where we have an expression of the type $\hat\theta = s(x)$, so by simply measuring some data and doing an operation on it (like taking the sample mean) we directly (explicitly) obtain a consistent estimator for the unknown parameter $\theta$. Great! Implicit estimators, instead, are slightly different: we have an expression of the type $k_N(\vec{x}, \hat\theta_N) = 0$. Here, the estimator $\hat\theta_N$ is defined not by a direct formula, but as the root of an estimating function. If certain conditions are met then $\hat\theta_N$ is a consistent estimator for $\theta$.
+Let's take a step back and look at what we are dealing with. Before this section we talked about (without really giving them a name) \emph{explicit estimators}, where we have an expression of the type $\hat\theta = s(x)$, so by simply measuring some data and doing an operation on it (like taking the sample mean) we directly (explicitly) obtain a consistent estimator for the unknown parameter $\theta$. Great! Implicit estimators, instead, are slightly different: we have an expression of the type $k_N(\vec{x}, \hat\theta_N) = 0$. Here, the estimator $\hat\theta_N$ is defined not by a direct formula, but as the root of an estimating function. If certain conditions are met then $\hat\theta_N$ is a consistent estimator for $\theta$.
 
 Finding the root of this function is not usually an easy task, and luckily we won't have to explicitly, in many cases. However, this formalism is important to introduce for a very important implicit estimator that we will use over the course of this text.
 
@@ -427,7 +427,7 @@ Since we know a thing or two about compromises, and because lunch is never free,
 
 \subsection{Variance of the MLE}
 
-Now that we understand the power of the MLE, we see why it is so widely used in real-world problems. In more complex cases, especially with large datasets, the maximum of the total likelihood $L_{\text{tot}}$ is typically found numerically using optimization algorithms (\textit{fitting})\todo{From here we start talking about \textit{fitting} but we never defined what a fit is in the first place}. The question is: how can we evaluate the variance of the MLE in these cases?
+Now that we understand the power of the MLE, we see why it is so widely used in real-world problems. In more complex cases, especially with large datasets, the maximum of the total likelihood $L_{\text{tot}}$ is typically found numerically using optimization algorithms (\emph{fitting})\todo{From here we start talking about \emph{fitting} but we never defined what a fit is in the first place}. The question is: how can we evaluate the variance of the MLE in these cases?
 
 In the asymptotic limit, we can use of the Cramer-Rao theorem \ref{def:cramer-rao} to state that, if $I$ is linear:
 
@@ -455,7 +455,7 @@ If the expected value exists, it can be consistently estimated from the data usi
 		 \Var(\hat\theta_{MLE})\simeq-\left(\frac{\partial^2\ln L_{tot}(\hat\theta_{MLE})}{\partial\theta^2}\right)^{-1}
 	\]
 	
-In other words: \textit{the asymptotic variance of the MLE can be evaluated using the second derivative of the total likelihood $L_{tot}$}. 
+In other words: \emph{the asymptotic variance of the MLE can be evaluated using the second derivative of the total likelihood $L_{tot}$}. 
 One advantage of this formula is that the total likelihood has already been computed and maximized numerically, so evaluating its second derivative is computationally inexpensive.
 
 Generalizing to $n$ dimensions:
@@ -483,7 +483,7 @@ We now distinguish two scenarios, depending on whether $N$ is fixed or not.
 
 \subsection{N-fixed histograms}
 
-If $N$ is fixed \textit{a priori}, the counts $\{k_i\}$ follow a multinomial distribution\todo{Insert here the ref to the appendix with all the distribution defined}:
+If $N$ is fixed \emph{a priori}, the counts $\{k_i\}$ follow a multinomial distribution\todo{Insert here the ref to the appendix with all the distribution defined}:
 
 	\[
 		P(\{k_i\};\mathfrak{p}_i(\theta),N)=\frac{N!}{\prod_i{k_i!}}\prod_i \mathfrak{p}_i^{k_i}(\theta)
@@ -525,7 +525,7 @@ In the limit of infinitely fine binning ($n \to \infty$), each bin contains at m
 	&= \text{Const} + \ln L_{\text{unbinned}}(\theta) 
 \end{align*}
 
-\textit{Therefore, in the limit of infinitesimally small bins, the binned and unbinned likelihoods coincide up to an additive constant. This implies that both approaches lead to the same inference asymptotically.}
+\emph{Therefore, in the limit of infinitesimally small bins, the binned and unbinned likelihoods coincide up to an additive constant. This implies that both approaches lead to the same inference asymptotically.}
 
 \subsection{Variable-$N$ histograms}
 
@@ -620,22 +620,22 @@ A further simplification is sometimes introduced:
 This expression is asymptotically equivalent, and has the advantage of being quadratic in $\theta$ if $\mu_i(\theta)$ is linear in $\theta$. However, it has significantly worse convergence properties, and the resulting estimator can be biased, sometimes with a bias larger than its statistical uncertainty.
 
 \section{Robustness of a statistic}
-We have seen thus far the basic principles of classic point estimators, where in most cases the \textit{pdf} of the observable is known almost to perfection. However, this is not always the case, and it's important to talk about one final concept: the \textit{robustness} of a statistic. 
+We have seen thus far the basic principles of classic point estimators, where in most cases the \emph{pdf} of the observable is known almost to perfection. However, this is not always the case, and it's important to talk about one final concept: the \emph{robustness} of a statistic. 
 
 \begin{definition}[Robustness of a statistic]
-	The \textit{robustness} measures how well a statistic maintains its properties even if the underlying distributional assumptions are incorrect. 
+	The \emph{robustness} measures how well a statistic maintains its properties even if the underlying distributional assumptions are incorrect. 
 \end{definition}
 
 In a sense, a robust statistic is more trustworthy, as it is less volatile to outliers, model inconsistencies, or noise. The last thing we want as experimental scientists is to use methods that break down for tiny variations of the initial hypotheses, and for this reason robustness is a sought out property.
 
 \begin{example}
-	A good estimator for the variance of a Gaussian distributed random variable is the \textit{root-mean-square} (RMS), which, being the MLE, is asymptotically efficient:
+	A good estimator for the variance of a Gaussian distributed random variable is the \emph{root-mean-square} (RMS), which, being the MLE, is asymptotically efficient:
 	\[
 	\hat\sigma \equiv s_N = \sqrt{\frac{1}{N}\sum_i (x_i - \bar{x})^2}
 	\]
 	where $\bar{x}$ is the sample mean.
 	
-	This is not the only possible estimator for the variance. We could use, for example, the \textit{mean-absolute-deviation} (MAD):
+	This is not the only possible estimator for the variance. We could use, for example, the \emph{mean-absolute-deviation} (MAD):
 	\[
 	d_N = \frac{1}{N}\sum_i |x_i - \bar{x}| \quad \rightarrow \quad \hat\sigma' \equiv \sqrt{\frac{\pi}{2}}\, d_N
 	\]
@@ -647,8 +647,8 @@ In a sense, a robust statistic is more trustworthy, as it is less volatile to ou
 	\]
 	This means that the efficiency of $d_N$ is significantly worse than that of $s_N$. One might conclude that this settles the question. However, the story does not end here.
 	
-	Consider the case where we are not completely certain about the underlying \textit{pdf}. For example, suppose the data are contaminated by a small fraction $f$ of observations with a larger variance $\sigma_2$.
-	We model the total \textit{pdf} as a mixture of two Gaussians with the same mean $\mu$ but different variances (take $\sigma_2 = 3\sigma_1$):
+	Consider the case where we are not completely certain about the underlying \emph{pdf}. For example, suppose the data are contaminated by a small fraction $f$ of observations with a larger variance $\sigma_2$.
+	We model the total \emph{pdf} as a mixture of two Gaussians with the same mean $\mu$ but different variances (take $\sigma_2 = 3\sigma_1$):
 	\[
 	p(x; \mu, \sigma_1, f) = (1-f)\mathcal{N}(x;\mu,\sigma_1) + f\mathcal{N}(x;\mu, 3\sigma_1)
 	\]
@@ -680,7 +680,7 @@ In a sense, a robust statistic is more trustworthy, as it is less volatile to ou
 As we can see, the theory discussed up until now is rather fragile, and we'd like to find some robust estimators that we can trust even when we don't have full knowledge of the distribution of the data. 
 
 \subsection{Least Squares method}
-Let's talk about a robust estimator that is consistent even when the underlying \textit{pdf} is not known. We begin by remembering what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property.\todo{Is it clear here that what comes is not limited to histograms but it can be used every time there's a set of observation depending on a parameter? I think it is -J}
+Let's talk about a robust estimator that is consistent even when the underlying \emph{pdf} is not known. We begin by remembering what we talked about in section \ref{subsec:Implicits} about implicit estimators: all we need is a general function $F$ such that $\E\left[F(x,\theta)\right] = 0$ to build one, and we shall consider the function $F\left(k_i,\theta\right) = k_i -\mu_i(\theta) = k_i - \E\left[k_i\right]$. It's clear to see that the expected value of this function is indeed equal to zero, and we wish to transform it while maintaining this property.\todo{Is it clear here that what comes is not limited to histograms but it can be used every time there's a set of observation depending on a parameter? I think it is -J}
 
 We apply a generic linear transformation:
 	\[
@@ -711,9 +711,9 @@ Which corresponds to minimizing a quadratic form. In the case of $V_{ij}$ equal 
 	F(k_i,\theta) = - \frac{1}{2}\frac{\partial}{\partial\theta}\left(k_i-\mu_i(\theta)\right)^2
 	\]
 
-Whose roots we recognize as the estimators that \textit{minimize the sum of squares}. This \textbf{Least Squares Method} (LSM) allows us to find consistent estimators for the parameters $\theta$. 
+Whose roots we recognize as the estimators that \emph{minimize the sum of squares}. This \textbf{Least Squares Method} (LSM) allows us to find consistent estimators for the parameters $\theta$. 
 
-Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \textit{pdf}, making it a way to find robust estimators. However it is necessary that $\exists\; \mu_i(\theta)\equiv \E\left[k_i\right]$, which could be seen as a potential weakness for distributions where this is not the case, for example ones with heavy tails or many outliers.
+Coming from the implicit estimator formalism, it follows that the consistency does not depend from the choice of $V$ (granted it is positively-defined) nor from the \emph{pdf}, making it a way to find robust estimators. However it is necessary that $\exists\; \mu_i(\theta)\equiv \E\left[k_i\right]$, which could be seen as a potential weakness for distributions where this is not the case, for example ones with heavy tails or many outliers.
 
 \begin{example}
 	Let's look at one specific, yet didactic, case: where the expected values are linear functions of the parameters $\mu_i = A_{ij}\theta_j$.
@@ -734,7 +734,7 @@ Coming from the implicit estimator formalism, it follows that the consistency do
 		&=A^{-1}A\vec{\theta} - \vec\theta = 0 
 	\end{align*}
 	
-	We add one last property to this, and in the case where $V_{ij}^{-1} = \text{cov}\left[k_i,k_j\right]$ then the estimator above is the one with minimum variance among all unbiased estimators that are linear functions of the data. We call this the \textbf{B.L.U.E} (the \textit{Best Linear Unbiased Estimator}). If the \textit{pdf} of $k_i$ is a Normal distribution, then this estimator is also the MVB. 
+	We add one last property to this, and in the case where $V_{ij}^{-1} = \text{cov}\left[k_i,k_j\right]$ then the estimator above is the one with minimum variance among all unbiased estimators that are linear functions of the data. We call this the \textbf{B.L.U.E} (the \emph{Best Linear Unbiased Estimator}). If the \emph{pdf} of $k_i$ is a Normal distribution, then this estimator is also the MVB. 
 	
 	This is the Gauss-Markov theorem, which we won't prove nor go into further detail upon. 
 \end{example}
@@ -754,8 +754,8 @@ We note that $\hat{m}$ is a consistent estimator for the mean $\mu$, and in the 
 
 As we stated, for different values of $p$ we are estimating different quantities:
 \begin{itemize}
-	\item When $p\rightarrow-\infty$ $m$ represents the \textit{mode}, which signifies the single value that appears most frequently. We are minimizing the amount of values that do not equal $m$
-	\item When $p=1$ $m$ represents the \textit{median}\sidenote{We will familiarize ourselves with the median in the next section.}, which is the value where half the data lies above and below it. We are minimizing the sum of absolute differences.
+	\item When $p\rightarrow-\infty$ $m$ represents the \emph{mode}, which signifies the single value that appears most frequently. We are minimizing the amount of values that do not equal $m$
+	\item When $p=1$ $m$ represents the \emph{median}\sidenote{We will familiarize ourselves with the median in the next section.}, which is the value where half the data lies above and below it. We are minimizing the sum of absolute differences.
 	\item When $p=2$ $m=\mu$, and we are estimating the mean as in the standard least squares method. 
 	\item When $p\rightarrow\infty$ $m$ represents the mid-range, which is the value exactly halfway between the maximum and minimum value in the dataset.
 \end{itemize}
@@ -764,7 +764,7 @@ Depending on the type of data we have, and our interests, we can choose $p$ and 
 
 \subsection{A robust estimator: the median}
 \begin{definition}[Median]
-	The \textit{median} $m_1$ is the value for which there is an equal probability of being greater or less than: $P(x > m_1) = P(x<m_1) = \frac{1}{2}$. In other words, it is the value for which the cumulative density function is one half. 
+	The \emph{median} $m_1$ is the value for which there is an equal probability of being greater or less than: $P(x > m_1) = P(x<m_1) = \frac{1}{2}$. In other words, it is the value for which the cumulative density function is one half. 
 \end{definition}
 
 The sample median 
@@ -794,7 +794,7 @@ We note that the median always\sidenote{except for pathological cases involving 
 \end{theorem}
 \todo{We could split these into two and prove them individually or not prove, idrk}
 
-The sample median is such an important robust estimator that we also wish to see how it is distributed, since this will be independent of the \textit{pdf} from which the data was extracted.
+The sample median is such an important robust estimator that we also wish to see how it is distributed, since this will be independent of the \emph{pdf} from which the data was extracted.
 
 Assume that $p(x)$ is a continuous pdf with a unique median $m$. Let us draw an i.i.d. sample of size $2k+1$ and consider the central order statistic, i.e. the sample median $\hat m_1$.
 
@@ -924,7 +924,7 @@ This procedure significantly reduces sensitivity to heavy tails, making it usefu
 
 \section{Systematic uncertainty}
 
-Because an unknown \textit{pdf} compromises our statistical certainty, we must adopt robust principles to minimize information loss. This specific form of ambiguity, which stems from a partial understanding of the \textit{pdf}, is what we term \textbf{systematic uncertainty}. Under this definition, we can see robustness as the property of not being sensible to systematic uncertainties. 
+Because an unknown \emph{pdf} compromises our statistical certainty, we must adopt robust principles to minimize information loss. This specific form of ambiguity, which stems from a partial understanding of the \emph{pdf}, is what we term \textbf{systematic uncertainty}. Under this definition, we can see robustness as the property of not being sensible to systematic uncertainties. 
 
 Let's assume we are measuring something that has independent counts, and so we assume a Poisson distribution, where the best estimator\sidenote{The calculation for the MLE for the $N$ Poisson extractions is found in \textcolor{orange}{REF}} for $\mu$ is $\hat\mu = \frac{\sum_i k_i}{N}$ 
 
@@ -938,7 +938,7 @@ Usually, I'll have some information on $b$, like restricting it within a range:
 
 This type of information can come from physical limitations, previous predictions, experimental data (like a "dark" measurement), and interval estimations (which we will talk about in the next chapter). 
 
-In any case, we say \textit{something} about $b$, and, for example, we can expand $\hat\mu$ to include this:
+In any case, we say \emph{something} about $b$, and, for example, we can expand $\hat\mu$ to include this:
 
 	\[
 	\hat\mu = \left(\frac{\sum_i k_i}{N}-b_0\right)\pm \sqrt{\frac{\sum_i k_i}{N}}\text{(stat)} + \frac{\delta}{2}\text{(syst)} 
@@ -953,7 +953,7 @@ Which is a specific case of the more general:
 There isn't a convention that is universally accepted, though usually both the systematic and statistic uncertainties get written separately, and each combine with their own counterparts (though systematic uncertainties are also often summed in quadrature like statistic ones). 
 
 \begin{example}
-	Let's look at an interesting case: along with my observable $k$, distributed like a Poisson $Pois(k,\mu+b)$, we have an observable $q$ that has a \textit{pdf} $p(q;b)$. This means that there is \textit{some} observable that gives me information on my background parameter $b$ (from which I was able to determine that $b$ fell within a certain range, for example). 
+	Let's look at an interesting case: along with my observable $k$, distributed like a Poisson $Pois(k,\mu+b)$, we have an observable $q$ that has a \emph{pdf} $p(q;b)$. This means that there is \emph{some} observable that gives me information on my background parameter $b$ (from which I was able to determine that $b$ fell within a certain range, for example). 
 	
 	Well, I can now express my experiment as a combination measurement of two observables
 	
@@ -967,14 +967,14 @@ There isn't a convention that is universally accepted, though usually both the s
 \end{example}
 
 \begin{example}
-	Another interesting case is where $b$ has a \textit{pdf} (or \textit{dob} in the Bayesian case) and we can eliminate it by marginalizing:
+	Another interesting case is where $b$ has a \emph{pdf} (or \emph{dob} in the Bayesian case) and we can eliminate it by marginalizing:
 	
 	\begin{align*}
 	p_q(k;\mu) &= \int p(k,b|q;\mu)\dd b = \int \pi(b)\frac{p(k,1|b;\mu)}{p(q)}\dd b\\
 	&= \frac{1}{p(q)}\int \pi(b) Pois(k;\mu+b)p(q;b)db
 	\end{align*}
 	
-	Also in this case the systematic uncertainty gets absorbed in the statistic. In the Bayesian case, in which we are free to assign a degree of belief to any parameter, the systematic uncertainty is always treatable like the statistic one. However, it's fundamental that $b$ follows a probability distribution (and thus mus be assigned a \textit{prior}), which is what it means when "the nuisance parameters were integrated" is written.
+	Also in this case the systematic uncertainty gets absorbed in the statistic. In the Bayesian case, in which we are free to assign a degree of belief to any parameter, the systematic uncertainty is always treatable like the statistic one. However, it's fundamental that $b$ follows a probability distribution (and thus mus be assigned a \emph{prior}), which is what it means when "the nuisance parameters were integrated" is written.
 \end{example}
 
 
@@ -988,7 +988,7 @@ We also take a moment to talk about non-systematic "uncertainties" that might pl
 	\item Choice of data cuts and limits
 \end{itemize}
 
-Of course, the result of our measurements will depend on these (and so will the \textit{pdf} of the data), though they are not uncertainties. 
+Of course, the result of our measurements will depend on these (and so will the \emph{pdf} of the data), though they are not uncertainties. 
 
 The important thing is to remain transparent at all times on these arbitrary choices, and to show in your treatment of the data that the results are not very sensitive to the different choices one may make (for example, by changing the binning and proving that the results do not vary significantly).
 
