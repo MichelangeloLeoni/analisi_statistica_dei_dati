@@ -20,26 +20,36 @@ Not having defined alternatives, we can't talk about \textit{priors} (there may 
 
 \section{p-values}
 
-The statistic at the core of almost every GOF Test is the famous (or infamous, if you were not a fan of the Lab courses) \textbf{p-value} statistic.
+The statistic at the core of almost every GOF Test is the famous (or infamous, if you were not a fan of the Lab courses) \textbf{p-value} statistic. This is perhaps one of the most common and commonly misunderstood concepts in data analysis, and so we take our time in defining it. Let's begin with an example:
 
-Perhaps one of the most commonly misunderstood concepts in data analysis, we give this formal, and simple definition:
+Imagine flipping a coin 10 times and getting 10 heads in a row. You suspect the coin is unfair, and thus construct a null hypothesis to hopefully reject $H_0$: The coin is fair (the outcomes of $n$ flips follows a Binomial with $p=0.5$). Our alternative hypothesis is that the coin is \textit{unfair}, as in, anything that is not $H_0$, and thus a goodness-of-fit Test must be used. If the coin really were fair, seeing 10 heads would be extremely rare. The $p$-value quantifies exactly how "rare" or "surprising" your observed data is, assuming $H_0$. We can see the parallels with the previous chapter, and we expect to use $p$ as a sort of Test statistic with a certain critical region. Therefore, it is intuitive that $p$ depend on the data $x$, and in some way must be combined with $H_0$. 
 
 \begin{definition}[p-value]
 	A \textit{p-value} is a statistic $p(x)$ such that $p\sim U[0,1]$ under $H_0$
 \end{definition}
-\todo{Admittedly, that was neither clear nor simple... Fix up?}
+
+Mathematically, if $T$ is our Test statistic and $F_T$ is its cumulative distribution function under $H_0$, then $p = 1 - F_T(t_{obs})$. Because the \textit{CDF} of any continuous random variable is uniformly distributed, as the probability integral transform theorem \ref{th:universal_uniform} states, the p-value follows $U[0, 1]$.
+
+Essentially, it is a function of the data such that its distribution is uniform between $0$ and $1$ and such that it is small for hypotheses distant from $H_0$.
 
 The goodness of fit Test, in this case, corresponds to the critical region $p<\alpha$ ($P(p<\alpha)=\alpha\forall\alpha)$
 
 We also wish for the GOF test to give unbiased results, and so we need for this statistic $p(x)$ to move towards lower values in every hypothesis in which $H_0$ is not verified. Synthetically:
 
 	\[
-	F_{\bar{H_0}}(p) \geq F_{H_0}(p)
+	F_{\cancel{H_0}}(p) \geq F_{H_0}(p)
 	\]
 
 This gives the $p$-value the interpretation of "probability" (under $H_0$) that the experiment give a result that deviates further from $H_0$ that what was observed. 
 
-Note: it's common to erroneously call the $p$-value "significance", though we know that to be the name given to $\alpha$, which has been priorly fixed.  
+\textbf{What the p-value is not:}
+\begin{itemize}
+	\item It is \textbf{NOT} the probability that the null hypothesis is true. ($P(H_0 | \text{data}) \neq \text{p-value}$)
+	\item It is \textbf{NOT} the probability that the results were caused by chance
+	\item It is \textbf{NOT} the significance of the test, as that is the name given to $\alpha$, which has been priorly fixed.  
+\end{itemize}
+
+
 
 \todo{Examples for when ONLY using GOF tests is badddddd! Also maybe Look elsewhere effect?}
 

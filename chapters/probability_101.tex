@@ -245,6 +245,28 @@ However, it is crucial that $\int p(x)\dd x = P(X\in O_X) = 1$ (we say that the 
 
 The fundamental theorem of calculus also tells us that $\dv{F}{x}=p(x)$. We will find the cumulative easier to calculate than the density function itself in many cases. 
 
+An interesting and somewhat unexpected result can be reached when talking about \textit{CDF's}: the \textbf{probability integral transform} (also known as the \textit{universality of the uniform}\sidenote{If you haven't done so already, take a moment to brush up on what a Uniform distribution is, by heading over to the appendix \textcolor{red}{ref}}).
+
+\begin{theorem}[Probability integral transform]
+	Suppose that a random variable $X$ has a continuous distribution for which the cumulative distribution function (CDF) is $F_X$. Then the random variable $Y$ defined as $Y \equiv F_X(X)$ follows a standard uniform distribution
+	\[
+	p_Y(Y) = U[0,1]
+	\]
+\label{th:universal_uniform}
+\end{theorem}
+\todo{This is my ref: https://www.jstor.org/stable/2332638?seq=1}
+
+Let's prove this theorem:
+Given a random continuous variable $X$, and $Y$ defined as above ($Y \equiv F_X(X)$) where $F_X$ is the \textit{cdf} of $X$. Given $y\in[0,1]$
+
+\begin{align*}
+	F_Y(y) &= P\left(Y\leq y\right) = P\left(F_X(X)\leq y\right) = P\left(X\leq F_X^{-1}(y)\right)\\
+	&= F_X\left(F_X^{-1}(y)\right) = y
+\end{align*}
+
+$F_Y(y) = y$ is the cumulative of a standard Uniform distribution, and so $Y$ is distributed as such.
+
+This theorem will be useful in the far future when we talk about $p$-values, though it is interesting to explore the consequences that it suggests.
 
 Moving on to probability distributions for more than one random variable, things generalize quite easily. We can generally call $P(x_1, \allowbreak x_2, \allowbreak \dots, \allowbreak x_N)$ the probability distribution of a countable number of random variables, each defined on its own outcome space. We can define independence as we have in section \ref{subsec:kolmogorov}, and say that probability distributions (defined on the same $S$) are independent if 
 
