@@ -1,15 +1,12 @@
-## TODO list
-
-- [ ] Finish the "Important distribution" appendix  
+# TODO
+- [ ] Finish the **"Important distribution"** appendix  
     - [ ] Exponential  
     - [ ] Poisson  
     - [ ] Bernoulli  
     - [ ] Binomial
     - [ ] Multinomial
     - [ ] Cauchy  
-    - [x] Uniform  
-- [ ] Insert somewhere how to compute an arithmetic progression (could be useful in some exercises)
-- [ ] Update README with a compiling guide
-- [ ] Least squares methods
-- [ ] Moments methods
-- [ ] Convolution of Poissonians (useful in practice)
+- [ ] Insert somewhere how to compute an **arithmetic progression** (could be useful in some exercises)
+- [ ] Expand and improve **least squares methods** section
+- [ ] Expand and improve **method of moments**
+- [ ] Add a demonstration of the **convolution of Poisson** distributions (useful in practice)
